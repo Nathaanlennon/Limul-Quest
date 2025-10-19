@@ -16,6 +16,7 @@ class UniversData:
         self.add_scene(scene_class, **kwargs)
         self.current_scene = self.scenes[scene_class]
         self.player.position = self.current_scene.spawn_player
+        self.player.world = self.current_scene
 
 
     def get_scene(self):
@@ -72,7 +73,12 @@ class Entity:
 
     def move(self, dx, dy):
         x, y = self.position
-        self.position = (x + dx, y + dy)
+        if self.is_move_possible(dx, dy):
+            self.position = (x + dx, y + dy)
+
+    def is_move_possible(self, dx, dy):
+        x, y = self.position
+        return self.world.map_data[x + dx][y + dy] in self.world.walkable_tiles
 
 
 class Player(Entity):
