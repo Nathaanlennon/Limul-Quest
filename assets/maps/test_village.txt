@@ -1,12 +1,7 @@
 ##################################################
 #                                                #
 #                                                #
-#                MMMMMM   MMMMMM                 #
-#                M    M   M    M                 #
-#                M    MMMMM    M                 #
-#                M             M                 #
-#         4      M             M                 #
-#                MMMMMMMDMMMMMMM                 #
+#                                                #
 #                                                #
 #                       P                        #
 #                                                #

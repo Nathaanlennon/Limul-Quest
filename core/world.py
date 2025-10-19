@@ -2,8 +2,10 @@ class UniversData:
     def __init__(self):
         self.scenes = {}
         self.current_scene = None
-        self.player = Player()
+        self.player = Player(self.current_scene)
         self.set_scene(Test2)
+
+        self.mode = "exploration"  # Possible modes: : exploration, combat, dialogue, inventory
 
     def add_scene(self, scene_class,
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
@@ -13,6 +15,8 @@ class UniversData:
     def set_scene(self, scene_class, **kwargs):
         self.add_scene(scene_class, **kwargs)
         self.current_scene = self.scenes[scene_class]
+        self.player.position = self.current_scene.spawn_player
+
 
     def get_scene(self):
         return self.current_scene
@@ -21,9 +25,11 @@ class UniversData:
         ...  # Implémentation du chargement de sauvegarde à venir
 
 class World:
-    def __init__(self, **kwargs):
+    def __init__(self, map,spawn_player, **kwargs):
         self.walkable_tiles = ['.', ',', ';', ':', '+', '*', ' ']
-        self.map = "../maps/void.txt" # empty map for initialisation
+        self.entities = []
+        self.map = map # empty map for initialisation
+        self.spawn_player = spawn_player # Default spawn position for player
 
     def load_map(self):
         with open(self.map, 'r') as file:
@@ -33,29 +39,42 @@ class World:
     def is_walkable(self, tile):
         return tile in self.walkable_tiles
 
+    def add_entity(self, entity):
+        self.entities.append(entity)
+
+
 class Test(World):
     def __init__(self, **kwargs):
-        super().__init__()
-        self.map = "assets/maps/maptest.txt"
+        super().__init__("assets/maps/maptest.txt", (2,3))
         self.name = "Monde1"
         self.map_data = self.load_map()
 
+
+
 class Test2(World):
     def __init__(self, **kwargs):
-        super().__init__()
-        self.map = "assets/maps/testchateau.txt"
+        super().__init__("assets/maps/testchateau.txt", (5,5))
         self.name = "Monde2"
         self.map_data = self.load_map()
 
 class Test3(World):
     def __init__(self, **kwargs):
-        super().__init__()
-        self.map = "assets/maps/test_village.txt"
+        super().__init__("assets/maps/test_village.txt", (3,3))
         self.name = "Monde3"
         self.map_data = self.load_map()
 
-class Player:
-    def __init__(self, name="Hero", position=(2, 3)):
+class Entity:
+    def __init__(self, world,  name, position, sprite, **kwargs):
         self.name = name
         self.position = position
-        self.sprite = '@'  # Symbole représentant le joueur sur la carte
+        self.sprite = sprite
+        self.world = world
+
+    def move(self, dx, dy):
+        x, y = self.position
+        self.position = (x + dx, y + dy)
+
+
+class Player(Entity):
+    def __init__(self, world):
+        super().__init__(world, "Hero", (2, 3), '@')
