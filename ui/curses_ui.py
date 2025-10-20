@@ -53,9 +53,6 @@ class CursesUI:
 
             stdscr.refresh()
 
-
-
-
     def show_scene(self, stdscr):
         scene = self.univers.current_scene
         for y, ligne in enumerate(scene.map_data):

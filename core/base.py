@@ -10,8 +10,7 @@ class UniversData:
 
         self.mode = "exploration"  # Possible modes: : exploration, combat, dialogue, inventory
 
-    def add_scene(self, scene_class,
-                  **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
+    def add_scene(self, scene_class, **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
         if scene_class not in self.scenes:
             self.scenes[scene_class] = scene_class(self, **kwargs)
 
