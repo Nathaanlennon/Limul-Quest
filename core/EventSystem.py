@@ -1,7 +1,7 @@
 class EventSystem:
     def __init__(self, world):
         self.world = world
-        self.events = {}
+        self.events = {} # key is the (x,y) coordinates of the event
 
 
 
@@ -13,7 +13,7 @@ class EventSystem:
             del self.events[event.position]
 
     def get_event(self, position):
-        return self.events.get(position)
+        return self.events.get(position, 0)
 
     def update(self, player, action):
         if action == "INTERACT":

@@ -37,14 +37,21 @@ class World:
         self.spawn_player = spawn_player  # Default spawn position for player
         self.event_system = EventSystem(self)
 
+        self.map_data = self.load_map()
+
     def load_map(self):
         with open(self.map, 'r') as file:
             map_data = [line.rstrip('\n') for line in file]
         return map_data
 
     def is_walkable(self, tile):
-        return tile in self.walkable_tiles
-
+        x, y = tile
+        if self.map_data[x][y] in self.walkable_tiles:
+            if self.event_system.get_event(tile):
+                return self.event_system.get_event(tile).walkable
+            else:
+                return True
+        return False
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -61,12 +68,9 @@ class Entity:
 
     def move(self, dx, dy):
         x, y = self.position
-        if self.is_move_possible(dx, dy) and self.movable:
+        if self.world.is_walkable((x+dx, y+dy)) and self.movable:
             self.position = (x + dx, y + dy)
 
-    def is_move_possible(self, dx, dy):
-        x, y = self.position
-        return self.world.map_data[x + dx][y + dy] in self.world.walkable_tiles
 
 
 class Event(Entity):
@@ -74,6 +78,7 @@ class Event(Entity):
         super().__init__(world, name, position, sprite)
         self.data = data
         self.active = True
+        self.walkable = False
 
     def activation(self):
         pass
@@ -91,13 +96,13 @@ class Event(Entity):
 
 class MoveEvent(Event):
     def __init__(self, data, world, name, position, target_scene, target_position, move_type):
+        super().__init__(data, world, name, position, '0')
         if move_type == "teleport":
             self.sprite = 'T'
+            self.walkable = True
         elif move_type == "door":
             self.sprite = 'D'
-        else:
-            self.sprite = 'O'  # Default sprite for other types
-        super().__init__(data, world, name, position, self.sprite)
+
 
         self.target_scene = target_scene
         self.target_position = target_position
@@ -112,7 +117,7 @@ class MoveEvent(Event):
         if self.type == "teleport":
             return self.data.player.position == self.position
         if self.type == "door":
-            return self.is_facing_player(), action == "INTERACT"
+            return self.is_facing_player() and action == "INTERACT"
         return False
 
 class NPC(Entity):
@@ -127,7 +132,7 @@ class Player(Entity):
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
 
-    def facing_position(self):
+    def facing_position(self): # gives the tiles facing the player
         x, y = self.position
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
             self.orientation, (0, 0)
