@@ -115,6 +115,10 @@ class MoveEvent(Event):
             return self.is_facing_player(), action == "INTERACT"
         return False
 
+class NPC(Entity):
+    def __init__(self, world, name, position, sprite, **kwargs):
+        super().__init__(world, name, position, sprite)
+
 
 class Player(Entity):
     def __init__(self, world, position):
