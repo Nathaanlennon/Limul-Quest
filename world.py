@@ -1,39 +1,36 @@
-from engine.core.base import World, Entity, Event, NPC
+from core.base import MoveEvent
+from core.base import World
 
 
 class Test(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/mapVillage1.txt", (2, 3))
+        super().__init__(data,"assets/maps/maptest.txt", (2, 3))
         self.name = "Monde1"
+        self.map_data = self.load_map()
 
-        self.add_entity(Entity(self, "door1", (4, 11), 'DD',
-                               [Event(data, self,"door1", "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5))]))
-        self.add_entity(Entity(self, "teleporter1", (5, 1), 'T',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
-
-        self.add_entity(NPC(self, "npc1", (1, 1), 'N', dialogue="assets/dialogues/test.json"))
-
-
+        self.event_system.add_event(MoveEvent(data, self,"door", (4, 11), Test4, (8, 23),"door"))
+        self.event_system.add_event(MoveEvent(data, self,"teleporter", (5,1), Test, (3,3),"teleport"))
 
 
 class Test2(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/testchateau.txt", (5, 5))
+        super().__init__(data,"assets/maps/testchateau.txt", (5, 5))
         self.name = "Monde2"
-
-        entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
-        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                               target_scene=Test3))
+        self.map_data = self.load_map()
 
 
 class Test3(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/test_village.txt", (3, 3))
+        super().__init__(data,"assets/maps/test_village.txt", (3, 3))
         self.name = "Monde3"
+        self.map_data = self.load_map()
 
-        entity = self.add_entity(Entity(self,"door", (9, 24), 'D'))
-        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(1, 1)))
 
+class Test4(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data,"assets/maps/mapVillage.txt", (8, 23))
+        self.name = "Monde4"
+        self.map_data = self.load_map()
+
+        self.event_system.add_event(MoveEvent(data, self,"door", (5, 11), Test2, (5,5),"door"))
+        self.event_system.add_event(MoveEvent(data, self,"teleporter", (5,1), Test, (3,3),"teleport"))
