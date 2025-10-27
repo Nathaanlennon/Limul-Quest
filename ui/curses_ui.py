@@ -21,9 +21,18 @@ class CursesUI:
     def __init__(self, univers, input_system):
         self.univers = univers
         self.input_system = input_system
+        self.modes = {
+            "exploration": self.exploration_mode,
+            "dialogue": self.dialogue_mode
+        }
+        self.mode_draw_function = self.modes[univers.mode]
+        self.univers.set_mode_change_callback(self.change_mode)
 
     def run(self):
         curses.wrapper(self.main_loop)
+
+    def change_mode(self, mode):
+        self.mode_draw_function = self.modes[mode]
 
     def main_loop(self, stdscr):
         curses.curs_set(0)
@@ -31,30 +40,39 @@ class CursesUI:
 
         while True:
             stdscr.clear()
-            self.show_scene(stdscr)
-            self.draw_player(stdscr)
-            self.draw_entities(stdscr)
-            self.draw_events(stdscr)
-
-            key = stdscr.getch()
-            if key != -1:  # -1 = aucune touche pressée
-                self.input_system.process_input(key_to_action(key)) # traite l'entrée et la convertit en action que le système peut comprendre
-
-            if key == ord('q'):
-                break
-            elif key == ord('r'):
-                self.univers.set_scene(world.Test)
-            elif key == ord('n'):
-                self.univers.set_scene(world.Test2)
-            elif key == ord('s'):
-                self.univers.set_scene(world.Test3)
-
-            self.univers.current_scene.event_system.update(self.univers.player, key_to_action(key))
-
+            self.mode_draw_function(stdscr)
             stdscr.refresh()
 
 
+    def exploration_mode(self, stdscr):
+        self.show_scene(stdscr)
+        self.draw_player(stdscr)
+        self.draw_entities(stdscr)
+        self.draw_events(stdscr)
 
+        key = stdscr.getch()
+        if key != -1:  # -1 = aucune touche pressée
+            self.input_system.process_input(
+                key_to_action(key))  # traite l'entrée et la convertit en action que le système peut comprendre
+
+
+        if key == ord('r'):
+            self.univers.set_scene(world.Test)
+        elif key == ord('n'):
+            self.univers.set_scene(world.Test2)
+        elif key == ord('s'):
+            self.univers.set_scene(world.Test3)
+        elif key == ord('m'):
+            self.univers.mode_change("dialogue")
+
+
+        self.univers.current_scene.event_system.update(self.univers.player, key_to_action(key))
+
+    def dialogue_mode(self, stdscr):
+        stdscr.addstr(0, 0, "C'est le mode dialogue ça !")
+        key = stdscr.getch()
+        if key == ord('m'):
+            self.univers.mode_change("exploration")
 
     def show_scene(self, stdscr):
         scene = self.univers.current_scene

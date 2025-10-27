@@ -9,6 +9,15 @@ class UniversData:
         self.set_scene(scene)
 
         self.mode = "exploration"  # Possible modes: : exploration, combat, dialogue, inventory
+        self.on_mode_change = None
+
+    def set_mode_change_callback(self, callback):
+        """L’UI nous donne la fonction à appeler plus tard"""
+        self.on_mode_change = callback
+
+    def mode_change(self, mode):
+        self.mode = mode
+        self.on_mode_change(mode)
 
     def add_scene(self, scene_class,
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
