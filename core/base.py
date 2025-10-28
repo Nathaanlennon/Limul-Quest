@@ -1,29 +1,23 @@
 from core.EventSystem import EventSystem
+from core.InputSystem import InputSystem
 
 
 class UniversData:
     def __init__(self, scene):
+        self.size = (18,67)
         self.scenes = {}
         self.current_scene = None
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
         self.set_scene(scene)
 
-        self.mode = "exploration"  # Possible modes: : exploration, combat, dialogue, inventory
+        self.mode = "exploration"  # Possible modes: : exploration, dialogue
+        self.input_system = InputSystem(self)
+        # self.input_systems = {
+        #     "exploration" : InputSystem(self)
+        # }
         self.on_mode_change = None
 
-    def set_mode_change_callback(self, callback):
-        """L’UI nous donne la fonction à appeler plus tard"""
-        self.on_mode_change = callback
-
-    def mode_change(self, mode):
-        self.mode = mode
-        self.on_mode_change(mode)
-
-    def add_scene(self, scene_class,
-                  **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
-        if scene_class not in self.scenes:
-            self.scenes[scene_class] = scene_class(self, **kwargs)
-
+    # scene gestion
     def set_scene(self, scene_class, **kwargs):
         self.add_scene(scene_class, **kwargs)
         self.current_scene = self.scenes[scene_class]
@@ -33,6 +27,22 @@ class UniversData:
     def get_scene(self):
         return self.current_scene
 
+    def add_scene(self, scene_class,
+                  **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
+        if scene_class not in self.scenes:
+            self.scenes[scene_class] = scene_class(self, **kwargs)
+
+
+    # Mode gestion, mode is the way the sytem and the ui will work, for exemple dialogues and "exploration"
+    def mode_change(self, mode):
+        self.mode = mode
+        self.on_mode_change(mode)
+
+    def set_mode_change_callback(self, callback):
+        """L’UI nous donne la fonction à appeler plus tard"""
+        self.on_mode_change = callback
+
+
     def load_save(self):
         ...  # Implémentation du chargement de sauvegarde à venir
 
@@ -40,7 +50,7 @@ class UniversData:
 class World:
     def __init__(self, data, map, spawn_player, **kwargs):
         self.data = data
-        self.walkable_tiles = ['.', ',', ';', ':', '+', '*', ' ']
+        self.walkable_tiles = ['.', ',', ';', ':', '*', ' ']
         self.entities = []
         self.map = map  # empty map for initialisation
         self.spawn_player = spawn_player  # Default spawn position for player
@@ -122,7 +132,7 @@ class MoveEvent(Event):
             self.data.set_scene(self.target_scene)
             self.data.player.position = self.target_position
 
-    def should_trigger(self, action):
+    def should_trigger(self, action): # action is whatever is happening
         if self.type == "teleport":
             return self.data.player.position == self.position
         if self.type == "door":

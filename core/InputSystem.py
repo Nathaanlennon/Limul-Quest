@@ -21,3 +21,6 @@ class InputSystem:
         elif key == "INTERACT":
             ...
 
+        self.univers.current_scene.event_system.update(self.univers.player, key)
+
+

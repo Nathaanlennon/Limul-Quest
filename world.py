@@ -4,7 +4,7 @@ from core.base import World
 
 class Test(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data,"assets/maps/maptest.txt", (2, 3))
+        super().__init__(data,"assets/maps/taille.txt", (2, 3))
         self.name = "Monde1"
 
         self.event_system.add_event(MoveEvent(data, self,"door", (4,11), Test2, (5,5),"door"))
