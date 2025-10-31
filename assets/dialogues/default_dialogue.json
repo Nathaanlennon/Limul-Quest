@@ -1,0 +1,19 @@
+[
+  {
+    "speaker": "PNJ",
+    "text": "…",
+    "require": null,
+    "set_flag": null,
+    "options": [
+      {
+        "text": "Partir.",
+        "next": -1
+      },
+        {
+            "text": "Parler.",
+            "next": 1
+        }
+    ]
+  },
+
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "speaker": "PNJ",
+    "text": "Le soleil se couchait derrière les montagnes, peignant le ciel de teintes orangées et violettes, tandis qu’un vent léger caressait les arbres et les feuilles frémissaient doucement.",
+    "require": null,
+    "set_flag": null,
+    "options": [
+      {
+        "text": "Partir.",
+        "next": -1
+      },
+      {
+        "text": "Parler.",
+        "next": 1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Bonjour, voyageur. Que puis-je pour vous ?",
+    "require": null,
+    "set_flag": null,
+    "options": [
+      {
+        "text": "Rien, merci.",
+        "next": -1
+      },
+      {
+        "text": "Avez-vous des quêtes pour moi ?",
+        "next": 2
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Oui, en fait. J'ai besoin d'aide pour retrouver un objet perdu dans la forêt voisine.",
+    "require": null,
+    "set_flag": null,
+    "options": [
+      {
+        "text": "Je vais vous aider.",
+        "next": 3
+      },
+      {
+        "text": "Désolé, je suis occupé.",
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Merci beaucoup ! Revenez me voir une fois que vous l'aurez trouvé.",
+    "require": null,
+    "set_flag": null
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Bonne chance dans vos aventures !",
+    "require": null,
+    "set_flag": null,
+    "options": [
+      {
+        "text": "Merci, à vous aussi !",
+        "next": -1
+      }
+    ]
+  }
+]
