@@ -1,20 +1,28 @@
 import curses
 import world
 
+# mapping global, créé une seule fois
+KEY_MAPPING = {
+    ord('z'): "UP", ord('Z'): "UP",
+    ord('s'): "DOWN", ord('S'): "DOWN",
+    ord('q'): "LEFT", ord('Q'): "LEFT",
+    ord('d'): "RIGHT", ord('D'): "RIGHT",
+    ord('e'): "INTERACT", ord('E'): "INTERACT",
+    ord('x'): "QUIT", ord('X'): "QUIT",
+    curses.KEY_UP: "UP",
+    curses.KEY_DOWN: "DOWN",
+    curses.KEY_LEFT: "LEFT",
+    curses.KEY_RIGHT: "RIGHT",
+}
+
+# chiffres 0-9 → renvoie directement l'entier
+for i in range(10):
+    KEY_MAPPING[ord(str(i))] = i
+
 def key_to_action(key):
-    mapping = {
-        ord('z'): "UP",
-        ord('s'): "DOWN",
-        ord('q'): "LEFT",
-        ord('d'): "RIGHT",
-        ord('e'): "INTERACT",
-        curses.KEY_UP: "UP",
-        curses.KEY_DOWN: "DOWN",
-        curses.KEY_LEFT: "LEFT",
-        curses.KEY_RIGHT: "RIGHT",
-        ord('x'): "QUIT"
-    }
-    return mapping.get(key, None)
+    return KEY_MAPPING.get(key, None)
+
+
 
 
 class CursesUI:
@@ -71,12 +79,10 @@ class CursesUI:
 
 
     def dialogue_mode(self, stdscr):
-
-
-
-        stdscr.addstr(0, 0, "dialogue")
-
-
+        stdscr.addstr(0, 0, self.universe.dialogue_system.current_reading)
+        if self.universe.dialogue_system.state == "CHOICE":
+            for idx, choice in enumerate(self.universe.dialogue_system.choices):
+                stdscr.addstr(idx + 2, 0, f"{idx + 1}. {choice}")
 
 
     def show_scene(self, stdscr):

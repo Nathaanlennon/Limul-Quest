@@ -1,6 +1,4 @@
-from core.base import Event
-from core.base import Entity
-from core.base import World
+from core.base import *
 
 
 class Test(World):
@@ -14,6 +12,8 @@ class Test(World):
         entity = self.add_entity(Entity(self, "teleporter1", (5, 1), 'T'))
         entity.add_event(Event(data, "teleporter1", entity, "ON_STEP", "MOVE",
                   target_scene=Test, target_position=(3, 3)))
+
+        entity = self.add_entity(NPC(self, "npc1", (1, 1), 'N', dialogue="assets/dialogues/test.json"))
 
 
 class Test2(World):

@@ -16,3 +16,19 @@ def exploration_input(universe, key):
         ...
 
     universe.current_scene.event_system.update(universe.player, key)
+
+def dialogue_input(universe, key):
+    if universe.dialogue_system.state == "TEXT_CHUNK":
+        if key == "INTERACT":
+            universe.dialogue_system.set_text_chunk()
+    elif universe.dialogue_system.state == "CHOICE":
+        if isinstance(key, int):  # renvoie d'un chiffre via le mapping
+            if 1 <= key <= len(universe.dialogue_system.choices):
+                universe.dialogue_system.set_next_line(choice_index=key - 1)
+    elif universe.dialogue_system.state == "NEXT_LINE":
+        if key == "INTERACT":
+            universe.dialogue_system.set_next_line()
+
+
+
+

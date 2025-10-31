@@ -1,5 +1,6 @@
 from core.EventSystem import EventSystem
 import core.InputSystem as InputSystem
+import core.DialogueSystem as DialogueSystem
 import logging
 
 # log configuration
@@ -25,6 +26,8 @@ class UniverseData:
         # }
         self.on_mode_change = None
 
+        self.dialogue_system = DialogueSystem.DialogueSystem(self)
+
     # scene gestion
     def set_scene(self, scene_class, **kwargs):
         self.add_scene(scene_class, **kwargs)
@@ -45,6 +48,10 @@ class UniverseData:
     def mode_change(self, mode):
         self.mode = mode
         self.on_mode_change(mode)
+        if mode == "exploration":
+            self.input_system = InputSystem.exploration_input
+        elif mode == "dialogue":
+            self.input_system = InputSystem.dialogue_input
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -65,6 +72,7 @@ class World:
         self.event_system = EventSystem(self)
 
         self.map_data = self.load_map()
+
 
     def load_map(self):
         with open(self.map, 'r') as file:
@@ -127,6 +135,8 @@ class Event:
         # vérification que les argumetns nécessaires sont présents selon le type d'action
         if self.action_type == "MOVE":
             self.necessary_args = ["target_scene", "target_position"]
+        elif self.action_type == "DIALOGUE":
+            self.necessary_args = ["dialogue"]
         self.check_event_args(self.necessary_args, kwargs)
 
     def check_event_args(self, required_args, kwargs):
@@ -153,6 +163,9 @@ class Event:
             if self.action_type == "MOVE":
                 self.data.set_scene(self.kwargs["target_scene"])
                 self.data.player.position = self.kwargs["target_position"]
+            elif self.action_type == "DIALOGUE":
+                self.data.mode_change("dialogue")
+                self.data.dialogue_system.set_dialogues(self.kwargs["dialogue"])
 
     def should_trigger(self, action):
         if self.activation_type == "ON_STEP":
@@ -164,9 +177,20 @@ class Event:
 
 
 class NPC(Entity):
-    def __init__(self, world, name, position, sprite, dialogue="assets/dialogues/void.json", **kwargs):
+    def __init__(self, world, name, position, sprite, dialogue="assets/dialogues/default_dialogue.json", **kwargs):
         super().__init__(world, name, position, sprite)
-        self.dialogue = Dialogue(dialogue)
+        self.dialogue = dialogue
+
+        self.add_event(
+            Event(
+                world.data,
+                f"dialogue_event_{name}",
+                self,
+                "ON_INTERACT",
+                "DIALOGUE",
+                dialogue=self.dialogue
+        ))
+
 
 
 
@@ -186,6 +210,3 @@ class Player(Entity):
         )
         return x + dx, y + dy
 
-class Dialogue:
-    def __init__(self, file):
-        self.file = file # path to the dialogue file

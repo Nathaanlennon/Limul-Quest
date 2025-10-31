@@ -4,7 +4,7 @@ from world import Test
 
 
 def main():
-    data = UniverseData(Test) # logique pure
+    data = UniverseData(Test)# logique pure
     interface = CursesUI(data)  # interface spécifique
     interface.run()        # démarre l'affichage
 
