@@ -1,8 +1,16 @@
 from core.EventSystem import EventSystem
-from core.InputSystem import InputSystem
+import core.InputSystem as InputSystem
+import logging
 
+# log configuration
+logging.basicConfig(
+    filename="game.log",   # fichier de sortie
+    filemode="a",          # "a" = append, "w" = écrase à chaque lancement
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO     # niveau minimum à logger
+)
 
-class UniversData:
+class UniverseData:
     def __init__(self, scene):
         self.size = (18,67)
         self.scenes = {}
@@ -11,7 +19,7 @@ class UniversData:
         self.set_scene(scene)
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue
-        self.input_system = InputSystem(self)
+        self.input_system = InputSystem.exploration_input
         # self.input_systems = {
         #     "exploration" : InputSystem(self)
         # }
@@ -51,7 +59,7 @@ class World:
     def __init__(self, data, map, spawn_player, **kwargs):
         self.data = data
         self.walkable_tiles = ['.', ',', ';', ':', '*', ' ']
-        self.entities = []
+        self.entities = {}
         self.map = map  # empty map for initialisation
         self.spawn_player = spawn_player  # Default spawn position for player
         self.event_system = EventSystem(self)
@@ -72,38 +80,64 @@ class World:
                 return True
         return False
 
+
     def add_entity(self, entity):
-        self.entities.append(entity)
+        """Add an entity to the world, entity is an instance of Entity class
+        it as world, name, position, sprite and other optional parameters
+        """
+        self.entities[entity.name] = entity
+        return entity
 
 
 
 class Entity:
-    def __init__(self, world, name, position, sprite, **kwargs):
+    def __init__(self, world, name, position, sprite, events = None, **kwargs):
         self.name = name
         self.position = position
         self.sprite = sprite
         self.world = world
         self.movable = False
+        self.events = {}
 
     def move(self, dx, dy):
         x, y = self.position
         if self.world.is_walkable((x+dx, y+dy)) and self.movable:
             self.position = (x + dx, y + dy)
 
+    def add_event(self, event):
+        if not isinstance(event, Event):
+            logging.warning(f"Event de type {type(event)} ignoré pour Entité {self.name}") # incorrect type
+            return
+        self.events[event.name] = event
+        self.world.event_system.add_event(event)
 
 
-class Event(Entity):
-    def __init__(self, data, world, name, position, sprite, **kwargs):
-        super().__init__(world, name, position, sprite)
+class Event:
+    def __init__(self, data, name, entity, activation_type, action_type, **kwargs):
         self.data = data
+        self.name = name
+        self.entity = entity
         self.active = True
-        self.walkable = False
+        self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT"
+        self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
+        self.action_type = action_type # e.g., "MOVE", "DIALOGUE"
+        self.kwargs = kwargs
+        self.necessary_args = []
 
-    def activation(self):
-        pass
+        # vérification que les argumetns nécessaires sont présents selon le type d'action
+        if self.action_type == "MOVE":
+            self.necessary_args = ["target_scene", "target_position"]
+        self.check_event_args(self.necessary_args, kwargs)
 
-    def should_trigger(self, action):
-        pass
+    def check_event_args(self, required_args, kwargs):
+        missing = [arg for arg in required_args if arg not in kwargs]
+        if missing:
+            logging.warning(f"Event {self.name} de {self.entity.name} dans {self.entity.world} désactivé : arguments manquants {missing}")
+            self.active = False
+
+    @property
+    def position(self):
+        return self.entity.position
 
     def is_facing_player(self):
         x, y = self.data.player.position
@@ -113,35 +147,29 @@ class Event(Entity):
         return (x + dx, y + dy) == self.position
 
 
-class MoveEvent(Event):
-    def __init__(self, data, world, name, position, target_scene, target_position, move_type):
-        super().__init__(data, world, name, position, '0')
-        if move_type == "teleport":
-            self.sprite = 'T'
-            self.walkable = True
-        elif move_type == "door":
-            self.sprite = 'D'
-
-
-        self.target_scene = target_scene
-        self.target_position = target_position
-        self.type = move_type
-
+    # activation stuff
     def activation(self):
         if self.active:
-            self.data.set_scene(self.target_scene)
-            self.data.player.position = self.target_position
+            if self.action_type == "MOVE":
+                self.data.set_scene(self.kwargs["target_scene"])
+                self.data.player.position = self.kwargs["target_position"]
 
-    def should_trigger(self, action): # action is whatever is happening
-        if self.type == "teleport":
+    def should_trigger(self, action):
+        if self.activation_type == "ON_STEP":
             return self.data.player.position == self.position
-        if self.type == "door":
+        elif self.activation_type == "ON_INTERACT":
             return self.is_facing_player() and action == "INTERACT"
         return False
 
+
+
 class NPC(Entity):
-    def __init__(self, world, name, position, sprite, **kwargs):
+    def __init__(self, world, name, position, sprite, dialogue="assets/dialogues/void.json", **kwargs):
         super().__init__(world, name, position, sprite)
+        self.dialogue = Dialogue(dialogue)
+
+
+
 
 
 class Player(Entity):
@@ -157,3 +185,7 @@ class Player(Entity):
             self.orientation, (0, 0)
         )
         return x + dx, y + dy
+
+class Dialogue:
+    def __init__(self, file):
+        self.file = file # path to the dialogue file

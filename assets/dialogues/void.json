@@ -1,0 +1,17 @@
+{
+  "id": "void_dialogue",
+  "lines": [
+    {
+      "speaker": "PNJ",
+      "text": "…",
+      "require": null,
+      "set_flag": null,
+      "options": [
+        {
+          "text": "Partir.",
+          "next": -1
+        }
+      ]
+    }
+  ]
+}
