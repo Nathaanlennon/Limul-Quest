@@ -1,4 +1,4 @@
-from core.base import *
+from engine.core.base import World, Entity, Event, NPC
 
 
 class Test(World):

@@ -1,6 +1,6 @@
-from core.EventSystem import EventSystem
-import core.InputSystem as InputSystem
-import core.DialogueSystem as DialogueSystem
+from engine.core.EventSystem import EventSystem
+import engine.core.InputSystem as InputSystem
+import engine.core.DialogueSystem as DialogueSystem
 import logging
 
 # log configuration
