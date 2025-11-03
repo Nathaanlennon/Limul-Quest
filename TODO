@@ -1,2 +1,6 @@
 modifier les event pour prendre en compte l'entité qui interragit avec -> player a des chances de devoir aller dans la lsite des entités aussi
 trouver une meilleure solution pour la redimension
+faire en sorte que les event aient pas accès à world et univers et faire des fonction callback
+faire en sorte qu'on puisse créer des event autre part et les introduire dans event plus tard
+peut-etre faire en sorte que les event soient plus liés aux entités
+que la fenetre redimmensionnée fasse crash le programme selon une taille dans l'univers et aussi la gestio ndes event est dans input system mtn

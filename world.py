@@ -6,14 +6,14 @@ class Test(World):
         super().__init__(data, "assets/maps/maptest.txt", (2, 3))
         self.name = "Monde1"
 
-        entity = self.add_entity(Entity(self, "door1", (4, 11), 'D'))
-        entity.add_event(Event(data, "door1", entity, "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5)))
-        entity = self.add_entity(Entity(self, "teleporter1", (5, 1), 'T'))
-        entity.add_event(Event(data, "teleporter1", entity, "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3)))
+        self.add_entity(Entity(self, "door1", (4, 11), 'D',
+                               [Event(data, self,"door1", "ON_INTERACT", "MOVE",
+                  target_scene=Test2, target_position=(5, 5))]))
+        self.add_entity(Entity(self, "teleporter1", (5, 1), 'T',
+                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
+                  target_scene=Test, target_position=(3, 3))]))
 
-        entity = self.add_entity(NPC(self, "npc1", (1, 1), 'N', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "npc1", (1, 1), 'N', dialogue="assets/dialogues/test.json"))
 
 
 class Test2(World):
@@ -22,8 +22,8 @@ class Test2(World):
         self.name = "Monde2"
 
         entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
-        entity.add_event(Event(data, "door", entity, "ON_INTERACT", "MOVE",
-                  target_scene=Test3))
+        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
+                               target_scene=Test3))
 
 
 class Test3(World):
@@ -32,5 +32,5 @@ class Test3(World):
         self.name = "Monde3"
 
         entity = self.add_entity(Entity(self,"door", (9, 24), 'D'))
-        entity.add_event(Event(data, "door", entity, "ON_INTERACT", "MOVE",
+        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
                   target_scene=Test2, target_position=(1, 1)))

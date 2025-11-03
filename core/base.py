@@ -12,7 +12,7 @@ logging.basicConfig(
 )
 
 class UniverseData:
-    def __init__(self, scene):
+    def __init__(self, scene, **kwargs):
         self.size = (18,67)
         self.scenes = {}
         self.current_scene = None
@@ -107,6 +107,11 @@ class Entity:
         self.movable = False
         self.events = {}
 
+        if events:
+            for event in events:
+                self.add_event(event)
+                event.entity = self
+
     def move(self, dx, dy):
         x, y = self.position
         if self.world.is_walkable((x+dx, y+dy)) and self.movable:
@@ -117,14 +122,16 @@ class Entity:
             logging.warning(f"Event de type {type(event)} ignoré pour Entité {self.name}") # incorrect type
             return
         self.events[event.name] = event
+        event.entity = self
         self.world.event_system.add_event(event)
 
 
 class Event:
-    def __init__(self, data, name, entity, activation_type, action_type, **kwargs):
+    def __init__(self, data, world, name, activation_type, action_type, entity=None, **kwargs):
         self.data = data
+        self.world = world
         self.name = name
-        self.entity = entity
+        self.entity = entity  # will be set when added to an entity
         self.active = True
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
@@ -142,7 +149,7 @@ class Event:
     def check_event_args(self, required_args, kwargs):
         missing = [arg for arg in required_args if arg not in kwargs]
         if missing:
-            logging.warning(f"Event {self.name} de {self.entity.name} dans {self.entity.world} désactivé : arguments manquants {missing}")
+            logging.warning(f"Event {self.name} dans {self.world} désactivé : arguments manquants {missing}")
             self.active = False
 
     @property
@@ -183,11 +190,11 @@ class NPC(Entity):
 
         self.add_event(
             Event(
-                world.data,
+                world.data, self.world,
                 f"dialogue_event_{name}",
-                self,
                 "ON_INTERACT",
                 "DIALOGUE",
+                self,
                 dialogue=self.dialogue
         ))
 
