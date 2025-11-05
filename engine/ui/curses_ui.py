@@ -100,7 +100,6 @@ class CursesUI:
         scene = self.universe.current_scene
         for y, ligne in enumerate(scene.map_data):
             stdscr.addstr(y, 0, ligne)
-        stdscr.addstr(len(scene.map_data) + 1, 0, "Appuie sur 'q' pour quitter.")
 
     def draw_player(self, stdscr):
         player = self.universe.player
