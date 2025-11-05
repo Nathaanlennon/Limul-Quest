@@ -1,3 +1,14 @@
+import importlib.util
+from engine.core.logging_setup import logger
+
+if importlib.util.find_spec("extensions.input_extensions") is not None:
+    import extensions.input_extensions as input_ext
+    charged = True
+else:
+    logger.warning(f"Module 'extension/input_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    charged = False
+
+
 def exploration_input(universe, key):
     if key == "UP":
         universe.player.move(-1, 0)  # Déplacer vers le haut
@@ -11,6 +22,9 @@ def exploration_input(universe, key):
     elif key == "RIGHT":
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
+
+    elif key == "TEST":
+        universe.mode_change("test")
 
     elif key == "INTERACT":
         ...
@@ -29,6 +43,10 @@ def dialogue_input(universe, key):
         if key == "INTERACT":
             universe.dialogue_system.set_next_line()
 
+modes = {
+    "exploration": exploration_input,
+    "dialogue": dialogue_input,}
 
-
+if charged:
+    modes.update(input_ext.input_modes)
 

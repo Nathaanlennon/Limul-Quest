@@ -1,15 +1,17 @@
-from core.EventSystem import EventSystem
-import core.InputSystem as InputSystem
-import core.DialogueSystem as DialogueSystem
-import logging
+from engine.core.EventSystem import EventSystem
+import engine.core.InputSystem as InputSystem
+import engine.core.DialogueSystem as DialogueSystem
+from engine.core.logging_setup import logger
+import importlib.util
 
-# log configuration
-logging.basicConfig(
-    filename="game.log",   # fichier de sortie
-    filemode="a",          # "a" = append, "w" = écrase à chaque lancement
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    level=logging.INFO     # niveau minimum à logger
-)
+if importlib.util.find_spec("extensions.data_extensions") is not None:
+    import extensions.data_extensions as data_ext
+    charged = True
+else:
+    logger.warning(f"Module 'extensions/data_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    charged = False
+
+
 
 class UniverseData:
     def __init__(self, scene, **kwargs):
@@ -19,14 +21,17 @@ class UniverseData:
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
         self.set_scene(scene)
 
-        self.mode = "exploration"  # Possible modes: : exploration, dialogue
-        self.input_system = InputSystem.exploration_input
-        # self.input_systems = {
+        self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
+        self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
+        # self.input_systems = {modes
         #     "exploration" : InputSystem(self)
         # }
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
+
+        if charged:
+            self.ext_data = data_ext.universe_data
 
     # scene gestion
     def set_scene(self, scene_class, **kwargs):
@@ -119,7 +124,7 @@ class Entity:
 
     def add_event(self, event):
         if not isinstance(event, Event):
-            logging.warning(f"Event de type {type(event)} ignoré pour Entité {self.name}") # incorrect type
+            logger.warning(f"Event de type {type(event)} ignoré pour Entité {self.name}") # incorrect type
             return
         self.events[event.name] = event
         event.entity = self
@@ -149,7 +154,7 @@ class Event:
     def check_event_args(self, required_args, kwargs):
         missing = [arg for arg in required_args if arg not in kwargs]
         if missing:
-            logging.warning(f"Event {self.name} dans {self.world} désactivé : arguments manquants {missing}")
+            logger.warning(f"Event {self.name} dans {self.world} désactivé : arguments manquants {missing}")
             self.active = False
 
     @property

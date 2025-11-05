@@ -1,4 +1,4 @@
-from core.base import *
+from engine.core.base import World, Entity, Event, NPC
 
 
 class Test(World):
@@ -6,7 +6,7 @@ class Test(World):
         super().__init__(data, "assets/maps/maptest.txt", (2, 3))
         self.name = "Monde1"
 
-        self.add_entity(Entity(self, "door1", (4, 11), 'D',
+        self.add_entity(Entity(self, "door1", (4, 11), 'DD',
                                [Event(data, self,"door1", "ON_INTERACT", "MOVE",
                   target_scene=Test2, target_position=(5, 5))]))
         self.add_entity(Entity(self, "teleporter1", (5, 1), 'T',

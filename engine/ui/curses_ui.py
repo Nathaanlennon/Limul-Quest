@@ -1,5 +1,16 @@
 import curses
 import world
+import importlib.util
+from engine.core.logging_setup import logger
+
+
+
+if importlib.util.find_spec("extensions.ui_extensions") is not None:
+    import extensions.ui_extensions as ui_ext
+    charged = True
+else:
+    logger.warning(f"Module 'extensions/ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
+    charged = False
 
 # mapping global, créé une seule fois
 KEY_MAPPING = {
@@ -9,6 +20,7 @@ KEY_MAPPING = {
     ord('d'): "RIGHT", ord('D'): "RIGHT",
     ord('e'): "INTERACT", ord('E'): "INTERACT",
     ord('x'): "QUIT", ord('X'): "QUIT",
+    ord('w'): "TEST",
     curses.KEY_UP: "UP",
     curses.KEY_DOWN: "DOWN",
     curses.KEY_LEFT: "LEFT",
@@ -19,10 +31,9 @@ KEY_MAPPING = {
 for i in range(10):
     KEY_MAPPING[ord(str(i))] = i
 
+
 def key_to_action(key):
     return KEY_MAPPING.get(key, None)
-
-
 
 
 class CursesUI:
@@ -32,19 +43,22 @@ class CursesUI:
             "exploration": self.exploration_mode,
             "dialogue": self.dialogue_mode
         }
+
+        if charged:
+            self.modes.update(ui_ext.ui_modes)
+
         self.mode_draw_function = self.modes[universe.mode]
         self.universe.set_mode_change_callback(self.change_mode)
-
 
     def run(self):
         curses.wrapper(self.main_loop)
 
     def change_mode(self, mode):
-        self.mode_draw_function = self.modes[mode]
+        self.mode_draw_function = self.modes.get(mode, self.exploration_mode)
 
     def main_loop(self, stdscr):
         curses.curs_set(0)
-        stdscr.nodelay(False) # getch make things waiting | edit I have no idea wtf this means
+        stdscr.nodelay(False)  # getch make things waiting | edit I have no idea wtf this means
 
         while True:
             stdscr.erase()
@@ -54,7 +68,8 @@ class CursesUI:
             else:
                 self.mode_draw_function(stdscr)
                 key = stdscr.getch()
-                self.universe.input_system(self.universe, key_to_action(key))# traite l'entrée et la convertit en action que le système peut comprendre
+                self.universe.input_system(self.universe, key_to_action(
+                    key))  # traite l'entrée et la convertit en action que le système peut comprendre
 
                 if key == ord('r'):
                     self.universe.set_scene(world.Test)
@@ -69,14 +84,11 @@ class CursesUI:
 
             stdscr.refresh()
 
-
     def exploration_mode(self, stdscr):
         self.show_scene(stdscr)
         self.draw_player(stdscr)
         self.draw_entities(stdscr)
         # self.draw_events(stdscr) # events dont have sprite for now
-
-
 
     def dialogue_mode(self, stdscr):
         stdscr.addstr(0, 0, self.universe.dialogue_system.current_reading)
@@ -84,12 +96,11 @@ class CursesUI:
             for idx, choice in enumerate(self.universe.dialogue_system.choices):
                 stdscr.addstr(idx + 2, 0, f"{idx + 1}. {choice}")
 
-
     def show_scene(self, stdscr):
         scene = self.universe.current_scene
         for y, ligne in enumerate(scene.map_data):
             stdscr.addstr(y, 0, ligne)
-        stdscr.addstr(len(scene.map_data)+1, 0, "Appuie sur 'q' pour quitter.")
+        stdscr.addstr(len(scene.map_data) + 1, 0, "Appuie sur 'q' pour quitter.")
 
     def draw_player(self, stdscr):
         player = self.universe.player
@@ -99,6 +110,7 @@ class CursesUI:
     def draw_entity(self, stdscr, entity):
         y, x = entity.position
         stdscr.addstr(y, x, entity.sprite)
+
     def draw_entities(self, stdscr):
         scene = self.universe.current_scene
         for entity in scene.entities.values():
@@ -107,6 +119,7 @@ class CursesUI:
     def draw_event(self, stdscr, event):
         y, x = event.position
         stdscr.addstr(y, x, event.sprite)
+
     def draw_events(self, stdscr):
         scene = self.universe.current_scene
         for event in scene.event_system.events.values():
