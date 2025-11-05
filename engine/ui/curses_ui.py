@@ -9,7 +9,7 @@ if importlib.util.find_spec("extensions.ui_extensions") is not None:
     import extensions.ui_extensions as ui_ext
     charged = True
 else:
-    logger.warning(f"Module 'extensions.ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
+    logger.warning(f"Module 'extensions/ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
     charged = False
 
 # mapping global, créé une seule fois

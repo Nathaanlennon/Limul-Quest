@@ -5,7 +5,7 @@ if importlib.util.find_spec("extensions.input_extensions") is not None:
     import extensions.input_extensions as input_ext
     charged = True
 else:
-    logger.warning(f"Module 'extensions.input_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    logger.warning(f"Module 'extension/input_extensions' is missing. please import scripts/setup_environment.py. in the main")
     charged = False
 
 

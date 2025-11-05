@@ -22,3 +22,9 @@ go on the project repository and run the main.py file
 ```bash
 py -3 `main.py`
 ```
+
+Linux:
+go on the repository and run
+```bash
+python3 main.py
+```

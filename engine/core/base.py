@@ -2,6 +2,15 @@ from engine.core.EventSystem import EventSystem
 import engine.core.InputSystem as InputSystem
 import engine.core.DialogueSystem as DialogueSystem
 from engine.core.logging_setup import logger
+import importlib.util
+
+if importlib.util.find_spec("extensions.data_extensions") is not None:
+    import extensions.data_extensions as data_ext
+    charged = True
+else:
+    logger.warning(f"Module 'extensions/data_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    charged = False
+
 
 
 class UniverseData:
@@ -20,6 +29,9 @@ class UniverseData:
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
+
+        if charged:
+            self.ext_data = data_ext.universe_data
 
     # scene gestion
     def set_scene(self, scene_class, **kwargs):

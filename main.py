@@ -1,4 +1,4 @@
-import scripts.setup_environment
+import scripts.setup_environment #necessary to add more "extensions", does nothing else and the program works whitout it
 
 from engine.ui.curses_ui import CursesUI
 from engine.core.base import UniverseData

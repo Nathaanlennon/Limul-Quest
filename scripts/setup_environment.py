@@ -2,9 +2,7 @@ import os
 
 # Dossiers obligatoires
 required_dirs = [
-    "game/data",
-    "game/input",
-    "game/worlds",
+    "extensions"
 ]
 
 for d in required_dirs:
@@ -51,4 +49,18 @@ if not os.path.exists(input_file):
 
 modes = {
     #custom_input: custom_input,
+}""")
+
+input_file= "extensions/data_extensions.py"
+if not os.path.exists(input_file):
+    with open(input_file, "w", encoding="utf-8") as f:
+        f.write("""# this is where all the additionnal data will be put, all the data that is not originally in the game-engine. 
+# It will be imported in the universe_data and the player_data in the core but the said core will never know nor use it, it's only for your additional extensions that you make
+
+universe_data = {
+    
+}
+
+player_data = {
+    
 }""")
