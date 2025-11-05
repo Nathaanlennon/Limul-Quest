@@ -13,7 +13,7 @@ logging.basicConfig(
 
 class UniverseData:
     def __init__(self, scene):
-        self.size = (18,67)
+        self.size = (40,70)
         self.scenes = {}
         self.current_scene = None
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
