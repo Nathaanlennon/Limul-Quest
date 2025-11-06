@@ -2,6 +2,7 @@ import curses
 import world
 import importlib.util
 from engine.core.logging_setup import logger
+from engine.core.ItemManager import get_item
 
 
 
@@ -19,6 +20,7 @@ KEY_MAPPING = {
     ord('q'): "LEFT", ord('Q'): "LEFT",
     ord('d'): "RIGHT", ord('D'): "RIGHT",
     ord('e'): "INTERACT", ord('E'): "INTERACT",
+    27 : "ESCAPE",  # ESCAPE key
     ord('x'): "QUIT", ord('X'): "QUIT",
     ord('w'): "TEST",
     curses.KEY_UP: "UP",
@@ -33,7 +35,7 @@ for i in range(10):
 
 
 def key_to_action(key):
-    return KEY_MAPPING.get(key, None)
+    return KEY_MAPPING.get(key, key)
 
 
 class CursesUI:
@@ -41,7 +43,8 @@ class CursesUI:
         self.universe = universe
         self.modes = {
             "exploration": self.exploration_mode,
-            "dialogue": self.dialogue_mode
+            "dialogue": self.dialogue_mode,
+            "inventory": self.inventory_mode
         }
 
         if charged:
@@ -49,6 +52,9 @@ class CursesUI:
 
         self.mode_draw_function = self.modes[universe.mode]
         self.universe.set_mode_change_callback(self.change_mode)
+
+
+
 
     def run(self):
         curses.wrapper(self.main_loop)
@@ -60,17 +66,22 @@ class CursesUI:
         curses.curs_set(0)
         stdscr.nodelay(False)  # getch make things waiting | edit I have no idea wtf this means
 
+
         while True:
             stdscr.erase()
+
             if stdscr.getmaxyx()[0] <= self.universe.size[0] or stdscr.getmaxyx()[1] <= self.universe.size[1]:
                 stdscr.addstr(0, 0, "Veuillez agrandir la fenêtre")
 
             else:
                 self.mode_draw_function(stdscr)
+                self.draw_screen(stdscr)
                 key = stdscr.getch()
+                stdscr.addstr(10, 10, f"Mode: {key}")
                 self.universe.input_system(self.universe, key_to_action(
                     key))  # traite l'entrée et la convertit en action que le système peut comprendre
 
+                # TODO: remove debug keys
                 if key == ord('r'):
                     self.universe.set_scene(world.Test)
                 elif key == ord('n'):
@@ -81,6 +92,10 @@ class CursesUI:
                     self.universe.mode_change("dialogue")
                 elif key == ord('p'):
                     self.universe.mode_change("exploration")
+                elif key == ord('o'):
+                    self.universe.player.add_to_inventory("health_potion", 1)
+                elif key == ord('l'):
+                    self.universe.mode_change("inventory")
 
             stdscr.refresh()
 
@@ -96,11 +111,16 @@ class CursesUI:
             for idx, choice in enumerate(self.universe.dialogue_system.choices):
                 stdscr.addstr(idx + 2, 0, f"{idx + 1}. {choice}")
 
+    def inventory_mode(self, stdscr):
+        stdscr.addstr(0, 0, "Inventory:")
+        for idx, (item_name, quantity) in enumerate(self.universe.player.inventory.items()):
+            item = get_item(item_name)
+            stdscr.addstr(idx + 2, 0, f"{item['name']} x{quantity}")
+
     def show_scene(self, stdscr):
         scene = self.universe.current_scene
         for y, ligne in enumerate(scene.map_data):
             stdscr.addstr(y, 0, ligne)
-        stdscr.addstr(len(scene.map_data) + 1, 0, "Appuie sur 'q' pour quitter.")
 
     def draw_player(self, stdscr):
         player = self.universe.player
@@ -124,3 +144,21 @@ class CursesUI:
         scene = self.universe.current_scene
         for event in scene.event_system.events.values():
             self.draw_event(stdscr, event)
+
+    def draw_screen(self, stdscr):
+        h, w = self.universe.size
+
+
+        # Bordures
+        stdscr.addstr(0, 0, '┌' + '─' * (w - 2) + '┐')
+        stdscr.addstr(h - 1, 0, '└' + '─' * (w - 2) + '┘')
+
+        # Barre du milieu
+        mid = h // 2
+        stdscr.addstr(mid, 0, '├' + '─' * (w - 2) + '┤')
+
+        # Bordures latérales sans remplir
+        for y in range(1, h - 1):
+            if y != mid:  # on saute la ligne centrale déjà dessinée
+                stdscr.addstr(y, 0, '│')
+                stdscr.addstr(y, w - 1, '│')

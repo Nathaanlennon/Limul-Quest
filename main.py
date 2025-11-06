@@ -6,7 +6,7 @@ from world import Test
 
 
 def main():
-    data = UniverseData(Test)  # logique pure
+    data = UniverseData(Test, (39,71))  # size is the size with the map and interface, number of lines and columns
     interface = CursesUI(data)  # interface spécifique
     interface.run()  # démarre l'affichage
 

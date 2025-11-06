@@ -1,6 +1,7 @@
 import importlib.util
 from engine.core.logging_setup import logger
 
+
 if importlib.util.find_spec("extensions.input_extensions") is not None:
     import extensions.input_extensions as input_ext
     charged = True
@@ -26,6 +27,8 @@ def exploration_input(universe, key):
     elif key == "TEST":
         universe.mode_change("test")
 
+
+
     elif key == "INTERACT":
         ...
 
@@ -43,9 +46,15 @@ def dialogue_input(universe, key):
         if key == "INTERACT":
             universe.dialogue_system.set_next_line()
 
+def inventory_input(universe, key):
+    if key == ord('v'):
+        universe.mode_change("exploration")
+
 modes = {
     "exploration": exploration_input,
-    "dialogue": dialogue_input,}
+    "dialogue": dialogue_input,
+    "inventory": inventory_input
+}
 
 if charged:
     modes.update(input_ext.input_modes)

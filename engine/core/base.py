@@ -14,8 +14,8 @@ else:
 
 
 class UniverseData:
-    def __init__(self, scene, **kwargs):
-        self.size = (18,67)
+    def __init__(self, scene, screen_size, **kwargs):
+        self.size = screen_size # (rows, cols)
         self.scenes = {}
         self.current_scene = None
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
@@ -57,6 +57,8 @@ class UniverseData:
             self.input_system = InputSystem.exploration_input
         elif mode == "dialogue":
             self.input_system = InputSystem.dialogue_input
+        elif mode == "inventory":
+            self.input_system = InputSystem.inventory_input
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -215,6 +217,12 @@ class Player(Entity):
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
 
+        self.inventory = { # dictionnary, id of the item is the key, the value is the quantity
+
+        }
+
+
+
     def facing_position(self): # gives the tiles facing the player
         x, y = self.position
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
@@ -222,3 +230,14 @@ class Player(Entity):
         )
         return x + dx, y + dy
 
+    def add_to_inventory(self, item_id, quantity=1):
+        if item_id in self.inventory:
+            self.inventory[item_id] += quantity
+        else:
+            self.inventory[item_id] = quantity
+
+    def remove_from_inventory(self, item_id, quantity=1):
+        if item_id in self.inventory and self.inventory[item_id] >= quantity:
+            self.inventory[item_id] -= quantity
+            if self.inventory[item_id] <= 0:
+                del self.inventory[item_id]
