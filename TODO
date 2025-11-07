@@ -8,3 +8,11 @@ TODO: gros probleme : si assets/default_map n'existe pas le programme crashera
 inverser les clés et valeurs pour le mapping pour pouvoir faire des mofications de touches par l'utilisateur ?
 
 TODO: CRITIQUE : L'UI FAIT CONSTAMMENT LA BOUCLE AU LIEU D'ATTENDRE
+
+systeme qui remplace les caractères dans les map
+
+finir inventaire, cad afficher les informations
+
+faire dialogue et inventaire proprement
+
+dialogue : utiliser la personne qui parle pour afficher l'image avec le nom du fichier étant pareil. Charger tous les fichiers dans un dictionnaire.

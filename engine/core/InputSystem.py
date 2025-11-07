@@ -42,6 +42,7 @@ def dialogue_input(universe, key):
         if isinstance(key, int):  # renvoie d'un chiffre via le mapping
             if 1 <= key <= len(universe.dialogue_system.choices):
                 universe.dialogue_system.set_next_line(choice_index=key - 1)
+
     elif universe.dialogue_system.state == "NEXT_LINE":
         if key == "INTERACT":
             universe.dialogue_system.set_next_line()

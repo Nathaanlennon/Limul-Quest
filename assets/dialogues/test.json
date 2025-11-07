@@ -1,9 +1,32 @@
 [
   {
+    "require": {
+      "insulted_npc": true
+    },
+    "speaker": "PNJ",
+    "text": "Tu oses revenir après m’avoir insulté ?",
+    "options": [
+      {
+        "text": "Euh… pardon ?",
+        "next": -1
+      },
+      {
+        "require": {
+          "has_item:health_potion": true
+        },
+        "text": "Je voulais juste plaisanter.",
+        "set_flags": {
+          "insulted_npc": false
+        },
+        "next": 1
+      }
+    ]
+  },
+  {
     "speaker": "PNJ",
     "text": "Le soleil se couchait derrière les montagnes, peignant le ciel de teintes orangées et violettes, tandis qu’un vent léger caressait les arbres et les feuilles frémissaient doucement.",
     "require": null,
-    "set_flag": null,
+    "set_flags": null,
     "options": [
       {
         "text": "Partir.",
@@ -11,7 +34,14 @@
       },
       {
         "text": "Parler.",
-        "next": 1
+        "next": 2
+      },
+      {
+        "text": "tu es vla moche",
+        "next": -1,
+        "set_flags": {
+          "insulted_npc": true
+        }
       }
     ]
   },
@@ -27,7 +57,7 @@
       },
       {
         "text": "Avez-vous des quêtes pour moi ?",
-        "next": 2
+        "next": 3
       }
     ]
   },
@@ -35,11 +65,11 @@
     "speaker": "PNJ",
     "text": "Oui, en fait. J'ai besoin d'aide pour retrouver un objet perdu dans la forêt voisine.",
     "require": null,
-    "set_flag": null,
+    "set_flags": null,
     "options": [
       {
         "text": "Je vais vous aider.",
-        "next": 3
+        "next": 4
       },
       {
         "text": "Désolé, je suis occupé.",
@@ -51,13 +81,13 @@
     "speaker": "PNJ",
     "text": "Merci beaucoup ! Revenez me voir une fois que vous l'aurez trouvé.",
     "require": null,
-    "set_flag": null
+    "set_flags": null
   },
   {
     "speaker": "PNJ",
     "text": "Bonne chance dans vos aventures !",
     "require": null,
-    "set_flag": null,
+    "set_flags": null,
     "options": [
       {
         "text": "Merci, à vous aussi !",

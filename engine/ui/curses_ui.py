@@ -75,7 +75,7 @@ class CursesUI:
 
             else:
                 self.mode_draw_function(stdscr)
-                self.draw_screen(stdscr)
+                #self.draw_screen(stdscr)
                 key = stdscr.getch()
                 stdscr.addstr(10, 10, f"Mode: {key}")
                 self.universe.input_system(self.universe, key_to_action(

@@ -1,16 +1,19 @@
+from os.path import exists
+
 from engine.core.EventSystem import EventSystem
 import engine.core.InputSystem as InputSystem
 import engine.core.DialogueSystem as DialogueSystem
 from engine.core.logging_setup import logger
-import importlib.util
+import os
 
-if importlib.util.find_spec("extensions.data_extensions") is not None:
+"""Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
+if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
     import extensions.data_extensions as data_ext
     charged = True
-else:
-    logger.warning(f"Module 'extensions/data_extensions' is missing. please import scripts/setup_environment.py. in the main")
-    charged = False
 
+else:
+    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Importez scripts/setup_environment.py dans le main pour utiliser.")
+    charged = False
 
 
 class UniverseData:
@@ -30,6 +33,7 @@ class UniverseData:
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
 
+        # extension data
         if charged:
             self.ext_data = data_ext.universe_data
 
@@ -220,6 +224,9 @@ class Player(Entity):
         self.inventory = { # dictionnary, id of the item is the key, the value is the quantity
 
         }
+        if charged:
+            self.ext_data = data_ext.player_data
+
 
 
 
