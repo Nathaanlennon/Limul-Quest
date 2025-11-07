@@ -15,7 +15,7 @@ else:
 
 class UniverseData:
     def __init__(self, scene, **kwargs):
-        self.size = (37,71)
+        self.size = (39,72)
         self.scenes = {}
         self.current_scene = None
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
