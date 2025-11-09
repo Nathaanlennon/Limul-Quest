@@ -1,5 +1,7 @@
 import importlib.util
 from engine.core.logging_setup import logger
+import world
+
 
 
 if importlib.util.find_spec("extensions.input_extensions") is not None:
@@ -23,9 +25,10 @@ def exploration_input(universe, key):
     elif key == "RIGHT":
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
-
+    elif key == "INVENTORY":
+        universe.mode_change("inventory")
     elif key == "TEST":
-        universe.mode_change("test")
+        universe.mode_change("debug")
 
 
 
@@ -48,13 +51,37 @@ def dialogue_input(universe, key):
             universe.dialogue_system.set_next_line()
 
 def inventory_input(universe, key):
-    if key == ord('v'):
+    if key == "INVENTORY":
+        universe.mode_change("exploration")
+
+def debug_input(universe, key):
+    exploration_input(universe, key)  # garder les contrôles d'exploration
+
+    if key == ord('b'):
+        universe.mode_change("exploration")
+        # TODO: remove debug keys
+    if key == ord('r'):
+        universe.set_scene(world.Test)
+    elif key == ord('n'):
+        universe.set_scene(world.Test2)
+    elif key == ord('y'):
+        universe.set_scene(world.Test3)
+    elif key == ord('m'):
+        universe.mode_change("dialogue")
+    elif key == ord('p'):
+        universe.mode_change("exploration")
+    elif key == ord('o'):
+        universe.player.add_to_inventory("health_potion", 1)
+    elif key == ord('l'):
+        universe.mode_change("inventory")
+    elif key == 'TEST':
         universe.mode_change("exploration")
 
 modes = {
     "exploration": exploration_input,
     "dialogue": dialogue_input,
-    "inventory": inventory_input
+    "inventory": inventory_input,
+    "debug": debug_input
 }
 
 if charged:

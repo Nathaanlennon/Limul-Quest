@@ -63,6 +63,8 @@ class UniverseData:
             self.input_system = InputSystem.dialogue_input
         elif mode == "inventory":
             self.input_system = InputSystem.inventory_input
+        elif mode == "debug":
+            self.input_system = InputSystem.debug_input
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""

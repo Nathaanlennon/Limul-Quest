@@ -61,6 +61,37 @@ class DialogueSystem:
                     return False
         return True
 
+    def apply_effects(self, effects):
+        """
+        Applique les effets définis dans un dialogue ou une option.
+        Anciennement `set_flag`, mais étendu pour inclure :
+        - player:<clé> → modifie self.universe.player.ext_data
+        - universe:<clé> → modifie self.universe.ext_data
+        - give_item:<item_id> → ajoute un item à l'inventaire du joueur
+        - remove_item:<item_id> → retire un item de l'inventaire du joueur
+        """
+
+        if not effects:
+            return
+
+        for key, value in effects.items():
+            if key.startswith("player:"):
+                subkey = key.split(":", 1)[1]
+                self.universe.player.ext_data[subkey] = value
+            elif key.startswith("universe:"):
+                subkey = key.split(":", 1)[1]
+                self.universe.ext_data[subkey] = value
+            elif key.startswith("give_item:"):
+                item_id = key.split(":", 1)[1]
+                if int(value) > 0:
+                    self.universe.player.add_to_inventory(item_id, int(value))
+            elif key.startswith("remove_item:"):
+                item_id = key.split(":", 1)[1]
+                if int(value) < 0:
+                    self.universe.player.remove_from_inventory(item_id, value)
+            else:
+                # Par défaut : stocke dans player.ext_data
+                self.universe.player.ext_data[key] = value
 
     def set_dialogues(self, file_path):
         """Load dialogues from file_path if it exists, otherwise fall back to default.
@@ -141,9 +172,8 @@ class DialogueSystem:
             # set index based on the 'next' field of the chosen option
             choice = self.dialogues[self.index]["options"][choice_index]
             self.index = choice["next"]
-            if "set_flags" in choice:
-                for key, value in choice["set_flags"].items():
-                    self.universe.player.ext_data[key] = value
+            if "effects" in choice:
+                self.apply_effects(choice["effects"])
 
             # clear choices since we've taken a branch
             self.choices = []

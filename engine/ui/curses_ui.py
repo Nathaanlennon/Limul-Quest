@@ -22,7 +22,8 @@ KEY_MAPPING = {
     ord('e'): "INTERACT", ord('E'): "INTERACT",
     27 : "ESCAPE",  # ESCAPE key
     ord('x'): "QUIT", ord('X'): "QUIT",
-    ord('w'): "TEST",
+    ord('w'): "TEST", ord('W'): "TEST",
+    ord('i'): "INVENTORY", ord('I'): "INVENTORY",
     curses.KEY_UP: "UP",
     curses.KEY_DOWN: "DOWN",
     curses.KEY_LEFT: "LEFT",
@@ -44,7 +45,8 @@ class CursesUI:
         self.modes = {
             "exploration": self.exploration_mode,
             "dialogue": self.dialogue_mode,
-            "inventory": self.inventory_mode
+            "inventory": self.inventory_mode,
+            "debug": self.debug_mode
         }
 
         if charged:
@@ -81,21 +83,7 @@ class CursesUI:
                 self.universe.input_system(self.universe, key_to_action(
                     key))  # traite l'entrée et la convertit en action que le système peut comprendre
 
-                # TODO: remove debug keys
-                if key == ord('r'):
-                    self.universe.set_scene(world.Test)
-                elif key == ord('n'):
-                    self.universe.set_scene(world.Test2)
-                elif key == ord('y'):
-                    self.universe.set_scene(world.Test3)
-                elif key == ord('m'):
-                    self.universe.mode_change("dialogue")
-                elif key == ord('p'):
-                    self.universe.mode_change("exploration")
-                elif key == ord('o'):
-                    self.universe.player.add_to_inventory("health_potion", 1)
-                elif key == ord('l'):
-                    self.universe.mode_change("inventory")
+
 
             stdscr.refresh()
 
@@ -116,6 +104,10 @@ class CursesUI:
         for idx, (item_name, quantity) in enumerate(self.universe.player.inventory.items()):
             item = get_item(item_name)
             stdscr.addstr(idx + 2, 0, f"{item['name']} x{quantity}")
+
+    def debug_mode(self, stdscr):
+        self.exploration_mode(stdscr)
+        stdscr.addstr(0, 0, "DEBUG MODE")
 
     def show_scene(self, stdscr):
         scene = self.universe.current_scene

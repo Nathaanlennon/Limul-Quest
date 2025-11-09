@@ -16,3 +16,5 @@ finir inventaire, cad afficher les informations
 faire dialogue et inventaire proprement
 
 dialogue : utiliser la personne qui parle pour afficher l'image avec le nom du fichier étant pareil. Charger tous les fichiers dans un dictionnaire.
+
+verifier que les assets existent / réparer le script pour le rendre executable au lieu de l'importer
