@@ -88,7 +88,7 @@ class World:
 
 
     def load_map(self):
-        with open(self.map, 'r') as file:
+        with open(self.map, 'r', encoding='utf-8') as file:
             map_data = [line.rstrip('\n') for line in file]
         return map_data
 

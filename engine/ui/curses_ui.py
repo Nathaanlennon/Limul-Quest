@@ -13,6 +13,23 @@ else:
     logger.warning(f"Module 'extensions/ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
     charged = False
 
+curses.initscr()
+
+# Table de correspondance Unicode -> curses ACS
+CHAR_MAP = {
+    '─': curses.ACS_HLINE,
+    '│': curses.ACS_VLINE,
+    '┌': curses.ACS_ULCORNER,
+    '┐': curses.ACS_URCORNER,
+    '└': curses.ACS_LLCORNER,
+    '┘': curses.ACS_LRCORNER,
+    '┬': curses.ACS_TTEE,
+    '┴': curses.ACS_BTEE,
+    '├': curses.ACS_LTEE,
+    '┤': curses.ACS_RTEE,
+    '┼': curses.ACS_PLUS,
+}
+
 # mapping global, créé une seule fois
 KEY_MAPPING = {
     ord('z'): "UP", ord('Z'): "UP",
@@ -154,3 +171,10 @@ class CursesUI:
             if y != mid:  # on saute la ligne centrale déjà dessinée
                 stdscr.addstr(y, 0, '│')
                 stdscr.addstr(y, w - 1, '│')
+
+    def draw_text(self, stdscr, text, y, x):
+        for idx, char in enumerate(text):
+            if char in CHAR_MAP:
+                stdscr.addch(y, x + idx, CHAR_MAP[char])
+            else:
+                stdscr.addch(y, x + idx, char)
