@@ -3,7 +3,7 @@ from engine.core.base import World, Entity, Event, NPC
 
 class Test(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/maptest.txt", (2, 3))
+        super().__init__(data, "assets/maps/mapVillage1.txt", (2, 3))
         self.name = "Monde1"
 
         self.add_entity(Entity(self, "door1", (4, 11), 'DD',
