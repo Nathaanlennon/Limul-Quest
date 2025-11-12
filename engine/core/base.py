@@ -229,6 +229,11 @@ class Player(Entity):
         if charged:
             self.ext_data = data_ext.player_data
 
+        # combat stats
+        self.hp = 100
+        self.attack = 10
+        self.defense = 5
+
 
 
 
@@ -250,3 +255,7 @@ class Player(Entity):
             self.inventory[item_id] -= quantity
             if self.inventory[item_id] <= 0:
                 del self.inventory[item_id]
+
+    def death(self):
+        """Gère la mort du joueur. À implémenter."""
+        logger.info("Le joueur est mort")
