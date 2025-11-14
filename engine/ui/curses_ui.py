@@ -2,6 +2,7 @@ import curses
 import world
 import importlib.util
 from engine.core.logging_setup import logger
+from engine.core.ItemManager import get_item
 
 
 
@@ -12,6 +13,23 @@ else:
     logger.warning(f"Module 'extensions/ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
     charged = False
 
+curses.initscr()
+
+# Table de correspondance Unicode -> curses ACS
+CHAR_MAP = {
+    '─': curses.ACS_HLINE,
+    '│': curses.ACS_VLINE,
+    '┌': curses.ACS_ULCORNER,
+    '┐': curses.ACS_URCORNER,
+    '└': curses.ACS_LLCORNER,
+    '┘': curses.ACS_LRCORNER,
+    '┬': curses.ACS_TTEE,
+    '┴': curses.ACS_BTEE,
+    '├': curses.ACS_LTEE,
+    '┤': curses.ACS_RTEE,
+    '┼': curses.ACS_PLUS,
+}
+
 # mapping global, créé une seule fois
 KEY_MAPPING = {
     ord('z'): "UP", ord('Z'): "UP",
@@ -19,8 +37,10 @@ KEY_MAPPING = {
     ord('q'): "LEFT", ord('Q'): "LEFT",
     ord('d'): "RIGHT", ord('D'): "RIGHT",
     ord('e'): "INTERACT", ord('E'): "INTERACT",
+    27 : "ESCAPE",  # ESCAPE key
     ord('x'): "QUIT", ord('X'): "QUIT",
-    ord('w'): "TEST",
+    ord('w'): "TEST", ord('W'): "TEST",
+    ord('i'): "INVENTORY", ord('I'): "INVENTORY",
     curses.KEY_UP: "UP",
     curses.KEY_DOWN: "DOWN",
     curses.KEY_LEFT: "LEFT",
@@ -33,7 +53,7 @@ for i in range(10):
 
 
 def key_to_action(key):
-    return KEY_MAPPING.get(key, None)
+    return KEY_MAPPING.get(key, key)
 
 
 class CursesUI:
@@ -41,7 +61,10 @@ class CursesUI:
         self.universe = universe
         self.modes = {
             "exploration": self.exploration_mode,
-            "dialogue": self.dialogue_mode
+            "dialogue": self.dialogue_mode,
+            "inventory": self.inventory_mode,
+            "debug": self.debug_mode,
+            "combat": self.combat_mode
         }
 
         if charged:
@@ -49,6 +72,9 @@ class CursesUI:
 
         self.mode_draw_function = self.modes[universe.mode]
         self.universe.set_mode_change_callback(self.change_mode)
+
+
+
 
     def run(self):
         curses.wrapper(self.main_loop)
@@ -60,29 +86,27 @@ class CursesUI:
         curses.curs_set(0)
         stdscr.nodelay(False)  # getch make things waiting | edit I have no idea wtf this means
 
+
         while True:
             stdscr.erase()
+
             if stdscr.getmaxyx()[0] <= self.universe.size[0] or stdscr.getmaxyx()[1] <= self.universe.size[1]:
                 stdscr.addstr(0, 0, "Veuillez agrandir la fenêtre")
 
             else:
                 self.mode_draw_function(stdscr)
+                #self.draw_screen(stdscr)
                 key = stdscr.getch()
+                stdscr.addstr(10, 10, f"Mode: {key}")
                 self.universe.input_system(self.universe, key_to_action(
                     key))  # traite l'entrée et la convertit en action que le système peut comprendre
 
-                if key == ord('r'):
-                    self.universe.set_scene(world.Test)
-                elif key == ord('n'):
-                    self.universe.set_scene(world.Test2)
-                elif key == ord('y'):
-                    self.universe.set_scene(world.Test3)
-                elif key == ord('m'):
-                    self.universe.mode_change("dialogue")
-                elif key == ord('p'):
-                    self.universe.mode_change("exploration")
+
 
             stdscr.refresh()
+
+
+    # modes de "gameplay"
 
     def exploration_mode(self, stdscr):
         self.show_scene(stdscr)
@@ -96,11 +120,60 @@ class CursesUI:
             for idx, choice in enumerate(self.universe.dialogue_system.choices):
                 stdscr.addstr(idx + 2, 0, f"{idx + 1}. {choice}")
 
+    def inventory_mode(self, stdscr):
+        stdscr.addstr(0, 0, "Inventory:")
+        for idx, (item_name, quantity) in enumerate(self.universe.player.inventory.items()):
+            item = get_item(item_name)
+            stdscr.addstr(idx + 2, 0, f"{item['name']} x{quantity}")
+
+    def combat_mode(self, stdscr):
+        combat_system = self.universe.combat_system
+        stdscr.addstr(0, 0, "COMBAT MODE")
+        for idx, enemy in enumerate(self.universe.combat_system.fighters):
+            stdscr.addstr(idx + 2, 0, f"{enemy.name} - HP: {enemy.hp}")
+        stdscr.addstr(10, 0, "Player HP: {}".format(self.universe.player.hp))
+
+        q0 = combat_system.queue[0] if combat_system.queue else ""
+
+        if combat_system.state == "START":
+            stdscr.addstr(12, 0, "A wild enemy appears!")
+        elif combat_system.state == "PLAYER_TURN":
+            if q0 == "PLAYER_CHOICE":
+                stdscr.addstr(12, 0, "Choose your action:")
+                stdscr.addstr(13, 0, "1. Attack")
+                # stdscr.addstr(14, 0, "2. Defend")
+                # stdscr.addstr(15, 0, "3. Use Item")
+            elif q0:
+                for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
+                    if q0.startswith(prefix):
+                        stdscr.addstr(12, 0, q0)
+                        break
+
+        elif combat_system.state == "ENEMIES_TURN" and q0:
+            for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
+                if q0.startswith(prefix):
+                    stdscr.addstr(12, 0, q0)
+                    break
+        elif combat_system.state == "VICTORY":
+            stdscr.addstr(12, 0, "You won the combat!")
+            stdscr.addstr(13, 0, "Loot:")
+            for idx, (item_id, quantity) in enumerate(combat_system.loot):
+                item = get_item(item_id)
+                stdscr.addstr(14 + idx, 0, f"{item['name']} x{quantity}")
+
+
+
+    def debug_mode(self, stdscr):
+        self.exploration_mode(stdscr)
+        stdscr.addstr(0, 0, "DEBUG MODE")
+
+
+
+
     def show_scene(self, stdscr):
         scene = self.universe.current_scene
         for y, ligne in enumerate(scene.map_data):
             stdscr.addstr(y, 0, ligne)
-        stdscr.addstr(len(scene.map_data) + 1, 0, "Appuie sur 'q' pour quitter.")
 
     def draw_player(self, stdscr):
         player = self.universe.player
@@ -124,3 +197,28 @@ class CursesUI:
         scene = self.universe.current_scene
         for event in scene.event_system.events.values():
             self.draw_event(stdscr, event)
+
+    def draw_screen(self, stdscr):
+        h, w = self.universe.size
+
+
+        # Bordures
+        stdscr.addstr(0, 0, '┌' + '─' * (w - 2) + '┐')
+        stdscr.addstr(h - 1, 0, '└' + '─' * (w - 2) + '┘')
+
+        # Barre du milieu
+        mid = h // 2
+        stdscr.addstr(mid, 0, '├' + '─' * (w - 2) + '┤')
+
+        # Bordures latérales sans remplir
+        for y in range(1, h - 1):
+            if y != mid:  # on saute la ligne centrale déjà dessinée
+                stdscr.addstr(y, 0, '│')
+                stdscr.addstr(y, w - 1, '│')
+
+    def draw_text(self, stdscr, text, y, x):
+        for idx, char in enumerate(text):
+            if char in CHAR_MAP:
+                stdscr.addch(y, x + idx, CHAR_MAP[char])
+            else:
+                stdscr.addch(y, x + idx, char)

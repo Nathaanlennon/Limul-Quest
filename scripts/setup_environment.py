@@ -22,7 +22,7 @@ if not os.path.exists(input_file):
 #def custom_mode(stdscr):
 #    # Custom mode implementation
 
-modes = {
+ui_modes = {
     #cutom_mode: custom_mode,
 }
 
@@ -47,7 +47,7 @@ if not os.path.exists(input_file):
 #def custom_input(universe, key):
 #    # Custom input implementation
 
-modes = {
+input_modes = {
     #custom_input: custom_input,
 }""")
 

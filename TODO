@@ -1,6 +1,20 @@
 modifier les event pour prendre en compte l'entité qui interragit avec -> player a des chances de devoir aller dans la lsite des entités aussi
-trouver une meilleure solution pour la redimension
 faire en sorte que les event aient pas accès à world et univers et faire des fonction callback
 faire en sorte qu'on puisse créer des event autre part et les introduire dans event plus tard
 peut-etre faire en sorte que les event soient plus liés aux entités
-que la fenetre redimmensionnée fasse crash le programme selon une taille dans l'univers et aussi la gestio ndes event est dans input system mtn
+
+TODO: gros probleme : si assets/default_map n'existe pas le programme crashera
+
+inverser les clés et valeurs pour le mapping pour pouvoir faire des mofications de touches par l'utilisateur ?
+
+TODO: CRITIQUE : L'UI FAIT CONSTAMMENT LA BOUCLE AU LIEU D'ATTENDRE
+
+systeme qui remplace les caractères dans les map
+
+finir inventaire, cad afficher les informations
+
+faire dialogue et inventaire proprement
+
+dialogue : utiliser la personne qui parle pour afficher l'image avec le nom du fichier étant pareil. Charger tous les fichiers dans un dictionnaire.
+
+verifier que les assets existent / réparer le script pour le rendre executable au lieu de l'importer
