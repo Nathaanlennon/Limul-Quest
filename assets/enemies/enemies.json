@@ -1,7 +1,7 @@
 {
   "goblin": {
     "name": "Gobelin",
-    "hp": 30,
+    "hp": 10,
     "attack": 5,
     "defense": 2,
     "loot": {

@@ -18,18 +18,9 @@ def load_enemies_list(file_path="assets/enemies/enemies.json"):
         return {}
 
 
-def attack_target(attacker, target):
-    """Effectue une attaque basique sur la cible."""
-    attack_value = attacker.attack
-    damage = random.randint(attack_value - 2, attack_value + 2)
-    target.receive_damage(damage)
 
 
-def receive_damage(target, damage):
-    """Réduit les points de vie de l'ennemi."""
-    target.hp -= damage - target.defense
-    if target.hp <= 0:
-        target.death()
+
 
 
 class CombatSystem:
@@ -38,6 +29,10 @@ class CombatSystem:
         self.enemies_list = load_enemies_list()
         self.fighters = []
         self.loot = []
+
+        self.state = "START" # États possibles : START, PLAYER_TURN, ENEMIES_TURN, VICTORY, DEFEAT
+        self.queue = []
+        self.player_turn()
 
     class Enemy:
         def __init__(self, combat_system, enemy_data):
@@ -50,15 +45,12 @@ class CombatSystem:
 
             self.combat_system = combat_system
 
-        def loot(self):
-            if self.hp <= 0:
-                for item, proba in self.loot:
-                    if random.randint(1, 100) <= proba * 100:
-                        self.combat_system.loot.append((item, 1))
 
         def death(self):
             """Gère la mort de l'ennemi."""
-            self.loot()
+            for item, proba in self.loot.items():
+                if random.randint(1, 100) <= proba * 100:
+                    self.combat_system.loot.append((item, 1))
             self.combat_system.remove_fighter(self)
 
 
@@ -80,6 +72,23 @@ class CombatSystem:
         if fighter in self.fighters:
             self.fighters.remove(fighter)
 
+    def attack_target(self, attacker, target):
+        """Effectue une attaque basique sur la cible."""
+
+        attack_value = attacker.attack
+        damage = random.randint(attack_value - 2, attack_value + 2)
+        self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
+        self.receive_damage(target, damage)
+
+    def receive_damage(self, target, damage):
+        """Réduit les points de vie de l'ennemi."""
+        hit = max(0,damage - target.defense)
+        target.hp -= hit
+        self.queue.append('DAMAGE: {} takes {} damage'.format(target.name, hit))
+        if target.hp <= 0:
+            self.queue.append('DEATH: {} has been defeated'.format(target.name))
+            target.death()
+
     def give_loot(self):
         """Donne le loot au joueur après le combat."""
         for item_id, quantity in self.loot:
@@ -89,12 +98,29 @@ class CombatSystem:
     def player_turn(self):
         """Effectue le tour du joueur."""
         # Pour l'instant, le joueur attaque le premier ennemi dans la liste
+        self.state="PLAYER_TURN"
+        self.queue.append("PLAYER_CHOICE")
+
+
+    def enemies_turn(self):
+        """Effectue le tour des ennemis."""
+        self.state="ENEMIES_TURN"
         if self.fighters:
-            attack_target(self.player, self.fighters[0])
+            for fighter in self.fighters:
+                self.attack_target(fighter, self.player)
+        else:
+            self.state="VICTORY"
 
-    def combat_round(self):
-        """Effectue un round de combat où chaque combattant attaque."""
-        self.player_turn()
-        for fighter in self.fighters:
-            attack_target(fighter, self.player)
+    def new_round(self):
+        """Démarre un nouveau round de combat."""
+        if self.fighters:
+            self.player_turn()
+        else:
+            self.state="VICTORY"
 
+    def reset_combat(self):
+        """Réinitialise le système de combat pour un nouveau combat."""
+        self.fighters = []
+        self.loot = []
+        self.queue = []
+        self.state = "START"

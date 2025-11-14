@@ -3,6 +3,7 @@ from os.path import exists
 from engine.core.EventSystem import EventSystem
 import engine.core.InputSystem as InputSystem
 import engine.core.DialogueSystem as DialogueSystem
+import engine.core.CombatSystem as CombatSystem
 from engine.core.logging_setup import logger
 import os
 
@@ -32,6 +33,7 @@ class UniverseData:
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
+        self.combat_system = CombatSystem.CombatSystem(self.player)
 
         # extension data
         if charged:
@@ -65,6 +67,8 @@ class UniverseData:
             self.input_system = InputSystem.inventory_input
         elif mode == "debug":
             self.input_system = InputSystem.debug_input
+        elif mode == "combat":
+            self.input_system = InputSystem.combat_input
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -88,9 +92,12 @@ class World:
 
 
     def load_map(self):
-        with open(self.map, 'r', encoding='utf-8') as file:
-            map_data = [line.rstrip('\n') for line in file]
-        return map_data
+        if os.path.exists(self.map) and os.path.isfile(self.map):
+            with open(self.map, 'r', encoding='utf-8') as file:
+                map_data = [line.rstrip('\n') for line in file]
+            return map_data
+        else:
+           return ""
 
     def is_walkable(self, tile):
         x, y = tile

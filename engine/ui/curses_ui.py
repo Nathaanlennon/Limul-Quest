@@ -63,7 +63,8 @@ class CursesUI:
             "exploration": self.exploration_mode,
             "dialogue": self.dialogue_mode,
             "inventory": self.inventory_mode,
-            "debug": self.debug_mode
+            "debug": self.debug_mode,
+            "combat": self.combat_mode
         }
 
         if charged:
@@ -104,6 +105,9 @@ class CursesUI:
 
             stdscr.refresh()
 
+
+    # modes de "gameplay"
+
     def exploration_mode(self, stdscr):
         self.show_scene(stdscr)
         self.draw_player(stdscr)
@@ -122,9 +126,49 @@ class CursesUI:
             item = get_item(item_name)
             stdscr.addstr(idx + 2, 0, f"{item['name']} x{quantity}")
 
+    def combat_mode(self, stdscr):
+        combat_system = self.universe.combat_system
+        stdscr.addstr(0, 0, "COMBAT MODE")
+        for idx, enemy in enumerate(self.universe.combat_system.fighters):
+            stdscr.addstr(idx + 2, 0, f"{enemy.name} - HP: {enemy.hp}")
+        stdscr.addstr(10, 0, "Player HP: {}".format(self.universe.player.hp))
+
+        q0 = combat_system.queue[0] if combat_system.queue else ""
+
+        if combat_system.state == "START":
+            stdscr.addstr(12, 0, "A wild enemy appears!")
+        elif combat_system.state == "PLAYER_TURN":
+            if q0 == "PLAYER_CHOICE":
+                stdscr.addstr(12, 0, "Choose your action:")
+                stdscr.addstr(13, 0, "1. Attack")
+                # stdscr.addstr(14, 0, "2. Defend")
+                # stdscr.addstr(15, 0, "3. Use Item")
+            elif q0:
+                for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
+                    if q0.startswith(prefix):
+                        stdscr.addstr(12, 0, q0)
+                        break
+
+        elif combat_system.state == "ENEMIES_TURN" and q0:
+            for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
+                if q0.startswith(prefix):
+                    stdscr.addstr(12, 0, q0)
+                    break
+        elif combat_system.state == "VICTORY":
+            stdscr.addstr(12, 0, "You won the combat!")
+            stdscr.addstr(13, 0, "Loot:")
+            for idx, (item_id, quantity) in enumerate(combat_system.loot):
+                item = get_item(item_id)
+                stdscr.addstr(14 + idx, 0, f"{item['name']} x{quantity}")
+
+
+
     def debug_mode(self, stdscr):
         self.exploration_mode(stdscr)
         stdscr.addstr(0, 0, "DEBUG MODE")
+
+
+
 
     def show_scene(self, stdscr):
         scene = self.universe.current_scene
