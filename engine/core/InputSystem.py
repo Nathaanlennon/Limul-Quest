@@ -1,5 +1,8 @@
 import importlib.util
 from engine.core.logging_setup import logger
+import world
+
+
 
 if importlib.util.find_spec("extensions.input_extensions") is not None:
     import extensions.input_extensions as input_ext
@@ -22,9 +25,12 @@ def exploration_input(universe, key):
     elif key == "RIGHT":
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
-
+    elif key == "INVENTORY":
+        universe.mode_change("inventory")
     elif key == "TEST":
-        universe.mode_change("test")
+        universe.mode_change("debug")
+
+
 
     elif key == "INTERACT":
         ...
@@ -39,13 +45,84 @@ def dialogue_input(universe, key):
         if isinstance(key, int):  # renvoie d'un chiffre via le mapping
             if 1 <= key <= len(universe.dialogue_system.choices):
                 universe.dialogue_system.set_next_line(choice_index=key - 1)
+
     elif universe.dialogue_system.state == "NEXT_LINE":
         if key == "INTERACT":
             universe.dialogue_system.set_next_line()
 
+def inventory_input(universe, key):
+    if key == "INVENTORY":
+        universe.mode_change("exploration")
+
+def debug_input(universe, key):
+    exploration_input(universe, key)  # garder les contrôles d'exploration
+
+    if key == ord('b'):
+        universe.mode_change("exploration")
+        # TODO: remove debug keys
+    if key == ord('r'):
+        universe.set_scene(world.Test)
+    elif key == ord('n'):
+        universe.set_scene(world.Test2)
+    elif key == ord('y'):
+        universe.set_scene(world.Test3)
+    elif key == ord('m'):
+        universe.mode_change("dialogue")
+    elif key == ord('p'):
+        universe.mode_change("exploration")
+    elif key == ord('o'):
+        universe.player.add_to_inventory("health_potion", 1)
+    elif key == ord('l'):
+        universe.mode_change("inventory")
+    elif key == 'TEST':
+        universe.mode_change("exploration")
+    elif key == ord('b'):
+        universe.mode_change("combat")
+        universe.combat_system.add_fighter("goblin")
+        universe.combat_system.add_fighter("goblin")
+
+def combat_input(universe, key):
+    # Placeholder for combat input handling
+    if universe.combat_system.state == "START":
+        if key == "INTERACT":
+            universe.combat_system.player_turn()
+    elif universe.combat_system.state == "PLAYER_TURN":
+        if universe.combat_system.queue:
+            if universe.combat_system.queue[0] == "PLAYER_CHOICE":
+                if isinstance(key, int):
+                    if key == 1:
+                        # For now, always attack the first enemy
+                        if universe.combat_system.fighters:
+                            universe.combat_system.queue.pop(0)  # Remove PLAYER_CHOICE from queue
+                            universe.combat_system.attack_target(universe.player, universe.combat_system.fighters[0])
+            else:
+                # In combat, any key press could advance the combat log
+                universe.combat_system.queue.pop(0)
+        if not universe.combat_system.queue:
+            # If the queue is empty, proceed to the next round
+            universe.combat_system.enemies_turn()
+    elif universe.combat_system.state == "ENEMIES_TURN":
+        # During enemies' turn, we can just wait for the turn to end
+        if universe.combat_system.queue:
+            # In combat, any key press could advance the combat log
+            universe.combat_system.queue.pop(0)
+        if not universe.combat_system.queue:
+            universe.combat_system.new_round()
+    elif universe.combat_system.state == "VICTORY":
+        if key == "INTERACT":
+            universe.combat_system.give_loot()
+            universe.combat_system.reset_combat()
+            universe.mode_change("exploration")
+
+
+
 modes = {
     "exploration": exploration_input,
-    "dialogue": dialogue_input,}
+    "dialogue": dialogue_input,
+    "inventory": inventory_input,
+    "debug": debug_input,
+    "combat": combat_input,
+}
 
 if charged:
     modes.update(input_ext.input_modes)

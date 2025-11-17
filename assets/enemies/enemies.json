@@ -1,0 +1,19 @@
+{
+  "goblin": {
+    "name": "Gobelin",
+    "hp": 10,
+    "attack": 5,
+    "defense": 2,
+    "loot": {
+      "gold_coin" : 0.5,
+      "iron_sword" : 0.1
+    },
+    "attacks": [
+      {
+        "name": "Coup de dague",
+        "damage": 6,
+        "accuracy": 0.8
+      }
+    ]
+  }
+}

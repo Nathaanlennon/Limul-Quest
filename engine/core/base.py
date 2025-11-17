@@ -1,21 +1,25 @@
+from os.path import exists
+
 from engine.core.EventSystem import EventSystem
 import engine.core.InputSystem as InputSystem
 import engine.core.DialogueSystem as DialogueSystem
+import engine.core.CombatSystem as CombatSystem
 from engine.core.logging_setup import logger
-import importlib.util
+import os
 
-if importlib.util.find_spec("extensions.data_extensions") is not None:
+"""Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
+if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
     import extensions.data_extensions as data_ext
     charged = True
+
 else:
-    logger.warning(f"Module 'extensions/data_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Importez scripts/setup_environment.py dans le main pour utiliser.")
     charged = False
 
 
-
 class UniverseData:
-    def __init__(self, scene, **kwargs):
-        self.size = (18,67)
+    def __init__(self, scene, screen_size, **kwargs):
+        self.size = screen_size # (rows, cols)
         self.scenes = {}
         self.current_scene = None
         self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
@@ -29,7 +33,9 @@ class UniverseData:
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
+        self.combat_system = CombatSystem.CombatSystem(self.player)
 
+        # extension data
         if charged:
             self.ext_data = data_ext.universe_data
 
@@ -57,6 +63,12 @@ class UniverseData:
             self.input_system = InputSystem.exploration_input
         elif mode == "dialogue":
             self.input_system = InputSystem.dialogue_input
+        elif mode == "inventory":
+            self.input_system = InputSystem.inventory_input
+        elif mode == "debug":
+            self.input_system = InputSystem.debug_input
+        elif mode == "combat":
+            self.input_system = InputSystem.combat_input
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -80,9 +92,12 @@ class World:
 
 
     def load_map(self):
-        with open(self.map, 'r') as file:
-            map_data = [line.rstrip('\n') for line in file]
-        return map_data
+        if os.path.exists(self.map) and os.path.isfile(self.map):
+            with open(self.map, 'r', encoding='utf-8') as file:
+                map_data = [line.rstrip('\n') for line in file]
+            return map_data
+        else:
+           return ""
 
     def is_walkable(self, tile):
         x, y = tile
@@ -215,6 +230,20 @@ class Player(Entity):
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
 
+        self.inventory = { # dictionnary, id of the item is the key, the value is the quantity
+
+        }
+        if charged:
+            self.ext_data = data_ext.player_data
+
+        # combat stats
+        self.hp = 100
+        self.attack = 10
+        self.defense = 5
+
+
+
+
     def facing_position(self): # gives the tiles facing the player
         x, y = self.position
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
@@ -222,3 +251,18 @@ class Player(Entity):
         )
         return x + dx, y + dy
 
+    def add_to_inventory(self, item_id, quantity=1):
+        if item_id in self.inventory:
+            self.inventory[item_id] += quantity
+        else:
+            self.inventory[item_id] = quantity
+
+    def remove_from_inventory(self, item_id, quantity=1):
+        if item_id in self.inventory and self.inventory[item_id] >= quantity:
+            self.inventory[item_id] -= quantity
+            if self.inventory[item_id] <= 0:
+                del self.inventory[item_id]
+
+    def death(self):
+        """Gère la mort du joueur. À implémenter."""
+        logger.info("Le joueur est mort")
