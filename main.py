@@ -6,7 +6,7 @@ from world import Village1
 
 
 def main():
-    data = UniverseData(Village1)  # logique pure
+    data = UniverseData(Village1,(20, 71))  # logique pure
     interface = CursesUI(data)  # interface spécifique
     interface.run()  # démarre l'affichage
 
