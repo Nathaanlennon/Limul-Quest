@@ -20,9 +20,6 @@ def load_enemies_list(file_path="assets/enemies/enemies.json"):
 
 
 
-
-
-
 class CombatSystem:
     def __init__(self, player):
         self.player = player
@@ -32,7 +29,12 @@ class CombatSystem:
 
         self.state = "START" # États possibles : START, PLAYER_TURN, ENEMIES_TURN, VICTORY, DEFEAT
         self.queue = []
-        self.player_turn()
+
+        self.player_action = {
+            "action" : {}, # 'attack' if basic attack, else ability dict (for now)
+            "target" : {} # L'ennemi ciblé par l'action du joueur
+        }
+
 
     class Enemy:
         def __init__(self, combat_system, enemy_data):
@@ -44,6 +46,7 @@ class CombatSystem:
             self.loot = enemy_data.get("loot", [])
 
             self.combat_system = combat_system
+
 
         def attack(self):
             if self.abilities:
@@ -87,7 +90,7 @@ class CombatSystem:
     def attack_target(self, attacker, target):
         """Effectue une attaque basique sur la cible."""
 
-        attack_value = attacker.attack()
+        attack_value = attacker.damage
         damage = random.randint(attack_value - 2, attack_value + 2)
         self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
         self.receive_damage(target, damage)
@@ -113,8 +116,16 @@ class CombatSystem:
         self.state="PLAYER_TURN"
         self.queue.append("PLAYER_CHOICE")
 
-    def player_ability(self):
-        ...
+    def player_attack(self):
+        if self.fighters and self.player_action["action"] is not None and self.player_action["target"] is not None:
+            if self.player_action["action"] == "attack":
+                if self.player_action["target"] in self.fighters:
+                    self.attack_target(self.player, self.player_action["target"])
+            else:
+                ability = self.player_action["action"]
+                self.queue.append('ATTACK: Player uses {}'.format(ability["name"]))
+                damage = self.ability_use(ability)
+                self.receive_damage(self.fighters[0], damage)
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""
@@ -126,8 +137,8 @@ class CombatSystem:
                         attack = random.choice(fighter.abilities)
                         self.queue.append('ATTACK: {} uses {}'.format(fighter.name, attack["name"]))
                         self.receive_damage(self.player, self.ability_use(attack)+ random.randint(-2,2))
-                        break
-                self.attack_target(fighter, self.player)
+                    else:
+                        self.attack_target(fighter, self.player)
         else:
             self.state="VICTORY"
 

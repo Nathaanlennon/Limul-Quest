@@ -143,22 +143,21 @@ class CursesUI:
                 stdscr.addstr(12, 0, "Choose your action:")
                 stdscr.addstr(13, 0, "1. Attack")
                 stdscr.addstr(14, 0, "2. Ability")
-                # stdscr.addstr(15, 0, "3. Use Item")
+                # TODO :stdscr.addstr(15, 0, "3. Use Item")
             elif q0 == "ABILITY_CHOICE":
                 stdscr.addstr(12, 0, "Choose your ability:")
                 for idx, ability in enumerate(self.universe.player.ext_data["abilities"].values()):
                     stdscr.addstr(13 + idx, 0, f"{idx + 1}. {ability['name']}")
+            elif q0 == "CHOOSE_TARGET":
+                stdscr.addstr(12, 0, "Choose your target:")
+                for idx, enemy in enumerate(combat_system.fighters):
+                    stdscr.addstr(13 + idx, 0, f"{idx + 1}. {enemy.name}")
             elif q0:
-                for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
-                    if q0.startswith(prefix):
-                        stdscr.addstr(12, 0, q0)
-                        break
+                    stdscr.addstr(12, 0, q0)
+
 
         elif combat_system.state == "ENEMIES_TURN" and q0:
-            for prefix in ("ATTACK:", "DAMAGE:", "DEATH:", "MISS:"):
-                if q0.startswith(prefix):
-                    stdscr.addstr(12, 0, q0)
-                    break
+                stdscr.addstr(12, 0, q0)
         elif combat_system.state == "VICTORY":
             stdscr.addstr(12, 0, "You won the combat!")
             stdscr.addstr(13, 0, "Loot:")

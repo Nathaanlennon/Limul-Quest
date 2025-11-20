@@ -91,22 +91,25 @@ def combat_input(universe, key):
             if universe.combat_system.queue[0] == "PLAYER_CHOICE":
                 if isinstance(key, int):
                     if key == 1:
-                        # For now, always attack the first enemy
-                        if universe.combat_system.fighters:
-                            universe.combat_system.attack_target(universe.player, universe.combat_system.fighters[0])
+                        universe.combat_system.player_action["action"] = "attack"
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
                     elif key == 2:
                         universe.combat_system.queue.append("ABILITY_CHOICE")
-                    universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.pop(0)
             elif universe.combat_system.queue[0] == "ABILITY_CHOICE":
                 if isinstance(key, int):
                     abilities = list(universe.player.ext_data["abilities"].values())
                     if 1 <= key <= len(abilities):
-                        ability = abilities[key - 1]
-                        if universe.combat_system.fighters:
-                            damage = universe.combat_system.ability_use(ability)
-                            universe.combat_system.receive_damage(universe.combat_system.fighters[0], damage)
-                    universe.combat_system.queue.pop(0)
-
+                        universe.combat_system.player_action["action"] = abilities[key - 1]
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+            elif universe.combat_system.queue[0] == "CHOOSE_TARGET":
+                if isinstance(key, int):
+                    if 1 <= key <= len(universe.combat_system.fighters):
+                        universe.combat_system.player_action["target"] = universe.combat_system.fighters[key - 1]
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.player_attack()
 
             else:
                 # In combat, any key press could advance the combat log
