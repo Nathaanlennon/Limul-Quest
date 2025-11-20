@@ -142,8 +142,12 @@ class CursesUI:
             if q0 == "PLAYER_CHOICE":
                 stdscr.addstr(12, 0, "Choose your action:")
                 stdscr.addstr(13, 0, "1. Attack")
-                # stdscr.addstr(14, 0, "2. Defend")
+                stdscr.addstr(14, 0, "2. Ability")
                 # stdscr.addstr(15, 0, "3. Use Item")
+            elif q0 == "ABILITY_CHOICE":
+                stdscr.addstr(12, 0, "Choose your ability:")
+                for idx, ability in enumerate(self.universe.player.ext_data["abilities"].values()):
+                    stdscr.addstr(13 + idx, 0, f"{idx + 1}. {ability['name']}")
             elif q0:
                 for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
                     if q0.startswith(prefix):

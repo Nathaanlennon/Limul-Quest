@@ -8,11 +8,11 @@
       "gold_coin" : 0.5,
       "iron_sword" : 0.1
     },
-    "attacks": [
+    "abilities": [
       {
         "name": "Coup de dague",
         "damage": 6,
-        "accuracy": 0.0
+        "accuracy": 0.8
       }
     ]
   }

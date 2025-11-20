@@ -37,7 +37,7 @@ class CombatSystem:
     class Enemy:
         def __init__(self, combat_system, enemy_data):
             self.name = enemy_data.get("name", "Ennemi inconnu")
-            self.attacks = enemy_data.get("attacks", [])
+            self.abilities = enemy_data.get("abilities", [])
             self.damage = enemy_data.get("damage", 0)
             self.defense = enemy_data.get("defense", 0)
             self.hp = enemy_data.get("hp", 10)
@@ -46,9 +46,9 @@ class CombatSystem:
             self.combat_system = combat_system
 
         def attack(self):
-            if self.attacks:
+            if self.abilities:
                 if random.randint(0,1):
-                    attack = random.choice(self.attacks)
+                    attack = random.choice(self.abilities)
                     self.combat_system.queue.append('ATTACK: {} uses {}'.format(self.name, attack["name"]))
                     if random.randint(1, 100) <= attack["accuracy"] * 100:
                         return attack["damage"]
@@ -113,15 +113,17 @@ class CombatSystem:
         self.state="PLAYER_TURN"
         self.queue.append("PLAYER_CHOICE")
 
+    def player_ability(self):
+        ...
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""
         self.state="ENEMIES_TURN"
         if self.fighters:
             for fighter in self.fighters:
-                if fighter.attacks:
+                if fighter.abilities:
                     if random.randint(0, 1):
-                        attack = random.choice(fighter.attacks)
+                        attack = random.choice(fighter.abilities)
                         self.queue.append('ATTACK: {} uses {}'.format(fighter.name, attack["name"]))
                         self.receive_damage(self.player, self.ability_use(attack)+ random.randint(-2,2))
                         break

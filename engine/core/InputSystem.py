@@ -93,8 +93,21 @@ def combat_input(universe, key):
                     if key == 1:
                         # For now, always attack the first enemy
                         if universe.combat_system.fighters:
-                            universe.combat_system.queue.pop(0)  # Remove PLAYER_CHOICE from queue
                             universe.combat_system.attack_target(universe.player, universe.combat_system.fighters[0])
+                    elif key == 2:
+                        universe.combat_system.queue.append("ABILITY_CHOICE")
+                    universe.combat_system.queue.pop(0)
+            elif universe.combat_system.queue[0] == "ABILITY_CHOICE":
+                if isinstance(key, int):
+                    abilities = list(universe.player.ext_data["abilities"].values())
+                    if 1 <= key <= len(abilities):
+                        ability = abilities[key - 1]
+                        if universe.combat_system.fighters:
+                            damage = universe.combat_system.ability_use(ability)
+                            universe.combat_system.receive_damage(universe.combat_system.fighters[0], damage)
+                    universe.combat_system.queue.pop(0)
+
+
             else:
                 # In combat, any key press could advance the combat log
                 universe.combat_system.queue.pop(0)
