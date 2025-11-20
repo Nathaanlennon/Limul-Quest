@@ -128,6 +128,7 @@ class CursesUI:
 
     def combat_mode(self, stdscr):
         combat_system = self.universe.combat_system
+        # TODO: changer la variable là qui se fait à chaque itération, ça sert à rien bordel
         stdscr.addstr(0, 0, "COMBAT MODE")
         for idx, enemy in enumerate(self.universe.combat_system.fighters):
             stdscr.addstr(idx + 2, 0, f"{enemy.name} - HP: {enemy.hp}")
@@ -150,7 +151,7 @@ class CursesUI:
                         break
 
         elif combat_system.state == "ENEMIES_TURN" and q0:
-            for prefix in ("ATTACK:", "DAMAGE:", "DEATH:"):
+            for prefix in ("ATTACK:", "DAMAGE:", "DEATH:", "MISS:"):
                 if q0.startswith(prefix):
                     stdscr.addstr(12, 0, q0)
                     break

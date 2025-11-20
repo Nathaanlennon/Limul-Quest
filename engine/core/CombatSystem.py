@@ -38,12 +38,24 @@ class CombatSystem:
         def __init__(self, combat_system, enemy_data):
             self.name = enemy_data.get("name", "Ennemi inconnu")
             self.attacks = enemy_data.get("attacks", [])
-            self.attack = enemy_data.get("attack", 0)
+            self.damage = enemy_data.get("damage", 0)
             self.defense = enemy_data.get("defense", 0)
             self.hp = enemy_data.get("hp", 10)
             self.loot = enemy_data.get("loot", [])
 
             self.combat_system = combat_system
+
+        def attack(self):
+            if self.attacks:
+                if random.randint(0,1):
+                    attack = random.choice(self.attacks)
+                    self.combat_system.queue.append('ATTACK: {} uses {}'.format(self.name, attack["name"]))
+                    if random.randint(1, 100) <= attack["accuracy"] * 100:
+                        return attack["damage"]
+                    else:
+                        self.combat_system.queue.append('MISS: {}\'s attack missed!'.format(self.name))
+                        return 0
+            return self.damage
 
 
         def death(self):
@@ -75,7 +87,7 @@ class CombatSystem:
     def attack_target(self, attacker, target):
         """Effectue une attaque basique sur la cible."""
 
-        attack_value = attacker.attack
+        attack_value = attacker.attack()
         damage = random.randint(attack_value - 2, attack_value + 2)
         self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
         self.receive_damage(target, damage)
@@ -107,9 +119,23 @@ class CombatSystem:
         self.state="ENEMIES_TURN"
         if self.fighters:
             for fighter in self.fighters:
+                if fighter.attacks:
+                    if random.randint(0, 1):
+                        attack = random.choice(fighter.attacks)
+                        self.queue.append('ATTACK: {} uses {}'.format(fighter.name, attack["name"]))
+                        self.receive_damage(self.player, self.ability_use(attack)+ random.randint(-2,2))
+                        break
                 self.attack_target(fighter, self.player)
         else:
             self.state="VICTORY"
+
+
+    def ability_use(self, ability):
+        if random.randint(1, 100) <= ability["accuracy"] * 100:
+            return ability["damage"]
+        else:
+            self.queue.append('MISS: it missed!')
+            return 0
 
     def new_round(self):
         """Démarre un nouveau round de combat."""

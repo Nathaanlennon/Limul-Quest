@@ -238,9 +238,11 @@ class Player(Entity):
 
         # combat stats
         self.hp = 100
-        self.attack = 10
+        self.damage = 10
         self.defense = 5
 
+    def attack(self):
+            return self.damage
 
 
 
