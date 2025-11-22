@@ -6,6 +6,7 @@ import engine.core.DialogueSystem as DialogueSystem
 import engine.core.CombatSystem as CombatSystem
 from engine.core.logging_setup import logger
 import os
+import random
 
 """Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
 if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
@@ -149,14 +150,30 @@ class Entity:
 
 class Event:
     def __init__(self, data, world, name, activation_type, action_type, entity=None, **kwargs):
+        """
+        Initialise un événement dans le jeu.
+        :param data: universe data
+        :param world: world where the event is located
+        :param name: name of the event
+        :param activation_type: e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
+        :param action_type: e.g., "MOVE", "DIALOGUE", "COMBAT"
+        :param entity: not required, to link the event to an entity
+        :param kwargs: additionnal arguments depending on action_type
+        ------------------------------------------------------
+        Action types and their required arguments:
+        - MOVE: target_scene (class), target_position (tuple)
+        - DIALOGUE: dialogue (str, path to dialogue file)
+        - COMBAT: enemies (list of couples (enemy, proba)), proba (int)
+        ------------------------------------------------------
+        """
         self.data = data
         self.world = world
         self.name = name
         self.entity = entity  # will be set when added to an entity
         self.active = True
-        self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT"
+        self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
-        self.action_type = action_type # e.g., "MOVE", "DIALOGUE"
+        self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT"
         self.kwargs = kwargs
         self.necessary_args = []
 
@@ -165,6 +182,8 @@ class Event:
             self.necessary_args = ["target_scene", "target_position"]
         elif self.action_type == "DIALOGUE":
             self.necessary_args = ["dialogue"]
+        elif self.action_type == "COMBAT":
+            self.necessary_args = ["enemies", "proba"] # list of enemies and their probabilities ex : [("goblin", 100), ("goblin",50)] | chance to trigger the combat (0-100)
         self.check_event_args(self.necessary_args, kwargs)
 
     def check_event_args(self, required_args, kwargs):
@@ -175,6 +194,8 @@ class Event:
 
     @property
     def position(self):
+        if self.entity is None:
+            return None
         return self.entity.position
 
     def is_facing_player(self):
@@ -194,12 +215,21 @@ class Event:
             elif self.action_type == "DIALOGUE":
                 self.data.mode_change("dialogue")
                 self.data.dialogue_system.set_dialogues(self.kwargs["dialogue"])
+            elif self.action_type == "COMBAT":
+                if random.random() <= self.kwargs["proba"]:
+                    self.data.mode_change("combat")
+                    for (enemy, proba) in self.kwargs["enemies"]:
+                        if random.random() <= proba:
+                            self.data.combat_system.add_fighter(enemy)
+
 
     def should_trigger(self, action):
         if self.activation_type == "ON_STEP":
             return self.data.player.position == self.position
         elif self.activation_type == "ON_INTERACT":
             return self.is_facing_player() and action == "INTERACT"
+        elif self.activation_type == "ALWAYS":
+            return True
         return False
 
 

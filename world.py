@@ -14,6 +14,11 @@ class Test(World):
                   target_scene=Test, target_position=(3, 3))]))
 
         self.add_entity(NPC(self, "npc1", (1, 1), 'N', dialogue="assets/dialogues/test.json"))
+        self.event_system.add_event(Event(data, self, "comabt_event", "ALWAYS","COMBAT",
+                                          enemies=[
+                                              ("goblin",1),
+                                              ("goblin",1)
+                                          ], proba=1.0))
 
 
 

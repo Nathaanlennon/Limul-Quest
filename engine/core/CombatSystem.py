@@ -64,7 +64,7 @@ class CombatSystem:
         def death(self):
             """Gère la mort de l'ennemi."""
             for item, proba in self.loot.items():
-                if random.randint(1, 100) <= proba * 100:
+                if random.random() <= proba:
                     self.combat_system.loot.append((item, 1))
             self.combat_system.remove_fighter(self)
 
@@ -77,6 +77,8 @@ class CombatSystem:
         """
         if fighter in self.enemies_list:
             self.fighters.append(self.Enemy(self, self.enemies_list[fighter]))
+        else:
+            logger.warning(f"Combattant inconnu de enemies.json : {fighter}")
 
     def remove_fighter(self, fighter):
         """Retire un combattant de la liste des combattants.
