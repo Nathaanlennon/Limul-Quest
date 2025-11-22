@@ -13,7 +13,7 @@ if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extension
     charged = True
 
 else:
-    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Importez scripts/setup_environment.py dans le main pour utiliser.")
+    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Executez setup_environment.py qui est dans l'engine pour utiliser.")
     charged = False
 
 
@@ -35,9 +35,10 @@ class UniverseData:
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
         self.combat_system = CombatSystem.CombatSystem(self.player)
 
+        self.ext_data = {}
         # extension data
         if charged:
-            self.ext_data = data_ext.universe_data
+            self.ext_data.update(data_ext.universe_data)
 
     # scene gestion
     def set_scene(self, scene_class, **kwargs):
@@ -233,9 +234,11 @@ class Player(Entity):
         self.inventory = { # dictionnary, id of the item is the key, the value is the quantity
 
         }
+        self.ext_data = {
+            "abilities": {}
+        }
         if charged:
-            self.ext_data = data_ext.player_data
-
+            self.ext_data.update(data_ext.player_data)
         # combat stats
         self.hp = 100
         self.damage = 10

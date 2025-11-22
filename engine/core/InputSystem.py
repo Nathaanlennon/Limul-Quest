@@ -1,14 +1,14 @@
-import importlib.util
+import os
 from engine.core.logging_setup import logger
 import world
 
 
 
-if importlib.util.find_spec("extensions.input_extensions") is not None:
+if os.path.exists("extensions/input_extensions.py") and os.path.isfile("extensions/input_extensions.py"):
     import extensions.input_extensions as input_ext
     charged = True
 else:
-    logger.warning(f"Module 'extension/input_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    logger.warning(f"Module 'extension/input_extensions' is missing. please run setup_environment.py. from engine")
     charged = False
 
 
@@ -99,6 +99,10 @@ def combat_input(universe, key):
                         universe.combat_system.queue.pop(0)
             elif universe.combat_system.queue[0] == "ABILITY_CHOICE":
                 if isinstance(key, int):
+                    if key == 0:
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        return
                     abilities = list(universe.player.ext_data["abilities"].values())
                     if 1 <= key <= len(abilities):
                         universe.combat_system.player_action["action"] = abilities[key - 1]
@@ -106,6 +110,10 @@ def combat_input(universe, key):
                         universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
             elif universe.combat_system.queue[0] == "CHOOSE_TARGET":
                 if isinstance(key, int):
+                    if key == 0:
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        return
                     if 1 <= key <= len(universe.combat_system.fighters):
                         universe.combat_system.player_action["target"] = universe.combat_system.fighters[key - 1]
                         universe.combat_system.queue.pop(0)

@@ -1,16 +1,16 @@
 import curses
 import world
-import importlib.util
+import os
 from engine.core.logging_setup import logger
 from engine.core.ItemManager import get_item
 
 
 
-if importlib.util.find_spec("extensions.ui_extensions") is not None:
+if os.path.exists("extensions/ui_extensions.py") and os.path.isfile("extensions/ui_extensions.py"):
     import extensions.ui_extensions as ui_ext
     charged = True
 else:
-    logger.warning(f"Module 'extensions/ui_extensions' is missing. Please import scripts/setup_environment.py in the main.")
+    logger.warning(f"Module 'extensions/ui_extensions' is missing. Please run setup_environment.py in the engine")
     charged = False
 
 curses.initscr()
@@ -146,12 +146,14 @@ class CursesUI:
                 # TODO :stdscr.addstr(15, 0, "3. Use Item")
             elif q0 == "ABILITY_CHOICE":
                 stdscr.addstr(12, 0, "Choose your ability:")
+                stdscr.addstr(13, 0, "0. Back")
                 for idx, ability in enumerate(self.universe.player.ext_data["abilities"].values()):
-                    stdscr.addstr(13 + idx, 0, f"{idx + 1}. {ability['name']}")
+                    stdscr.addstr(14 + idx, 0, f"{idx + 1}. {ability['name']}")
             elif q0 == "CHOOSE_TARGET":
                 stdscr.addstr(12, 0, "Choose your target:")
+                stdscr.addstr(13, 0, "0. Back")
                 for idx, enemy in enumerate(combat_system.fighters):
-                    stdscr.addstr(13 + idx, 0, f"{idx + 1}. {enemy.name}")
+                    stdscr.addstr(14 + idx, 0, f"{idx + 1}. {enemy.name}")
             elif q0:
                     stdscr.addstr(12, 0, q0)
 
