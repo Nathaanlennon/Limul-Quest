@@ -2,6 +2,7 @@ from engine.core.logging_setup import logger
 import os
 import json
 import random
+import engine.core.ItemManager as ItemManager
 
 
 def load_enemies_list(file_path="assets/enemies/enemies.json"):
@@ -31,8 +32,9 @@ class CombatSystem:
         self.queue = []
 
         self.player_action = {
-            "action" : {}, # 'attack' if basic attack, else ability dict (for now)
-            "target" : {} # L'ennemi ciblé par l'action du joueur
+            "action" : "", # e.g. "attack", "ability", "use_item"
+            "data" : None, # Détails supplémentaires sur l'action (ex: quelle capacité ou quel objet)
+            "target" : None # L'ennemi ciblé par l'action du joueur
         }
 
 
@@ -42,7 +44,8 @@ class CombatSystem:
             self.abilities = enemy_data.get("abilities", [])
             self.damage = enemy_data.get("damage", 0)
             self.defense = enemy_data.get("defense", 0)
-            self.hp = enemy_data.get("hp", 10)
+            self.max_hp = enemy_data.get("hp", 10)
+            self.hp = self.max_hp
             self.loot = enemy_data.get("loot", [])
 
             self.combat_system = combat_system
@@ -118,16 +121,41 @@ class CombatSystem:
         self.state="PLAYER_TURN"
         self.queue.append("PLAYER_CHOICE")
 
-    def player_attack(self):
-        if self.fighters and self.player_action["action"] is not None and self.player_action["target"] is not None:
+    def execute_player_action(self):
+        if self.fighters and self.player_action["action"] is not None:
             if self.player_action["action"] == "attack":
-                if self.player_action["target"] in self.fighters:
-                    self.attack_target(self.player, self.player_action["target"])
-            else:
-                ability = self.player_action["action"]
+                if self.player_action["target"] is not None:
+                    if self.player_action["target"] in self.fighters:
+                        self.attack_target(self.player, self.player_action["target"])
+            elif self.player_action["action"] == "ability":
+                ability = self.player_action["data"]
                 self.queue.append('ATTACK: Player uses {}'.format(ability["name"]))
                 damage = self.ability_use(ability)
                 self.receive_damage(self.fighters[0], damage)
+            elif self.player_action["action"] == "use_item":
+                item = self.player_action["data"]
+                self.use_object(self.player, obj=item, target=self.player_action.get("target", None))
+        self.player_action = {
+            "action" : "",
+            "data" : None,
+            "target" : None
+        }
+    def heal_target(self, target, amount):
+        amount = min(amount, target.max_hp - target.hp)
+        target.hp = min(target.max_hp, target.hp + amount)
+        self.queue.append('{} heals {} HP'.format(target.name, amount))
+    def use_object(self, user, obj, target = None):
+        if obj["id"] in user.inventory:
+            if target is None:
+                target = self.player
+            if obj["type"] == "consumable" and "effect" in obj:
+                self.queue.append('{} uses {} on {}'.format(user.name, obj["name"], target.name))
+                if "heal" in obj["effect"]:
+                    self.heal_target(target, obj["effect"]["heal"])
+                elif "damage" in obj["effect"]:
+                    damage_amount = obj["effect"]["damage"]
+                    self.receive_damage(target, damage_amount)
+            user.remove_from_inventory(obj["id"], 1)
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""

@@ -229,7 +229,7 @@ class Event:
         elif self.activation_type == "ON_INTERACT":
             return self.is_facing_player() and action == "INTERACT"
         elif self.activation_type == "ALWAYS":
-            return True
+            return action in ["UP", "DOWN", "LEFT", "RIGHT"]
         return False
 
 
@@ -270,7 +270,8 @@ class Player(Entity):
         if charged:
             self.ext_data.update(data_ext.player_data)
         # combat stats
-        self.hp = 100
+        self.max_hp = 100
+        self.hp = self.max_hp
         self.damage = 10
         self.defense = 5
 

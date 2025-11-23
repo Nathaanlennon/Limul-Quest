@@ -1,5 +1,6 @@
 {
   "iron_sword": {
+    "id": "iron_sword",
     "name": "Épée en fer",
     "type": "primary_weapon",
     "damages": 15,
@@ -7,15 +8,27 @@
     "value": 50
   },
   "health_potion": {
+    "id": "health_potion",
     "name": "Potion de soin",
     "type": "consumable",
-    "action": {
+    "effect": {
       "heal": 50
     },
     "description": "Restaure 50 points de vie.",
     "value": 10
   },
+  "bomb": {
+    "id": "bomb",
+    "name": "Bombe",
+    "type": "consumable",
+    "effect": {
+      "damage": 40
+    },
+    "description": "Explose et inflige 40 points de dégâts à un ennemi",
+    "value": 25
+  },
   "wooden_shield": {
+    "id": "wooden_shield",
     "name": "Bouclier en bois",
     "type": "secondary_weapon",
     "damages_blocked": 5,
@@ -23,6 +36,7 @@
     "value": 30
   },
   "hunter_bow": {
+    "id": "hunter_bow",
     "name": "Arc de chasseur",
     "type": "primary_weapon",
     "damages": 12,
@@ -30,11 +44,10 @@
     "value": 70
   },
   "rusty_key": {
+    "id": "rusty_key",
     "name": "Clé rouillée",
     "type": "quest_item",
     "description": "Une clé ancienne couverte de rouille. Ouvre peut-être une porte oubliée.",
     "value": 0
   }
 }
-
-

@@ -143,12 +143,21 @@ class CursesUI:
                 stdscr.addstr(12, 0, "Choose your action:")
                 stdscr.addstr(13, 0, "1. Attack")
                 stdscr.addstr(14, 0, "2. Ability")
-                # TODO :stdscr.addstr(15, 0, "3. Use Item")
+                stdscr.addstr(15, 0, "3. Use Item")
             elif q0 == "ABILITY_CHOICE":
                 stdscr.addstr(12, 0, "Choose your ability:")
                 stdscr.addstr(13, 0, "0. Back")
                 for idx, ability in enumerate(self.universe.player.ext_data["abilities"].values()):
                     stdscr.addstr(14 + idx, 0, f"{idx + 1}. {ability['name']}")
+            elif q0 == "ITEM_CHOICE":
+                stdscr.addstr(12, 0, "Choose your item:")
+                stdscr.addstr(13, 0, "0. Back")
+                inventory_items = list(self.universe.player.inventory.keys())
+                for idx, item_name in enumerate(inventory_items):
+                    item_data = get_item(item_name)
+                    quantity = self.universe.player.inventory[item_name]
+                    if quantity > 0 and item_data["type"] == "consumable":
+                        stdscr.addstr(14 + idx, 0, f"{idx + 1}. {item_data['name']} x{quantity}")
             elif q0 == "CHOOSE_TARGET":
                 stdscr.addstr(12, 0, "Choose your target:")
                 stdscr.addstr(13, 0, "0. Back")
