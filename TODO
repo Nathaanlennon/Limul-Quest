@@ -7,7 +7,7 @@ TODO: gros probleme : si assets/default_map n'existe pas le programme crashera
 
 inverser les clés et valeurs pour le mapping pour pouvoir faire des mofications de touches par l'utilisateur ?
 
-TODO: CRITIQUE : L'UI FAIT CONSTAMMENT LA BOUCLE AU LIEU D'ATTENDRE
+TODO: CRITIQUE : L'UI FAIT CONSTAMMENT LA BOUCLE AU LIEU D'ATTENDRE c'est faux peut-etre
 
 systeme qui remplace les caractères dans les map
 
@@ -18,3 +18,7 @@ faire dialogue et inventaire proprement
 dialogue : utiliser la personne qui parle pour afficher l'image avec le nom du fichier étant pareil. Charger tous les fichiers dans un dictionnaire.
 
 verifier que les assets existent / réparer le script pour le rendre executable au lieu de l'importer
+
+uniformiser la detection des fichiers en utilisant os
+
+faire le readme du game engine

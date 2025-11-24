@@ -1,15 +1,17 @@
 import os
 
+path = os.path.join(os.path.dirname(__file__), "..")
+
 # Dossiers obligatoires
 required_dirs = [
     "extensions"
 ]
 
 for d in required_dirs:
-    os.makedirs(d, exist_ok=True)
+    os.makedirs(os.path.join(path, d), exist_ok=True)
 
 # Fichier d’input system par défaut
-input_file = "extensions/ui_extensions.py"
+input_file = os.path.join(path, 'extensions/ui_extensions.py')
 if not os.path.exists(input_file):
     with open(input_file, "w", encoding="utf-8") as f:
         f.write("""#This module defines various UI extension modes for the application.
@@ -34,7 +36,7 @@ KEY_MAPPING = {
     # Example: ord('a'): "CUSTOM_ACTION",
 }
 """)
-input_file = "extensions/input_extensions.py"
+input_file = os.path.join(path, "extensions/input_extensions.py")
 if not os.path.exists(input_file):
     with open(input_file, "w", encoding="utf-8") as f:
         f.write("""#this module defines various input extension modes for the application.
@@ -51,7 +53,7 @@ input_modes = {
     #custom_input: custom_input,
 }""")
 
-input_file= "extensions/data_extensions.py"
+input_file= os.path.join(path, "extensions/data_extensions.py")
 if not os.path.exists(input_file):
     with open(input_file, "w", encoding="utf-8") as f:
         f.write("""# this is where all the additionnal data will be put, all the data that is not originally in the game-engine. 

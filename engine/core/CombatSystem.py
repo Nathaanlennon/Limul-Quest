@@ -2,6 +2,7 @@ from engine.core.logging_setup import logger
 import os
 import json
 import random
+import engine.core.ItemManager as ItemManager
 
 
 def load_enemies_list(file_path="assets/enemies/enemies.json"):
@@ -20,9 +21,6 @@ def load_enemies_list(file_path="assets/enemies/enemies.json"):
 
 
 
-
-
-
 class CombatSystem:
     def __init__(self, player):
         self.player = player
@@ -32,24 +30,44 @@ class CombatSystem:
 
         self.state = "START" # États possibles : START, PLAYER_TURN, ENEMIES_TURN, VICTORY, DEFEAT
         self.queue = []
-        self.player_turn()
+
+        self.player_action = {
+            "action" : "", # e.g. "attack", "ability", "use_item"
+            "data" : None, # Détails supplémentaires sur l'action (ex: quelle capacité ou quel objet)
+            "target" : None # L'ennemi ciblé par l'action du joueur
+        }
+
 
     class Enemy:
         def __init__(self, combat_system, enemy_data):
             self.name = enemy_data.get("name", "Ennemi inconnu")
-            self.attacks = enemy_data.get("attacks", [])
-            self.attack = enemy_data.get("attack", 0)
+            self.abilities = enemy_data.get("abilities", [])
+            self.damage = enemy_data.get("damage", 0)
             self.defense = enemy_data.get("defense", 0)
-            self.hp = enemy_data.get("hp", 10)
+            self.max_hp = enemy_data.get("hp", 10)
+            self.hp = self.max_hp
             self.loot = enemy_data.get("loot", [])
 
             self.combat_system = combat_system
 
 
+        def attack(self):
+            if self.abilities:
+                if random.randint(0,1):
+                    attack = random.choice(self.abilities)
+                    self.combat_system.queue.append('ATTACK: {} uses {}'.format(self.name, attack["name"]))
+                    if random.randint(1, 100) <= attack["accuracy"] * 100:
+                        return attack["damage"]
+                    else:
+                        self.combat_system.queue.append('MISS: {}\'s attack missed!'.format(self.name))
+                        return 0
+            return self.damage
+
+
         def death(self):
             """Gère la mort de l'ennemi."""
             for item, proba in self.loot.items():
-                if random.randint(1, 100) <= proba * 100:
+                if random.random() <= proba:
                     self.combat_system.loot.append((item, 1))
             self.combat_system.remove_fighter(self)
 
@@ -62,6 +80,8 @@ class CombatSystem:
         """
         if fighter in self.enemies_list:
             self.fighters.append(self.Enemy(self, self.enemies_list[fighter]))
+        else:
+            logger.warning(f"Combattant inconnu de enemies.json : {fighter}")
 
     def remove_fighter(self, fighter):
         """Retire un combattant de la liste des combattants.
@@ -75,7 +95,7 @@ class CombatSystem:
     def attack_target(self, attacker, target):
         """Effectue une attaque basique sur la cible."""
 
-        attack_value = attacker.attack
+        attack_value = attacker.damage
         damage = random.randint(attack_value - 2, attack_value + 2)
         self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
         self.receive_damage(target, damage)
@@ -101,15 +121,64 @@ class CombatSystem:
         self.state="PLAYER_TURN"
         self.queue.append("PLAYER_CHOICE")
 
+    def execute_player_action(self):
+        if self.fighters and self.player_action["action"] is not None:
+            if self.player_action["action"] == "attack":
+                if self.player_action["target"] is not None:
+                    if self.player_action["target"] in self.fighters:
+                        self.attack_target(self.player, self.player_action["target"])
+            elif self.player_action["action"] == "ability":
+                ability = self.player_action["data"]
+                self.queue.append('ATTACK: Player uses {}'.format(ability["name"]))
+                damage = self.ability_use(ability)
+                self.receive_damage(self.fighters[0], damage)
+            elif self.player_action["action"] == "use_item":
+                item = self.player_action["data"]
+                self.use_object(self.player, obj=item, target=self.player_action.get("target", None))
+        self.player_action = {
+            "action" : "",
+            "data" : None,
+            "target" : None
+        }
+    def heal_target(self, target, amount):
+        amount = min(amount, target.max_hp - target.hp)
+        target.hp = min(target.max_hp, target.hp + amount)
+        self.queue.append('{} heals {} HP'.format(target.name, amount))
+    def use_object(self, user, obj, target = None):
+        if obj["id"] in user.inventory:
+            if target is None:
+                target = self.player
+            if obj["type"] == "consumable" and "effect" in obj:
+                self.queue.append('{} uses {} on {}'.format(user.name, obj["name"], target.name))
+                if "heal" in obj["effect"]:
+                    self.heal_target(target, obj["effect"]["heal"])
+                elif "damage" in obj["effect"]:
+                    damage_amount = obj["effect"]["damage"]
+                    self.receive_damage(target, damage_amount)
+            user.remove_from_inventory(obj["id"], 1)
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""
         self.state="ENEMIES_TURN"
         if self.fighters:
             for fighter in self.fighters:
-                self.attack_target(fighter, self.player)
+                if fighter.abilities:
+                    if random.randint(0, 1):
+                        attack = random.choice(fighter.abilities)
+                        self.queue.append('ATTACK: {} uses {}'.format(fighter.name, attack["name"]))
+                        self.receive_damage(self.player, self.ability_use(attack)+ random.randint(-2,2))
+                    else:
+                        self.attack_target(fighter, self.player)
         else:
             self.state="VICTORY"
+
+
+    def ability_use(self, ability):
+        if random.randint(1, 100) <= ability["accuracy"] * 100:
+            return ability["damage"]
+        else:
+            self.queue.append('MISS: it missed!')
+            return 0
 
     def new_round(self):
         """Démarre un nouveau round de combat."""

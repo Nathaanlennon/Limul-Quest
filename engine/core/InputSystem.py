@@ -1,14 +1,15 @@
-import importlib.util
+import os
 from engine.core.logging_setup import logger
 import world
+import engine.core.ItemManager as ItemManager
 
 
 
-if importlib.util.find_spec("extensions.input_extensions") is not None:
+if os.path.exists("extensions/input_extensions.py") and os.path.isfile("extensions/input_extensions.py"):
     import extensions.input_extensions as input_ext
     charged = True
 else:
-    logger.warning(f"Module 'extension/input_extensions' is missing. please import scripts/setup_environment.py. in the main")
+    logger.warning(f"Module 'extension/input_extensions' is missing. please run setup_environment.py. from engine")
     charged = False
 
 
@@ -71,7 +72,8 @@ def debug_input(universe, key):
     elif key == ord('p'):
         universe.mode_change("exploration")
     elif key == ord('o'):
-        universe.player.add_to_inventory("health_potion", 1)
+        universe.player.add_to_inventory("health_potion", 10)
+        universe.player.add_to_inventory("bomb", 5)
     elif key == ord('l'):
         universe.mode_change("inventory")
     elif key == 'TEST':
@@ -91,10 +93,62 @@ def combat_input(universe, key):
             if universe.combat_system.queue[0] == "PLAYER_CHOICE":
                 if isinstance(key, int):
                     if key == 1:
-                        # For now, always attack the first enemy
-                        if universe.combat_system.fighters:
-                            universe.combat_system.queue.pop(0)  # Remove PLAYER_CHOICE from queue
-                            universe.combat_system.attack_target(universe.player, universe.combat_system.fighters[0])
+                        universe.combat_system.player_action["action"] = "attack"
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+                    elif key == 2:
+                        universe.combat_system.queue.append("ABILITY_CHOICE")
+                        universe.combat_system.queue.pop(0)
+                    elif key == 3:
+                        universe.combat_system.queue.append("ITEM_CHOICE")
+                        universe.combat_system.queue.pop(0)
+            elif universe.combat_system.queue[0] == "ABILITY_CHOICE":
+                if isinstance(key, int):
+                    if key == 0:
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        return
+                    abilities = list(universe.player.ext_data["abilities"].values())
+                    if 1 <= key <= len(abilities):
+                        universe.combat_system.player_action["action"] = "ability"
+                        universe.combat_system.player_action["data"] = abilities[key - 1]
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+            elif universe.combat_system.queue[0] == "ITEM_CHOICE":
+                if isinstance(key, int):
+                    if key == 0:
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        return
+                    inventory_items = list(universe.player.inventory.keys())
+                    if 1 <= key <= len(inventory_items):
+                        if not universe.player.inventory[inventory_items[key - 1]]:
+                            # If the item quantity is zero, ignore the choice
+                            return
+                        item_data = ItemManager.get_item(inventory_items[key - 1])
+                        if item_data["type"] != "consumable":
+                            # If the item is not usable in combat, ignore the choice
+                            return
+                        universe.combat_system.player_action["action"] = "use_item"
+                        universe.combat_system.player_action["data"] = item_data
+                        if "damage" in item_data["effect"]:
+                            universe.combat_system.queue.pop(0)
+                            universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+                        else:
+                            universe.combat_system.queue.pop(0)
+                            universe.combat_system.execute_player_action()
+
+            elif universe.combat_system.queue[0] == "CHOOSE_TARGET":
+                if isinstance(key, int):
+                    if key == 0:
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        return
+                    if 1 <= key <= len(universe.combat_system.fighters):
+                        universe.combat_system.player_action["target"] = universe.combat_system.fighters[key - 1]
+                        universe.combat_system.queue.pop(0)
+                        universe.combat_system.execute_player_action()
+
             else:
                 # In combat, any key press could advance the combat log
                 universe.combat_system.queue.pop(0)
