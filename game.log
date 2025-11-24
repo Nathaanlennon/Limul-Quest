@@ -5,3 +5,4 @@
 2025-11-07 18:47:03,141 - WARNING - Event door dans <world.Test2 object at 0x7634212df370> désactivé : arguments manquants ['target_position']
 2025-11-07 18:48:10,676 - WARNING - Event door dans <world.Test2 object at 0x74e0cbb626e0> désactivé : arguments manquants ['target_position']
 2025-11-07 18:53:59,410 - WARNING - Event door dans <world.Test2 object at 0x7f9018fe2890> désactivé : arguments manquants ['target_position']
+2025-11-24 12:16:25,312 - WARNING - Event door dans <world.Test2 object at 0x7801578ac3a0> désactivé : arguments manquants ['target_position']
