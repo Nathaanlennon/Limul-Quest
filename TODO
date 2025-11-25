@@ -22,3 +22,5 @@ verifier que les assets existent / réparer le script pour le rendre executable 
 uniformiser la detection des fichiers en utilisant os
 
 faire le readme du game engine
+
+important : faire en sorte que si rien a spawn au début du combat on retente de spawn

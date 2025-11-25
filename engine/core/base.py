@@ -99,7 +99,10 @@ class World:
                 map_data = [line.rstrip('\n') for line in file]
             return map_data
         else:
-           return ""
+            with open("assets/maps/default_map.txt", 'r', encoding='utf-8') as file:
+                map_data = [line.rstrip('\n') for line in file]
+            logger.warning(f"Fichier de map introuvable : {self.map}, chargement de la map par défaut.")
+            return map_data
 
     def is_walkable(self, tile):
         x, y = tile

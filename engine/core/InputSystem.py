@@ -26,10 +26,8 @@ def exploration_input(universe, key):
     elif key == "RIGHT":
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
-    elif key == "INVENTORY":
-        universe.mode_change("inventory")
-    elif key == "TEST":
-        universe.mode_change("debug")
+    elif key in hud:
+        universe.mode_change(key.lower())
 
 
 
@@ -177,6 +175,9 @@ modes = {
     "debug": debug_input,
     "combat": combat_input,
 }
+
+# hud is the input handler for the hud elements like inventory and things like that, to add more if needed
+hud = {"INVENTORY", "DEBUG"}
 
 if charged:
     modes.update(input_ext.input_modes)

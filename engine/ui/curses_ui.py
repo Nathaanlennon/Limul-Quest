@@ -32,20 +32,26 @@ CHAR_MAP = {
 
 # mapping global, créé une seule fois
 KEY_MAPPING = {
-    ord('z'): "UP", ord('Z'): "UP",
-    ord('s'): "DOWN", ord('S'): "DOWN",
-    ord('q'): "LEFT", ord('Q'): "LEFT",
-    ord('d'): "RIGHT", ord('D'): "RIGHT",
-    ord('e'): "INTERACT", ord('E'): "INTERACT",
-    27 : "ESCAPE",  # ESCAPE key
-    ord('x'): "QUIT", ord('X'): "QUIT",
-    ord('w'): "TEST", ord('W'): "TEST",
-    ord('i'): "INVENTORY", ord('I'): "INVENTORY",
+    ord('Z'): "UP", ord('z'): "UP",
+    ord('S'): "DOWN", ord('s'): "DOWN",
+    ord('Q'): "LEFT", ord('q'): "LEFT",
+    ord('D'): "RIGHT", ord('d'): "RIGHT",
+    ord('E'): "INTERACT", ord('e'): "INTERACT",
+    27: "ESCAPE",  # ESCAPE key
+    ord('X'): "QUIT", ord('x'): "QUIT",
+    ord('W'): "DEBUG", ord('w'): "DEBUG",
+    ord('I'): "INVENTORY", ord('i'): "INVENTORY",
     curses.KEY_UP: "UP",
     curses.KEY_DOWN: "DOWN",
     curses.KEY_LEFT: "LEFT",
     curses.KEY_RIGHT: "RIGHT",
 }
+HUD_ACTIONS = {"INVENTORY", "QUIT", "DEBUG"}
+HUD_KEYS = {}
+for k, v in KEY_MAPPING.items():
+    if v in HUD_ACTIONS and v not in HUD_KEYS.values():
+        HUD_KEYS[k] = v
+
 
 # chiffres 0-9 → renvoie directement l'entier
 for i in range(10):
@@ -66,12 +72,25 @@ class CursesUI:
             "debug": self.debug_mode,
             "combat": self.combat_mode
         }
+        self.cursor = (0, 0)
+
+        # the area for scene and hud, the border is inculded
+        self.scene = {
+            "position": (0, 0),
+            "size": (universe.size[0] // 2, universe.size[1]),
+        }
+        self.hud = {
+            "position": (universe.size[0] - universe.size[0] // 2 , 0),
+            "size": (universe.size[0] // 2, universe.size[1]),
+        }
 
         if charged:
             self.modes.update(ui_ext.ui_modes)
 
         self.mode_draw_function = self.modes[universe.mode]
         self.universe.set_mode_change_callback(self.change_mode)
+
+        self.combat_system = self.universe.combat_system
 
 
 
@@ -95,7 +114,8 @@ class CursesUI:
 
             else:
                 self.mode_draw_function(stdscr)
-                #self.draw_screen(stdscr)
+                self.draw_border(self.scene, stdscr)
+                self.draw_border(self.hud, stdscr)
                 key = stdscr.getch()
                 stdscr.addstr(10, 10, f"Mode: {key}")
                 self.universe.input_system(self.universe, key_to_action(
@@ -113,74 +133,85 @@ class CursesUI:
         self.draw_player(stdscr)
         self.draw_entities(stdscr)
         # self.draw_events(stdscr) # events dont have sprite for now
+        self.draw_hud(stdscr)
 
     def dialogue_mode(self, stdscr):
-        stdscr.addstr(0, 0, self.universe.dialogue_system.current_reading)
+        text = self.universe.dialogue_system.current_reading
+
+        self.draw(stdscr, "hud",1,1, text)
         if self.universe.dialogue_system.state == "CHOICE":
             for idx, choice in enumerate(self.universe.dialogue_system.choices):
-                stdscr.addstr(idx + 2, 0, f"{idx + 1}. {choice}")
+                self.draw(stdscr, "hud",idx + 2, 1, f"{idx + 1}. {choice}")
 
     def inventory_mode(self, stdscr):
-        stdscr.addstr(0, 0, "Inventory:")
+        self.draw(stdscr, "hud",0, 0, "Inventory:")
         for idx, (item_name, quantity) in enumerate(self.universe.player.inventory.items()):
             item = get_item(item_name)
-            stdscr.addstr(idx + 2, 0, f"{item['name']} x{quantity}")
+            self.draw(stdscr, "hud",idx + 2, 0, f"{item['name']} x{quantity}")
 
     def combat_mode(self, stdscr):
-        combat_system = self.universe.combat_system
         # TODO: changer la variable là qui se fait à chaque itération, ça sert à rien bordel
-        stdscr.addstr(0, 0, "COMBAT MODE")
+        self.draw(stdscr, "hud",0, 0, "COMBAT MODE")
+        nb_enemies = len(self.universe.combat_system.fighters)
         for idx, enemy in enumerate(self.universe.combat_system.fighters):
-            stdscr.addstr(idx + 2, 0, f"{enemy.name} - HP: {enemy.hp}")
-        stdscr.addstr(10, 0, "Player HP: {}".format(self.universe.player.hp))
+            enemy_sprite, (max_x, max_y) = self.load_sprite("assets/sprites/{}.txt".format(enemy.id))
+            x = 1 + (idx+1) * (self.universe.size[1]-2) // (nb_enemies+1) - max_x//2
+            y = (self.universe.size[0]-1)//2 - max_y - 2
+            self.draw(stdscr, "scene", (self.universe.size[0]-1)//2-2,x , f"{enemy.name}")
+            self.draw(stdscr, "scene",(self.universe.size[0]-1)//2-1,x , f"{enemy.hp}/{enemy.max_hp}")
 
-        q0 = combat_system.queue[0] if combat_system.queue else ""
+            self.draw_sprite(enemy_sprite, x, y, stdscr)
 
-        if combat_system.state == "START":
-            stdscr.addstr(12, 0, "A wild enemy appears!")
-        elif combat_system.state == "PLAYER_TURN":
+        self.draw(stdscr, "hud",1, 1, "Player HP: {}".format(self.universe.player.hp))
+
+
+        q0 = self.combat_system.queue[0] if self.combat_system.queue else ""
+
+        if self.combat_system.state == "START":
+            self.draw(stdscr, "hud",1, 1, "A wild enemy appears!")
+        elif self.combat_system.state == "PLAYER_TURN":
             if q0 == "PLAYER_CHOICE":
-                stdscr.addstr(12, 0, "Choose your action:")
-                stdscr.addstr(13, 0, "1. Attack")
-                stdscr.addstr(14, 0, "2. Ability")
-                stdscr.addstr(15, 0, "3. Use Item")
+                self.draw(stdscr, "hud",1+1, 1, "Choose your action:")
+                self.draw(stdscr, "hud",1+1+1, 1, "1. Attack")
+                self.draw(stdscr, "hud",1+2+1, 1, "2. Ability")
+                self.draw(stdscr, "hud",1+1+3, 1, "3. Use Item")
             elif q0 == "ABILITY_CHOICE":
-                stdscr.addstr(12, 0, "Choose your ability:")
-                stdscr.addstr(13, 0, "0. Back")
+                self.draw(stdscr, "hud",1+1, 1, "Choose your ability:")
+                self.draw(stdscr, "hud",1+1+1, 1, "0. Back")
                 for idx, ability in enumerate(self.universe.player.ext_data["abilities"].values()):
-                    stdscr.addstr(14 + idx, 0, f"{idx + 1}. {ability['name']}")
+                    self.draw(stdscr, "hud",1+1+2 + idx, 1, f"{idx + 1}. {ability['name']}")
             elif q0 == "ITEM_CHOICE":
-                stdscr.addstr(12, 0, "Choose your item:")
-                stdscr.addstr(13, 0, "0. Back")
+                self.draw(stdscr, "hud",1+1, 1, "Choose your item:")
+                self.draw(stdscr, "hud",1+1+1, 1, "0. Back")
                 inventory_items = list(self.universe.player.inventory.keys())
                 for idx, item_name in enumerate(inventory_items):
                     item_data = get_item(item_name)
                     quantity = self.universe.player.inventory[item_name]
                     if quantity > 0 and item_data["type"] == "consumable":
-                        stdscr.addstr(14 + idx, 0, f"{idx + 1}. {item_data['name']} x{quantity}")
+                        self.draw(stdscr, "hud",1+2+1 + idx, 1, f"{idx + 1}. {item_data['name']} x{quantity}")
             elif q0 == "CHOOSE_TARGET":
-                stdscr.addstr(12, 0, "Choose your target:")
-                stdscr.addstr(13, 0, "0. Back")
-                for idx, enemy in enumerate(combat_system.fighters):
-                    stdscr.addstr(14 + idx, 0, f"{idx + 1}. {enemy.name}")
+                self.draw(stdscr, "hud",1+1, 1, "Choose your target:")
+                self.draw(stdscr, "hud",1+1+1, 1, "0. Back")
+                for idx, enemy in enumerate(self.combat_system.fighters):
+                    self.draw(stdscr, "hud",1+2+1 + idx, 1, f"{idx + 1}. {enemy.name}")
             elif q0:
-                    stdscr.addstr(12, 0, q0)
+                    self.draw(stdscr, "hud",1+1, 1, q0)
 
 
-        elif combat_system.state == "ENEMIES_TURN" and q0:
-                stdscr.addstr(12, 0, q0)
-        elif combat_system.state == "VICTORY":
-            stdscr.addstr(12, 0, "You won the combat!")
-            stdscr.addstr(13, 0, "Loot:")
-            for idx, (item_id, quantity) in enumerate(combat_system.loot):
+        elif self.combat_system.state == "ENEMIES_TURN" and q0:
+                self.draw(stdscr, "hud",1+1, 1, q0)
+        elif self.combat_system.state == "VICTORY":
+            self.draw(stdscr, "hud",1+1+2, 1, "You won the combat!")
+            self.draw(stdscr, "hud",1+1+3, 1, "Loot:")
+            for idx, (item_id, quantity) in enumerate(self.combat_system.loot):
                 item = get_item(item_id)
-                stdscr.addstr(14 + idx, 0, f"{item['name']} x{quantity}")
+                self.draw(stdscr, "hud",1+1+4 + idx, 1, f"{item['name']} x{quantity}")
 
 
 
     def debug_mode(self, stdscr):
         self.exploration_mode(stdscr)
-        stdscr.addstr(0, 0, "DEBUG MODE")
+        self.draw(stdscr, "hud",1, 1 + self.hud["size"][1] - 12 , "DEBUG MODE")
 
 
 
@@ -188,16 +219,16 @@ class CursesUI:
     def show_scene(self, stdscr):
         scene = self.universe.current_scene
         for y, ligne in enumerate(scene.map_data):
-            stdscr.addstr(y, 0, ligne)
+            self.draw(stdscr, "scene",y, 0, ligne)
 
     def draw_player(self, stdscr):
         player = self.universe.player
         y, x = player.position
-        stdscr.addstr(y, x, player.sprite)
+        self.draw(stdscr, "scene",y, x, player.sprite)
 
     def draw_entity(self, stdscr, entity):
         y, x = entity.position
-        stdscr.addstr(y, x, entity.sprite)
+        self.draw(stdscr, "scene",y, x, entity.sprite)
 
     def draw_entities(self, stdscr):
         scene = self.universe.current_scene
@@ -206,34 +237,105 @@ class CursesUI:
 
     def draw_event(self, stdscr, event):
         y, x = event.position
-        stdscr.addstr(y, x, event.sprite)
+        self.draw(stdscr, "scene",y, x, event.sprite)
 
     def draw_events(self, stdscr):
         scene = self.universe.current_scene
         for event in scene.event_system.events.values():
             self.draw_event(stdscr, event)
 
-    def draw_screen(self, stdscr):
-        h, w = self.universe.size
+    def draw_hud(self, stdscr):
+        # draw hud at fixed coordinate like for exemple for now like this : [key] : action
+        for idx, (k, v) in enumerate(HUD_KEYS.items()):
+            self.draw(stdscr, "hud",idx + 0+1, 0+1, f"[{chr(k)}] : {v}")
 
+    def draw_border(self, scene, stdscr):
+        h, w = scene["size"]
+        y,x = scene["position"]
 
         # Bordures
-        stdscr.addstr(0, 0, '┌' + '─' * (w - 2) + '┐')
-        stdscr.addstr(h - 1, 0, '└' + '─' * (w - 2) + '┘')
+        stdscr.addstr(y, x, '┌' + '─' * (w - 2) + '┐')
+        stdscr.addstr(y + h-1, x, '└' + '─' * (w - 2) + '┘')
 
-        # Barre du milieu
-        mid = h // 2
-        stdscr.addstr(mid, 0, '├' + '─' * (w - 2) + '┤')
 
         # Bordures latérales sans remplir
-        for y in range(1, h - 1):
-            if y != mid:  # on saute la ligne centrale déjà dessinée
-                stdscr.addstr(y, 0, '│')
-                stdscr.addstr(y, w - 1, '│')
+        for i in range(1, h-1):
+            stdscr.addstr(y+i, x, '│')
+            stdscr.addstr(y+i, x+ w -1, '│')
 
-    def draw_text(self, stdscr, text, y, x):
+    def draw_character(self, stdscr, text, y, x):
+        #unused for now
+        """
+        it checks if the character has to be turned into a special one
+        :param stdscr:
+        :param text:
+        :param y:
+        :param x:
+        :return:
+        """
         for idx, char in enumerate(text):
             if char in CHAR_MAP:
                 stdscr.addch(y, x + idx, CHAR_MAP[char])
             else:
                 stdscr.addch(y, x + idx, char)
+
+    def load_sprite(self, path):
+        """
+        Charge un sprite ASCII depuis un fichier texte.
+        Retourne :
+            - liste des lignes
+            - largeur maximale (max_x)
+            - hauteur (max_y)
+        """
+        sprite_lines = []
+        max_x = 0
+        max_y = 0
+
+        with open(path, "r") as f:
+            for line in f:
+                line = line.rstrip("\n")
+                sprite_lines.append(line)
+
+                length = len(line)
+                if length > max_x:
+                    max_x = length
+
+                max_y += 1
+
+        return sprite_lines, (max_x, max_y)
+
+    def draw_sprite(self, sprite_lines, x, y, stdscr):
+        """
+        Affiche un sprite ligne par ligne à partir d'une liste de lignes.
+        sprite_lines = liste obtenue via load_sprite().
+        """
+        for idx, line in enumerate(sprite_lines):
+            # Chaque ligne est dessinée à la position (y + idx, x)
+            stdscr.addstr(y + idx, x, line)
+    def draw(self, stdscr, scene, y, x, text):
+        """
+        Dessine du texte à une position relative à une scène (scene ou hud).
+        Les positions de la scène sont ajoutées aux coordonnées fournies.
+        :param scene:
+        :param y:
+        :param x:
+        :param text:
+        :param stdscr:
+        :return:
+        """
+        if scene == "scene":
+            pos = self.scene["position"]
+        elif scene == "hud":
+            pos = self.hud["position"]
+        else:
+            pos = (0, 0)
+        stdscr.addstr(y + pos[0], x + pos[1], text)
+
+    def draw_text(self, scene, y, x, text):
+        words = text.split()
+        line = ""
+        for word in words:
+            space_needed = 1 if line else 0
+            if len(word) < (scene["size"][0]-2)//2:
+                line+=word+
+

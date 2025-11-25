@@ -1,5 +1,6 @@
 {
   "goblin": {
+    "id": "goblin",
     "name": "Gobelin",
     "hp": 10,
     "damage": 5,
