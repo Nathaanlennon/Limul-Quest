@@ -61,16 +61,7 @@ class UniverseData:
     def mode_change(self, mode):
         self.mode = mode
         self.on_mode_change(mode)
-        if mode == "exploration":
-            self.input_system = InputSystem.exploration_input
-        elif mode == "dialogue":
-            self.input_system = InputSystem.dialogue_input
-        elif mode == "inventory":
-            self.input_system = InputSystem.inventory_input
-        elif mode == "debug":
-            self.input_system = InputSystem.debug_input
-        elif mode == "combat":
-            self.input_system = InputSystem.combat_input
+        self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -180,7 +171,7 @@ class Event:
         self.active = True
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
-        self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT"
+        self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT", "MODE_CHANGE"
         self.kwargs = kwargs
         self.necessary_args = []
 
@@ -190,7 +181,9 @@ class Event:
         elif self.action_type == "DIALOGUE":
             self.necessary_args = ["dialogue"]
         elif self.action_type == "COMBAT":
-            self.necessary_args = ["enemies", "proba"] # list of enemies and their probabilities ex : [("goblin", 100), ("goblin",50)] | chance to trigger the combat (0-100)
+            self.necessary_args = ["enemies", "proba"]# list of enemies and their probabilities ex : [("goblin", 100), ("goblin",50)] | chance to trigger the combat (0-100)
+        elif self.action_type=="MODE_CHANGE":
+            self.necessary_args = ["mode"] # new mode to switch to
         self.check_event_args(self.necessary_args, kwargs)
 
     def check_event_args(self, required_args, kwargs):
@@ -228,6 +221,8 @@ class Event:
                     for (enemy, proba) in self.kwargs["enemies"]:
                         if random.random() <= proba:
                             self.data.combat_system.add_fighter(enemy)
+            elif self.action_type == "MODE_CHANGE":
+                self.data.mode_change(self.kwargs["mode"])
 
 
     def should_trigger(self, action):

@@ -71,9 +71,9 @@ def exploration_mode(self, stdscr):
 def dialogue_mode(self, stdscr):
     if self.universe.dialogue_system.current_dialogue:
         self.universe.dialogue_system.current_say = self.get_dialogue_segment(((self.screens["hud"]["size"][0]-1)//2), self.screens["hud"]["size"][1]-2)
-        draw_dialogue_lines(self, stdscr, "hud", 1, 1, self.universe.dialogue_system.current_say)
+        self.draw_dialogue_lines(stdscr, "hud", 1, 1, self.universe.dialogue_system.current_say)
     if self.universe.dialogue_system.state == "CHOICE":
-        draw_dialogue_lines(self, stdscr, "hud",1,1, self.universe.dialogue_system.current_say)
+        self.draw_dialogue_lines(stdscr, "hud",1,1, self.universe.dialogue_system.current_say)
 
         for idx, choice in enumerate(self.universe.dialogue_system.choices):
             self.draw(stdscr, "hud", idx + self.screens["hud"]["size"][0]//2, 1, f"{idx + 1}. {choice}")
@@ -108,9 +108,9 @@ def combat_mode(self, stdscr):
     elif self.combat_system.state == "PLAYER_TURN":
         if q0 == "PLAYER_CHOICE":
             self.draw(stdscr, "hud", 1 + 1, 1, "Choose your action:")
-            self.draw(stdscr, "hud", 1 + 1 + 1, 1, "1. Attack")
-            self.draw(stdscr, "hud", 1 + 2 + 1, 1, "2. Ability")
-            self.draw(stdscr, "hud", 1 + 1 + 3, 1, "3. Use Item")
+            self.draw_button(stdscr, "hud", 1 + 1 + 1, 1, "1. Attack")
+            self.draw_button(stdscr, "hud", 1 + 2 + 2+1, 1, "2. Ability")
+            self.draw_button(stdscr, "hud", 1 + 2 + 4+2, 1, "3. Use Item")
         elif q0 == "ABILITY_CHOICE":
             self.draw(stdscr, "hud", 1 + 1, 1, "Choose your ability:")
             self.draw(stdscr, "hud", 1 + 1 + 1, 1, "0. Back")
@@ -198,8 +198,8 @@ class CursesUI:
 
             else:
                 self.mode_draw_function(self, stdscr)
-                self.draw_border("scene", stdscr)
-                self.draw_border("hud", stdscr)
+                self.draw_border(self.screens["scene"]["position"],self.screens["scene"]["size"], stdscr)
+                self.draw_border(self.screens["hud"]["position"],self.screens["hud"]["size"], stdscr)
                 key = stdscr.getch()
                 stdscr.addstr(10, 10, f"Mode: {key}")
                 self.universe.input_system(self.universe, key_to_action(
@@ -242,9 +242,16 @@ class CursesUI:
         for idx, (k, v) in enumerate(HUD_KEYS.items()):
             self.draw(stdscr, "hud", idx + 0 + 1, 0 + 1, f"[{chr(k)}] : {v}")
 
-    def draw_border(self, scene, stdscr):
-        h, w = self.screens[scene]["size"]
-        y, x = self.screens[scene]["position"]
+    def draw_border(self, position, size, stdscr):
+        """
+
+        :param position: (y,x)
+        :param size: (h,w)
+        :param stdscr:
+        :return:
+        """
+        h, w = size
+        y, x = position
 
         # Bordures
         stdscr.addstr(y, x, '┌' + '─' * (w - 2) + '┐')
@@ -430,11 +437,17 @@ class CursesUI:
 
         return lines_to_draw
 
-def draw_dialogue_lines(self, stdscr, scene, y, x, lines):
-    """Affiche les lignes déjà préparées."""
-    for idx, line in enumerate(lines):
-        self.draw(stdscr, scene, y + idx, x, line)
+    def draw_dialogue_lines(self, stdscr, scene, y, x, lines):
+        """Affiche les lignes déjà préparées."""
+        for idx, line in enumerate(lines):
+            self.draw(stdscr, scene, y + idx, x, line)
 
+    def draw_button(self, stdscr, scene, y, x, text):
+        """Dessine un bouton avec du texte centré."""
+        (border_y,border_x) = y + self.screens[scene]["position"][0], x + self.screens[scene]["position"][1]
+        button_width = len(text) + 4  # 2 espaces de chaque côté
+        self.draw_border((border_y, border_x), (3, button_width), stdscr)
+        self.draw(stdscr, scene, y + 1, x + 2, text)
 
 
 

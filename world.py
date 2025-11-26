@@ -19,6 +19,8 @@ class Test(World):
                                               ("goblin",1),
                                               ("goblin",1)
                                           ], proba=0))
+        self.add_entity(Entity(self, "test", (3,2), 'I',[
+            Event(data, self, "test", "ON_INTERACT","MODE_CHANGE", mode="saucisse")]))
 
 
 
