@@ -69,10 +69,16 @@ def exploration_mode(self, stdscr):
     self.draw_hud(stdscr)
 
 def dialogue_mode(self, stdscr):
-    self.draw_text(stdscr, "hud", 1, 1, self.segment_text(stdscr, "hud", 1,1))
+    if self.universe.dialogue_system.current_dialogue:
+        self.universe.dialogue_system.current_say = self.get_dialogue_segment(((self.screens["hud"]["size"][0]-1)//2), self.screens["hud"]["size"][1]-2)
+        draw_dialogue_lines(self, stdscr, "hud", 1, 1, self.universe.dialogue_system.current_say)
     if self.universe.dialogue_system.state == "CHOICE":
+        draw_dialogue_lines(self, stdscr, "hud",1,1, self.universe.dialogue_system.current_say)
+
         for idx, choice in enumerate(self.universe.dialogue_system.choices):
             self.draw(stdscr, "hud", idx + self.screens["hud"]["size"][0]//2, 1, f"{idx + 1}. {choice}")
+    sprite, (max_x, max_y) = self.load_sprite("assets/sprites/{}.txt".format(self.universe.dialogue_system.speaker))
+    self.draw_sprite("scene",sprite, self.screens["scene"]["size"][0]-max_y-1, (self.screens["scene"]["size"][1]-max_x)//2, stdscr)
 
 def inventory_mode(self, stdscr):
     self.draw(stdscr, "hud", 0, 0, "Inventory:")
@@ -91,7 +97,7 @@ def combat_mode(self, stdscr):
         self.draw(stdscr, "scene", (self.universe.size[0] - 1) // 2 - 2, x, f"{enemy.name}")
         self.draw(stdscr, "scene", (self.universe.size[0] - 1) // 2 - 1, x, f"{enemy.hp}/{enemy.max_hp}")
 
-        self.draw_sprite("scene",enemy_sprite, x, y, stdscr)
+        self.draw_sprite("scene",enemy_sprite, y, x, stdscr)
 
     self.draw(stdscr, "hud", 1, 1, "Player HP: {}".format(self.universe.player.hp))
 
@@ -290,7 +296,7 @@ class CursesUI:
 
         return sprite_lines, (max_x, max_y)
 
-    def draw_sprite(self, scene, sprite_lines, x, y, stdscr):
+    def draw_sprite(self, scene, sprite_lines, y, x, stdscr):
         """
         Affiche un sprite ligne par ligne à partir d'une liste de lignes.
         sprite_lines = liste obtenue via load_sprite().
@@ -368,5 +374,67 @@ class CursesUI:
             return new_text
         else:
             return self.universe.dialogue_system.current_dialogue
+
+    def get_dialogue_segment(self, max_lines, x_max):
+        """
+        Extrait un segment du dialogue, mot par mot, jusqu'à max_lines et x_max par ligne.
+        Retourne une liste de lignes à afficher et met à jour current_dialogue.
+        """
+        text = self.universe.dialogue_system.current_dialogue
+        words = text.split()
+        y_used = 0
+        current_line = ""
+        size_line = 0
+        displayed_words = 0
+        lines_to_draw = []
+
+        for word in words:
+            word_len = len(word)
+            space_needed = 1 if current_line else 0
+
+            if size_line + word_len + space_needed <= x_max:
+                if current_line:
+                    current_line += " "
+                    size_line += 1
+                current_line += word
+                size_line += word_len
+            else:
+                # ligne complète
+                lines_to_draw.append(current_line)
+                y_used += 1
+                if y_used >= max_lines:
+                    break
+
+                # découper les mots trop longs
+                while word_len > x_max:
+                    part = word[:x_max - 1] + "-"
+                    lines_to_draw.append(part)
+                    y_used += 1
+                    if y_used >= max_lines:
+                        break
+                    word = word[x_max - 1:]
+                    word_len = len(word)
+
+                current_line = word
+                size_line = len(word)
+
+            displayed_words += 1
+
+        if y_used < max_lines and current_line:
+            lines_to_draw.append(current_line)
+
+        # mise à jour du dialogue restant
+        self.universe.dialogue_system.current_dialogue = " ".join(words[displayed_words:])
+        if self.universe.dialogue_system.current_dialogue == "":
+            self.universe.dialogue_system.notify_reading_consumed()
+
+        return lines_to_draw
+
+def draw_dialogue_lines(self, stdscr, scene, y, x, lines):
+    """Affiche les lignes déjà préparées."""
+    for idx, line in enumerate(lines):
+        self.draw(stdscr, scene, y + idx, x, line)
+
+
 
 

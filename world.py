@@ -30,7 +30,7 @@ class Test2(World):
 
         entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
         entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                               target_scene=Test3))
+                               target_scene=Test3, target_position=(3, 3)))
 
 
 class Test3(World):

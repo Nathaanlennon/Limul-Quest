@@ -45,7 +45,7 @@ class UniverseData:
     def set_scene(self, scene_class, **kwargs):
         self.add_scene(scene_class, **kwargs)
         self.current_scene = self.scenes[scene_class]
-        self.player.position = self.current_scene.spawn_player
+        self.player.set_position(self.current_scene.spawn_player)
         self.player.world = self.current_scene
 
     def get_scene(self):
@@ -136,7 +136,10 @@ class Entity:
             for event in events:
                 self.add_event(event)
                 event.entity = self
-
+    def get_position(self):
+        return self.position
+    def set_position(self, position):
+        self.position = position
     def move(self, dx, dy):
         x, y = self.position
         if self.world.is_walkable((x+dx, y+dy)) and self.movable:
@@ -152,7 +155,7 @@ class Entity:
 
 
 class Event:
-    def __init__(self, data, world, name, activation_type, action_type, entity=None, **kwargs):
+    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, **kwargs):
         """
         Initialise un événement dans le jeu.
         :param data: universe data
@@ -173,6 +176,7 @@ class Event:
         self.world = world
         self.name = name
         self.entity = entity  # will be set when added to an entity
+        self.position = position #
         self.active = True
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
@@ -196,17 +200,17 @@ class Event:
             self.active = False
 
     @property
-    def position(self):
+    def get_position(self):
         if self.entity is None:
             return None
-        return self.entity.position
+        return self.entity.get_position()
 
     def is_facing_player(self):
-        x, y = self.data.player.position
+        x, y = self.data.player.get_position()
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
             self.data.player.orientation, (0, 0)
         )
-        return (x + dx, y + dy) == self.position
+        return (x + dx, y + dy) == self.get_position
 
 
     # activation stuff
@@ -214,7 +218,7 @@ class Event:
         if self.active:
             if self.action_type == "MOVE":
                 self.data.set_scene(self.kwargs["target_scene"])
-                self.data.player.position = self.kwargs["target_position"]
+                self.data.player.set_position(self.kwargs["target_position"])
             elif self.action_type == "DIALOGUE":
                 self.data.mode_change("dialogue")
                 self.data.dialogue_system.set_dialogues(self.kwargs["dialogue"])
@@ -228,7 +232,7 @@ class Event:
 
     def should_trigger(self, action):
         if self.activation_type == "ON_STEP":
-            return self.data.player.position == self.position
+            return self.data.player.get_position() == self.get_position
         elif self.activation_type == "ON_INTERACT":
             return self.is_facing_player() and action == "INTERACT"
         elif self.activation_type == "ALWAYS":
@@ -284,7 +288,7 @@ class Player(Entity):
 
 
     def facing_position(self): # gives the tiles facing the player
-        x, y = self.position
+        x, y = self.get_position()
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
             self.orientation, (0, 0)
         )

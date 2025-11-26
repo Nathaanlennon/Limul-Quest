@@ -24,7 +24,7 @@
   },
   {
     "speaker": "PNJ",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed eleifend nunc, sit amet fermentum diam. Sed lobortis lacinia elit, mattis ultrices leo. Praesent tempor leo purus, non mollis lorem vestibulum in. Ut sollicitudin nec tellus non dictum. Praesent ac augue nec nisi semper tempus quis non magna. Nulla finibus id tellus et maximus. Phasellus lectus purus, pulvinar scelerisque justo sit amet, blandit laoreet lectus. Integer id felis tristique, scelerisque dolor id, commodo magna. Sed eu turpis ante. Fusce consequat eros id dignissim pretium. Mauris dapibus turpis commodo scelerisque dapibus. Mauris bibendum ultrices massa. Etiam ante turpis, auctor finibus sodales vel, auctor et velit. ",
+    "text": "Lorem ipsum dolor ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnoPQRS\nsit amet, consectetur adipiscing elit. Nulla sed eleifend nunc, sit amet fermentum diam. Sed lobortis lacinia elit, mattis ultrices leo. Praesent tempor leo purus, non mollis lorem vestibulum in. Ut sollicitudin nec tellus non dictum. Praesent ac augue nec nisi semper tempus quis non magna. Nulla finibus id tellus et maximus. Phasellus lectus purus, pulvinar scelerisque justo sit amet, blandit laoreet lectus. Integer id felis tristique, scelerisque dolor id, commodo magna. Sed eu turpis ante. Fusce consequat eros id dignissim pretium. Mauris dapibus turpis commodo scelerisque dapibus. Mauris bibendum ultrices massa. Etiam ante turpis, auctor finibus sodales vel, auctor et velit. ",
     "require": null,
     "effects": null,
     "options": [

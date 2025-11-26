@@ -38,6 +38,13 @@ def exploration_input(universe, key):
 
 def dialogue_input(universe, key):
     if universe.dialogue_system.state == "TEXT_CHUNK":
+        if universe.dialogue_system.current_dialogue == "":
+            if universe.dialogue_system.as_choices():
+                universe.dialogue_system.state = "CHOICE"
+                universe.dialogue_system.set_choices()
+            else:
+                universe.dialogue_system.state = "NEXT_LINE"
+
         if key == "INTERACT":
             ...
     elif universe.dialogue_system.state == "CHOICE":
