@@ -87,6 +87,10 @@ def debug_input(universe, key):
         universe.mode_change("combat")
         universe.combat_system.add_fighter("goblin")
         universe.combat_system.add_fighter("goblin")
+    elif key == ord('c'):
+        universe.player.save_player()
+    elif key == ord('v'):
+        universe.player.load_player()
 
 def combat_input(universe, key):
     # Placeholder for combat input handling

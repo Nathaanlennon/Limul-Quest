@@ -10,8 +10,8 @@ class Test(World):
                                [Event(data, self,"door1", "ON_INTERACT", "MOVE",
                   target_scene=Test2, target_position=(5, 5))]))
         self.add_entity(Entity(self, "teleporter1", (5, 1), 'T',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
+                             [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
+                  target_scene=Test, target_position=(3, 3))], True))
 
         self.add_entity(NPC(self, "npc1", (3, 1), 'N', dialogue="assets/dialogues/test.json"))
         self.event_system.add_event(Event(data, self, "combat_event", "ALWAYS","COMBAT",

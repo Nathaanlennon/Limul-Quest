@@ -7,6 +7,7 @@ import engine.core.CombatSystem as CombatSystem
 from engine.core.logging_setup import logger
 import os
 import random
+import json
 
 """Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
 if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
@@ -18,6 +19,30 @@ else:
     charged = False
 
 
+
+def save_json_with_backup(data, filepath):
+    """
+    Sauvegarde les données JSON dans `filepath`.
+    Si le fichier existe, le renomme en `<filepath>.old`.
+    Crée les dossiers manquants si nécessaire.
+    """
+    # Crée les dossiers si besoin
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    # Sauvegarde de l'ancien fichier si présent
+    if os.path.exists(filepath):
+        backup_name = filepath + ".old"
+        os.replace(filepath, backup_name)  # remplace l'ancien backup si déjà existant
+
+    # Écriture du nouveau fichier
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Erreur lors de la sauvegarde de {filepath} : {e}")
+        return False
+    return True
+
 class UniverseData:
     def __init__(self, scene, screen_size, **kwargs):
         self.size = screen_size # (rows, cols)
@@ -28,9 +53,7 @@ class UniverseData:
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
         self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
-        # self.input_systems = {modes
-        #     "exploration" : InputSystem(self)
-        # }
+
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
@@ -97,12 +120,17 @@ class World:
 
     def is_walkable(self, tile):
         x, y = tile
+        walkable = False
         if self.map_data[x][y] in self.walkable_tiles:
             if self.event_system.get_event(tile):
-                return self.event_system.get_event(tile).walkable
+                walkable =  self.event_system.get_event(tile).walkable
             else:
-                return True
-        return False
+                walkable =  True
+            # vérifier les entités
+            for entity in self.entities.values():
+                if entity.get_position() == tile and not entity.is_walkable():
+                    walkable = False
+        return walkable
 
 
     def add_entity(self, entity):
@@ -115,12 +143,13 @@ class World:
 
 
 class Entity:
-    def __init__(self, world, name, position, sprite, events = None, **kwargs):
+    def __init__(self, world, name, position, sprite, events = None, walkable = False, **kwargs):
         self.name = name
         self.position = position
         self.sprite = sprite
         self.world = world
         self.movable = False
+        self.walkable = walkable
         self.events = {}
 
         if events:
@@ -143,6 +172,8 @@ class Entity:
         self.events[event.name] = event
         event.entity = self
         self.world.event_system.add_event(event)
+    def is_walkable(self):
+        return self.walkable
 
 
 class Event:
@@ -304,3 +335,25 @@ class Player(Entity):
     def death(self):
         """Gère la mort du joueur. À implémenter."""
         logger.info("Le joueur est mort")
+
+
+    def save_player(self):
+        filename = "saves/save_{}.json".format(self.name)
+        # Crée un dictionnaire filtré pour la sauvegarde
+        data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
+
+        if save_json_with_backup(data, filename):
+            logger.info(f"Progression du joueur sauvegardée dans {filename}")
+        else:
+            logger.error(f"Échec de la sauvegarde de la progression du joueur dans {filename}")
+
+    def load_player(self):
+        filename = "saves/save_{}.json".format(self.name)
+        if os.path.exists(filename) and os.path.isfile(filename):
+            with open(filename, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, value in data.items():
+                    setattr(self, key, value)
+            logger.info(f"Progression du joueur chargée depuis {filename}")
+        else:
+            logger.warning(f"Fichier de sauvegarde introuvable : {filename}")
