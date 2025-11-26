@@ -39,7 +39,7 @@ def exploration_input(universe, key):
 def dialogue_input(universe, key):
     if universe.dialogue_system.state == "TEXT_CHUNK":
         if key == "INTERACT":
-            universe.dialogue_system.set_text_chunk()
+            ...
     elif universe.dialogue_system.state == "CHOICE":
         if isinstance(key, int):  # renvoie d'un chiffre via le mapping
             if 1 <= key <= len(universe.dialogue_system.choices):

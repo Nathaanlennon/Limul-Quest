@@ -120,13 +120,13 @@ class DialogueSystem:
                 self.current_dialogue = self.dialogues[self.index]["text"]
                 # if the text is longer than max_length, show it in chunks
                 if len(self.current_dialogue) > self.max_length:
-                    self.state = "TEXT_CHUNK"
+                     self.state = "TEXT_CHUNK"
                 # if options exist, switch to CHOICE state and populate choices
                 elif "options" in self.dialogues[self.index]:
                     self.state = "CHOICE"
                     self.set_choices()
                 # prepare the first chunk of text to display (or the full text if short)
-                self.set_text_chunk()
+                #self.set_text_chunk()
             else:
                 # requirements not met, skip to next line
                 self.index += 1
