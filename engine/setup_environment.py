@@ -72,8 +72,24 @@ if not os.path.exists(input_file):
         f.write("""# this is where all the additionnal data will be put, all the data that is not originally in the game-engine. 
 # It will be imported in the universe_data and the player_data in the core but the said core will never know nor use it, it's only for your additional extensions that you make
 
+
+# You need to import your world classes here to be able to use them in the worlds dictionary below.
+# from world import Test, Test2, Test3
+
+# this is where you define the different worlds that your game will have.
+# the name of the wolrd is the key and the value is the Class that defines the world.
+worlds = {
+    #"my_world": MyWorldClass,
+}
+
 universe_data = {
     
+}
+
+# this is where you define the different worlds that your game will have.
+# the name of the wolrd is the key and the value is the Class that defines the world.
+worlds = {
+    #"my_world": MyWorldClass,
 }
 
 player_data = {

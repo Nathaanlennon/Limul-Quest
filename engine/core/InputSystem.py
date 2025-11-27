@@ -1,6 +1,5 @@
 import os
 from engine.core.logging_setup import logger
-import world
 import engine.core.ItemManager as ItemManager
 
 
@@ -34,7 +33,7 @@ def exploration_input(universe, key):
     elif key == "INTERACT":
         ...
 
-    universe.current_scene.event_system.update(universe.player, key)
+    universe.current_world.event_system.update(universe.player, key)
 
 def dialogue_input(universe, key):
     if universe.dialogue_system.state == "TEXT_CHUNK":
@@ -59,38 +58,11 @@ def dialogue_input(universe, key):
 def inventory_input(universe, key):
     if key == "INVENTORY":
         universe.mode_change("exploration")
+    elif key == ord('g'):
+        universe.load_save()
 
 def debug_input(universe, key):
-    exploration_input(universe, key)  # garder les contrôles d'exploration
-
-    if key == ord('b'):
-        universe.mode_change("exploration")
-        # TODO: remove debug keys
-    if key == ord('r'):
-        universe.set_scene(world.Test)
-    elif key == ord('n'):
-        universe.set_scene(world.Test2)
-    elif key == ord('y'):
-        universe.set_scene(world.Test3)
-    elif key == ord('m'):
-        universe.mode_change("dialogue")
-    elif key == ord('p'):
-        universe.mode_change("exploration")
-    elif key == ord('o'):
-        universe.player.add_to_inventory("health_potion", 10)
-        universe.player.add_to_inventory("bomb", 5)
-    elif key == ord('l'):
-        universe.mode_change("inventory")
-    elif key == 'TEST':
-        universe.mode_change("exploration")
-    elif key == ord('b'):
-        universe.mode_change("combat")
-        universe.combat_system.add_fighter("goblin")
-        universe.combat_system.add_fighter("goblin")
-    elif key == ord('c'):
-        universe.player.save_player()
-    elif key == ord('v'):
-        universe.player.load_player()
+    ...
 
 def combat_input(universe, key):
     # Placeholder for combat input handling

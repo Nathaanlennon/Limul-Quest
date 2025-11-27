@@ -9,15 +9,6 @@ import os
 import random
 import json
 
-"""Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
-if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
-    import extensions.data_extensions as data_ext
-    charged = True
-
-else:
-    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Executez setup_environment.py qui est dans l'engine pour utiliser.")
-    charged = False
-
 
 
 def save_json_with_backup(data, filepath):
@@ -44,12 +35,13 @@ def save_json_with_backup(data, filepath):
     return True
 
 class UniverseData:
-    def __init__(self, scene, screen_size, **kwargs):
+    def __init__(self, world, screen_size, name, **kwargs):
         self.size = screen_size # (rows, cols)
+        self.name = name
         self.scenes = {}
-        self.current_scene = None
-        self.player = Player(self.current_scene, self.current_scene.spawn_player if self.current_scene else (2, 2))
-        self.set_scene(scene)
+        self.current_world = None
+        self.player = Player(self.current_world, self.current_world.spawn_player if self.current_world else (2, 2))
+        self.set_world(world)
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
         self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
@@ -64,20 +56,28 @@ class UniverseData:
         if charged:
             self.ext_data.update(data_ext.universe_data)
 
-    # scene gestion
-    def set_scene(self, scene_class, **kwargs):
-        self.add_scene(scene_class, **kwargs)
-        self.current_scene = self.scenes[scene_class]
-        self.player.set_position(self.current_scene.spawn_player)
-        self.player.world = self.current_scene
+    # world gestion
+    def set_world(self, world, **kwargs):
+        if world not in worlds:
+            logger.error(f"Monde {world} non trouvé dans les données d'extensions.")
+            world_class = World
+        else :
+            world_class = worlds[world]
+        self.add_scene(world_class, **kwargs)
+        self.current_world = self.scenes[world_class]
+        self.player.set_position(self.current_world.spawn_player)
+        self.player.world = self.current_world
 
     def get_scene(self):
-        return self.current_scene
+        return self.current_world
 
     def add_scene(self, scene_class,
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
         if scene_class not in self.scenes:
-            self.scenes[scene_class] = scene_class(self, **kwargs)
+            if scene_class == World:
+                self.scenes[scene_class] = World(self,"assets/maps/default_map.txt",(1,1), **kwargs)
+            else:
+                self.scenes[scene_class] = scene_class(self, **kwargs)
 
 
     # Mode gestion, mode is the way the sytem and the ui will work, for exemple dialogues and "exploration"
@@ -91,8 +91,34 @@ class UniverseData:
         self.on_mode_change = callback
 
 
+    def save_save(self):
+        filename = "saves/save_universe_{}.json".format(self.name)
+        data = {}
+        for k,v in self.__dict__.items():
+            if k in ("scenes", "current_scene", "player", "input_system", "dialogue_system", "combat_system", "on_mode_change"):
+                if k == "scenes":
+                    # load de chaque scène
+                    scenes_data = {}
+                    for scene_class, scene in v.items():
+                        scenes_data[scene_class.__name__] = scene.extract_data()
+                    data[k] = scenes_data
+            else:
+                data[k] = v
+        if save_json_with_backup(data, filename):
+            logger.info(f"Progression de l'univers sauvegardée dans {filename}")
+        else:
+            logger.error(f"Échec de la sauvegarde de la progression de l'univers dans {filename}")
+
     def load_save(self):
-        ...  # Implémentation du chargement de sauvegarde à venir
+        filename = "saves/save_universe_{}.json".format(self.name)
+        if os.path.exists(filename) and os.path.isfile(filename):
+            with open(filename, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, value in data.items():
+                    if key == 'mode':
+                        self.mode_change(value)
+                    else:
+                        setattr(self, key, value)
 
 
 class World:
@@ -140,6 +166,26 @@ class World:
         self.entities[entity.name] = entity
         return entity
 
+    def extract_data(self):
+        """Extract data from the world for saving purposes"""
+        data = {
+            "map": self.map,
+            "spawn_player": self.spawn_player,
+            "entities": {}
+        }
+        for name, entity in self.entities.items():
+            # data de entities
+            ...
+        return data
+
+    def load_data(self, data):
+        """Load data into the world from a saved state"""
+        self.map = data.get("map", self.map)
+        self.spawn_player = data.get("spawn_player", self.spawn_player)
+        entities_data = data.get("entities", {})
+        for name, entity_data in entities_data.items():
+            # load data into entities
+            ...
 
 
 class Entity:
@@ -241,7 +287,7 @@ class Event:
     def activation(self):
         if self.active:
             if self.action_type == "MOVE":
-                self.data.set_scene(self.kwargs["target_scene"])
+                self.data.set_world(self.kwargs["target_scene"])
                 self.data.player.set_position(self.kwargs["target_position"])
             elif self.action_type == "DIALOGUE":
                 self.data.mode_change("dialogue")
@@ -337,7 +383,7 @@ class Player(Entity):
         logger.info("Le joueur est mort")
 
 
-    def save_player(self):
+    def save_save(self):
         filename = "saves/save_{}.json".format(self.name)
         # Crée un dictionnaire filtré pour la sauvegarde
         data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
@@ -357,3 +403,19 @@ class Player(Entity):
             logger.info(f"Progression du joueur chargée depuis {filename}")
         else:
             logger.warning(f"Fichier de sauvegarde introuvable : {filename}")
+
+
+"""Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
+if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
+    import extensions.data_extensions as data_ext
+    charged = True
+
+else:
+    logger.warning(f"Fichier de data introuvable : {'extensions.data_extensions.py'}, les extensions de data ne seront pas chargées. Executez setup_environment.py qui est dans l'engine pour utiliser.")
+    charged = False
+
+if charged:
+    worlds = data_ext.worlds
+else:
+    worlds = {}
+

@@ -8,10 +8,10 @@ class Test(World):
 
         self.add_entity(Entity(self, "door1", (4, 11), 'DD',
                                [Event(data, self,"door1", "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5))]))
+                  target_scene="Monde2", target_position=(5, 5))]))
         self.add_entity(Entity(self, "teleporter1", (5, 1), 'T',
                              [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))], True))
+                  target_scene="Monde1", target_position=(3, 3))], True))
 
         self.add_entity(NPC(self, "npc1", (3, 1), 'N', dialogue="assets/dialogues/test.json"))
         self.event_system.add_event(Event(data, self, "combat_event", "ALWAYS","COMBAT",
@@ -32,7 +32,7 @@ class Test2(World):
 
         entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
         entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                               target_scene=Test3, target_position=(3, 3)))
+                               target_scene="Monde3", target_position=(3, 3)))
 
 
 class Test3(World):
@@ -42,5 +42,5 @@ class Test3(World):
 
         entity = self.add_entity(Entity(self,"door", (9, 24), 'D'))
         entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(1, 1)))
+                  target_scene="Monde2", target_position=(1, 1)))
 
