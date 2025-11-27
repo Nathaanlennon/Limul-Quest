@@ -7,6 +7,7 @@ import engine.core.CombatSystem as CombatSystem
 from engine.core.logging_setup import logger
 import os
 import random
+import json
 
 """Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
 if os.path.exists("extensions/data_extensions.py") and os.path.isfile("extensions/data_extensions.py"):
@@ -18,6 +19,30 @@ else:
     charged = False
 
 
+
+def save_json_with_backup(data, filepath):
+    """
+    Sauvegarde les données JSON dans `filepath`.
+    Si le fichier existe, le renomme en `<filepath>.old`.
+    Crée les dossiers manquants si nécessaire.
+    """
+    # Crée les dossiers si besoin
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    # Sauvegarde de l'ancien fichier si présent
+    if os.path.exists(filepath):
+        backup_name = filepath + ".old"
+        os.replace(filepath, backup_name)  # remplace l'ancien backup si déjà existant
+
+    # Écriture du nouveau fichier
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Erreur lors de la sauvegarde de {filepath} : {e}")
+        return False
+    return True
+
 class UniverseData:
     def __init__(self, scene, screen_size, **kwargs):
         self.size = screen_size # (rows, cols)
@@ -28,9 +53,7 @@ class UniverseData:
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
         self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
-        # self.input_systems = {modes
-        #     "exploration" : InputSystem(self)
-        # }
+
         self.on_mode_change = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
@@ -45,7 +68,7 @@ class UniverseData:
     def set_scene(self, scene_class, **kwargs):
         self.add_scene(scene_class, **kwargs)
         self.current_scene = self.scenes[scene_class]
-        self.player.position = self.current_scene.spawn_player
+        self.player.set_position(self.current_scene.spawn_player)
         self.player.world = self.current_scene
 
     def get_scene(self):
@@ -61,16 +84,7 @@ class UniverseData:
     def mode_change(self, mode):
         self.mode = mode
         self.on_mode_change(mode)
-        if mode == "exploration":
-            self.input_system = InputSystem.exploration_input
-        elif mode == "dialogue":
-            self.input_system = InputSystem.dialogue_input
-        elif mode == "inventory":
-            self.input_system = InputSystem.inventory_input
-        elif mode == "debug":
-            self.input_system = InputSystem.debug_input
-        elif mode == "combat":
-            self.input_system = InputSystem.combat_input
+        self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
 
     def set_mode_change_callback(self, callback):
         """L’UI nous donne la fonction à appeler plus tard"""
@@ -99,16 +113,24 @@ class World:
                 map_data = [line.rstrip('\n') for line in file]
             return map_data
         else:
-           return ""
+            with open("assets/maps/default_map.txt", 'r', encoding='utf-8') as file:
+                map_data = [line.rstrip('\n') for line in file]
+            logger.warning(f"Fichier de map introuvable : {self.map}, chargement de la map par défaut.")
+            return map_data
 
     def is_walkable(self, tile):
         x, y = tile
+        walkable = False
         if self.map_data[x][y] in self.walkable_tiles:
             if self.event_system.get_event(tile):
-                return self.event_system.get_event(tile).walkable
+                walkable =  self.event_system.get_event(tile).walkable
             else:
-                return True
-        return False
+                walkable =  True
+            # vérifier les entités
+            for entity in self.entities.values():
+                if entity.get_position() == tile and not entity.is_walkable():
+                    walkable = False
+        return walkable
 
 
     def add_entity(self, entity):
@@ -121,19 +143,23 @@ class World:
 
 
 class Entity:
-    def __init__(self, world, name, position, sprite, events = None, **kwargs):
+    def __init__(self, world, name, position, sprite, events = None, walkable = False, **kwargs):
         self.name = name
         self.position = position
         self.sprite = sprite
         self.world = world
         self.movable = False
+        self.walkable = walkable
         self.events = {}
 
         if events:
             for event in events:
                 self.add_event(event)
                 event.entity = self
-
+    def get_position(self):
+        return self.position
+    def set_position(self, position):
+        self.position = position
     def move(self, dx, dy):
         x, y = self.position
         if self.world.is_walkable((x+dx, y+dy)) and self.movable:
@@ -146,10 +172,12 @@ class Entity:
         self.events[event.name] = event
         event.entity = self
         self.world.event_system.add_event(event)
+    def is_walkable(self):
+        return self.walkable
 
 
 class Event:
-    def __init__(self, data, world, name, activation_type, action_type, entity=None, **kwargs):
+    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, **kwargs):
         """
         Initialise un événement dans le jeu.
         :param data: universe data
@@ -170,10 +198,11 @@ class Event:
         self.world = world
         self.name = name
         self.entity = entity  # will be set when added to an entity
+        self.position = position #
         self.active = True
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
-        self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT"
+        self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT", "MODE_CHANGE"
         self.kwargs = kwargs
         self.necessary_args = []
 
@@ -183,7 +212,9 @@ class Event:
         elif self.action_type == "DIALOGUE":
             self.necessary_args = ["dialogue"]
         elif self.action_type == "COMBAT":
-            self.necessary_args = ["enemies", "proba"] # list of enemies and their probabilities ex : [("goblin", 100), ("goblin",50)] | chance to trigger the combat (0-100)
+            self.necessary_args = ["enemies", "proba"]# list of enemies and their probabilities ex : [("goblin", 100), ("goblin",50)] | chance to trigger the combat (0-100)
+        elif self.action_type=="MODE_CHANGE":
+            self.necessary_args = ["mode"] # new mode to switch to
         self.check_event_args(self.necessary_args, kwargs)
 
     def check_event_args(self, required_args, kwargs):
@@ -193,17 +224,17 @@ class Event:
             self.active = False
 
     @property
-    def position(self):
+    def get_position(self):
         if self.entity is None:
             return None
-        return self.entity.position
+        return self.entity.get_position()
 
     def is_facing_player(self):
-        x, y = self.data.player.position
+        x, y = self.data.player.get_position()
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
             self.data.player.orientation, (0, 0)
         )
-        return (x + dx, y + dy) == self.position
+        return (x + dx, y + dy) == self.get_position
 
 
     # activation stuff
@@ -211,7 +242,7 @@ class Event:
         if self.active:
             if self.action_type == "MOVE":
                 self.data.set_scene(self.kwargs["target_scene"])
-                self.data.player.position = self.kwargs["target_position"]
+                self.data.player.set_position(self.kwargs["target_position"])
             elif self.action_type == "DIALOGUE":
                 self.data.mode_change("dialogue")
                 self.data.dialogue_system.set_dialogues(self.kwargs["dialogue"])
@@ -221,11 +252,13 @@ class Event:
                     for (enemy, proba) in self.kwargs["enemies"]:
                         if random.random() <= proba:
                             self.data.combat_system.add_fighter(enemy)
+            elif self.action_type == "MODE_CHANGE":
+                self.data.mode_change(self.kwargs["mode"])
 
 
     def should_trigger(self, action):
         if self.activation_type == "ON_STEP":
-            return self.data.player.position == self.position
+            return self.data.player.get_position() == self.get_position
         elif self.activation_type == "ON_INTERACT":
             return self.is_facing_player() and action == "INTERACT"
         elif self.activation_type == "ALWAYS":
@@ -281,7 +314,7 @@ class Player(Entity):
 
 
     def facing_position(self): # gives the tiles facing the player
-        x, y = self.position
+        x, y = self.get_position()
         dx, dy = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}.get(
             self.orientation, (0, 0)
         )
@@ -302,3 +335,25 @@ class Player(Entity):
     def death(self):
         """Gère la mort du joueur. À implémenter."""
         logger.info("Le joueur est mort")
+
+
+    def save_player(self):
+        filename = "saves/save_{}.json".format(self.name)
+        # Crée un dictionnaire filtré pour la sauvegarde
+        data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
+
+        if save_json_with_backup(data, filename):
+            logger.info(f"Progression du joueur sauvegardée dans {filename}")
+        else:
+            logger.error(f"Échec de la sauvegarde de la progression du joueur dans {filename}")
+
+    def load_player(self):
+        filename = "saves/save_{}.json".format(self.name)
+        if os.path.exists(filename) and os.path.isfile(filename):
+            with open(filename, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, value in data.items():
+                    setattr(self, key, value)
+            logger.info(f"Progression du joueur chargée depuis {filename}")
+        else:
+            logger.warning(f"Fichier de sauvegarde introuvable : {filename}")

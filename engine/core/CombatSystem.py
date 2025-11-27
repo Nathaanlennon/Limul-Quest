@@ -41,6 +41,7 @@ class CombatSystem:
     class Enemy:
         def __init__(self, combat_system, enemy_data):
             self.name = enemy_data.get("name", "Ennemi inconnu")
+            self.id = enemy_data.get("id", "unknown_enemy")
             self.abilities = enemy_data.get("abilities", [])
             self.damage = enemy_data.get("damage", 0)
             self.defense = enemy_data.get("defense", 0)
