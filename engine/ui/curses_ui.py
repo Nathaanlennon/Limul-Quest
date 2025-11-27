@@ -94,7 +94,7 @@ class CursesUI:
                 stdscr.addstr(0, 0, "Veuillez agrandir la fenêtre")
 
             else:
-                self.mode_draw_function(stdscr)
+                self.mode_draw_function(self = self, stdscr = stdscr)
                 #self.draw_screen(stdscr)
                 key = stdscr.getch()
                 stdscr.addstr(10, 10, f"Mode: {key}")
