@@ -1,67 +1,143 @@
 from engine.core.base import World, Entity, Event, NPC
 
 
-class Test(World):
+class Village1(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/village2.txt", (12, 30))
-        self.name = "Monde1"
+        super().__init__(data, "assets/maps/village1.txt", (10, 36))
+        self.name = "Village1"
 
-        #bucher's door
+        #Exemple type de l'event door
+        self.add_entity(Entity(self, "aPreciser", (5, 5), 'D',
+                               [Event(data, self,"aPreciser", "ON_INTERACT", "MOVE",
+                  target_scene=Village2, target_position=(15, 5))]))
 
-        self.add_entity(Entity(self, "door1", (9, 13), 'D',
-                               [Event(data, self,"door1", "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5))]))
-        self.add_entity(Entity(self, "door2", (9, 14), 'D',
-                               [Event(data, self,"door2", "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5))]))
+        #transition to Village2
+        self.add_entity(Entity(self, "bridgeBot", (18, 36), ' ',
+                               [Event(data, self,"bridgeBot", "ON_STEP", "MOVE",
+                  target_scene=Village2, target_position=(2, 36))]))
+        self.add_entity(Entity(self, "bridgeBot", (18, 37), ' ',
+                               [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
+                                      target_scene=Village2, target_position=(2, 37))]))
+        self.add_entity(Entity(self, "bridgeBot", (18, 38), ' ',
+                               [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
+                                      target_scene=Village2, target_position=(2, 38))]))
+
+        #transition to forest
+        self.add_entity(Entity(self, "forestTop", (1, 36), ' ',
+                               [Event(data, self, "forestTop", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(17, 36))]))
+        self.add_entity(Entity(self, "forestTop", (1, 37), ' ',
+                               [Event(data, self, "forestTop", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(17, 37))]))
+        self.add_entity(Entity(self, "forestTop", (1, 38), ' ',
+                               [Event(data, self, "forestTop", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(17, 38))]))
+
+        #exemple type de l'event NPC
+        self.add_entity(NPC(self, "npc1", (4, 5), 'N', dialogue="assets/dialogues/Village.json"))
+
+
+
+class ButcherHouse(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/butcherHouse.txt", (0, 0))
+        self.name = "ButcherHouse"
+
+        self.add_entity(Entity(self, "door1Butcher", (16, 34), 'D',
+                               [Event(data, self, "door1Butcher", "ON_INTERACT", "MOVE",
+                                      target_scene=Village2, target_position=(10, 13))]))
+        self.add_entity(Entity(self, "door2Butcher", (16, 35), 'D',
+                               [Event(data, self, "door2Butcher", "ON_INTERACT", "MOVE",
+                                      target_scene=Village2, target_position=(10, 14))]))
+
+class Village2(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/village2.txt", (0, 0))
+        self.name = "Village2"
+
+        self.add_entity(Entity(self, "bridgeTop", (1, 36), ' ',
+                               [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(17, 36))]))
+        self.add_entity(Entity(self, "bridgeTop", (1, 37), ' ',
+                               [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(17, 37))]))
+        self.add_entity(Entity(self, "bridgeTop", (1, 38), ' ',
+                               [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(17, 38))]))
         
-        #theatre door
+        self.add_entity(Entity(self, "door1Butcher", (9, 13), 'D',
+                               [Event(data, self, "door1Butcher", "ON_INTERACT", "MOVE",
+                                      target_scene=ButcherHouse, target_position=(15, 34))]))
+        self.add_entity(Entity(self, "door2Butcher", (9, 14), 'D',
+                               [Event(data, self, "door2Butcher", "ON_INTERACT", "MOVE",
+                                      target_scene=ButcherHouse, target_position=(15, 35))]))
 
-        self.add_entity(Entity(self, "door3", (14, 52), 'D',
-                               [Event(data, self,"door3", "ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(5, 5))]))
+        #transition to zoo
+        self.add_entity(Entity(self, "zooLeft", (11, 1), ' ',
+                               [Event(data, self, "zooLeft", "ON_STEP", "MOVE",
+                                      target_scene=Zoo, target_position=(10, 68))]))
+
+class zooKeeperHouse(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/zooKeeperHouse.txt", (10,36))
+        self.name = "zooKeeperHouse"
+
+        self.add_entity(Entity(self, "door1Keeper", (16, 34), 'D',
+                               [Event(data, self, "door1Keeper", "ON_INTERACT", "MOVE",
+                                      target_scene=Zoo, target_position=(18, 55))]))
+        self.add_entity(Entity(self, "door2Keeper", (16, 35), 'D',
+                               [Event(data, self, "door2Keeper", "ON_INTERACT", "MOVE",
+                                      target_scene=Zoo, target_position=(18, 56))]))
         
+        self.add_entity(NPC(self, "zooKeeper", (11, 30), 'N', dialogue="assets/dialogues/test.json"))
+
+        
+
+class Zoo(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/zoo.txt", (10,36))
+        self.name = "Zoo"
+
+        self.add_entity(Entity(self, "zooBot", (10, 69), ' ',
+                               [Event(data, self, "zooBot", "ON_STEP", "MOVE",
+                                      target_scene=Village2, target_position=(11, 2))]))
+        self.add_entity(Entity(self, "door1Keeper", (17, 55), 'D',
+                               [Event(data, self, "door1Keeper", "ON_INTERACT", "MOVE",
+                                      target_scene=zooKeeperHouse, target_position=(15, 34))]))
+        self.add_entity(Entity(self, "door2Keeper", (17, 56), 'D',
+                               [Event(data, self, "door2Keeper", "ON_INTERACT", "MOVE",
+                                      target_scene=zooKeeperHouse, target_position=(15, 35))]))
+        
+
+
+class Forest(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/forest.txt", (0, 0))
+        self.name = "Forest"
+
         #transition to village1
+        self.add_entity(Entity(self, "forestBot", (18, 36), ' ',
+                               [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(2, 36))]))
+        self.add_entity(Entity(self, "forestBot", (18, 37), ' ',
+                               [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(2, 37))]))
+        self.add_entity(Entity(self, "forestBot", (18, 38), ' ',
+                               [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+                                      target_scene=Village1, target_position=(2, 38))]))
 
-        self.add_entity(Entity(self, "teleporter1", (1, 36), ' ',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
-        
-        self.add_entity(Entity(self, "teleporter1", (1, 37), ' ',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
-        
-        self.add_entity(Entity(self, "teleporter1", (1, 38), ' ',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
-        
-        # transition to zoo map
-
-        self.add_entity(Entity(self, "teleporter1", (11, 1), ' ',
-                               [Event(data, self,"teleporter1", "ON_STEP", "MOVE",
-                  target_scene=Test, target_position=(3, 3))]))
-        
-        # npcs
-
-        self.add_entity(NPC(self, "npc1", (10, 32), 'N', dialogue="assets/dialogues/test.json"))
+        #transition to cave
+        self.add_entity(Entity(self, "forest", (6, 22), 'C',
+                               [Event(data, self, "forest", "ON_STEP", "MOVE",
+                                      target_scene=Cave, target_position=(17, 37))]))
 
 
-class Test2(World):
+class Cave(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/testchateau.txt", (5, 5))
-        self.name = "Monde2"
+        super().__init__(data, "assets/maps/cave.txt", (0, 0))
+        self.name = "Cave"
 
-        entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
-        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                               target_scene=Test3))
-
-
-class Test3(World):
-    def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/test_village.txt", (3, 3))
-        self.name = "Monde3"
-
-        entity = self.add_entity(Entity(self,"door", (9, 24), 'D'))
-        entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
-                  target_scene=Test2, target_position=(1, 1)))
-
+        #transition to forest
+        self.add_entity(Entity(self, "entryCave", (18, 37), 'F',
+                               [Event(data, self, "entryCave", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(7, 22))]))

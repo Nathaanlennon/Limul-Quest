@@ -5,7 +5,7 @@
 #Each mode function should accept a single parameter, typically the standard screen object (`stdscr`), which is used for rendering the UI in that mode.
 
 #Example:
-#def custom_mode(stdscr):
+#def custom_mode(self, stdscr):
 #    # Custom mode implementation
 
 ui_modes = {
