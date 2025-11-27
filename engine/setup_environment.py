@@ -21,7 +21,7 @@ if not os.path.exists(input_file):
 #Each mode function should accept a single parameter, typically the standard screen object (`stdscr`), which is used for rendering the UI in that mode.
 
 #Example:
-#def custom_mode(stdscr):
+#def custom_mode(self, stdscr):
 #    # Custom mode implementation
 
 ui_modes = {
@@ -51,7 +51,20 @@ if not os.path.exists(input_file):
 
 input_modes = {
     #custom_input: custom_input,
-}""")
+}
+# the hud input is a set of actions that can be triggered from the hud, like opening the inventory, quitting the game, etc.
+# you can add more actions here if needed and even modify existing ones.
+# it works with the key mapping in engine/ui/curses_ui.py that maps key codes to action strings.
+# the code will take the key if in the hud set and trigger the corresponding action by changing the mode of the universe.
+# it will work this way : 
+#    elif key in hud:
+#        universe.mode_change(self, key.lower())
+# so it is very important that the input action string matches the mode name in lowercase.
+hud = {
+    # Example: "CUSTOM_ACTION",
+}
+""")
+
 
 input_file= os.path.join(path, "extensions/data_extensions.py")
 if not os.path.exists(input_file):

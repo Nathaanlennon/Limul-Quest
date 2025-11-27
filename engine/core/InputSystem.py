@@ -26,10 +26,8 @@ def exploration_input(universe, key):
     elif key == "RIGHT":
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
-    elif key == "INVENTORY":
-        universe.mode_change("inventory")
-    elif key == "TEST":
-        universe.mode_change("debug")
+    elif key in hud:
+        universe.mode_change(key.lower())
 
 
 
@@ -40,8 +38,15 @@ def exploration_input(universe, key):
 
 def dialogue_input(universe, key):
     if universe.dialogue_system.state == "TEXT_CHUNK":
+        if universe.dialogue_system.current_dialogue == "":
+            if universe.dialogue_system.as_choices():
+                universe.dialogue_system.state = "CHOICE"
+                universe.dialogue_system.set_choices()
+            else:
+                universe.dialogue_system.state = "NEXT_LINE"
+
         if key == "INTERACT":
-            universe.dialogue_system.set_text_chunk()
+            ...
     elif universe.dialogue_system.state == "CHOICE":
         if isinstance(key, int):  # renvoie d'un chiffre via le mapping
             if 1 <= key <= len(universe.dialogue_system.choices):
@@ -82,6 +87,10 @@ def debug_input(universe, key):
         universe.mode_change("combat")
         universe.combat_system.add_fighter("goblin")
         universe.combat_system.add_fighter("goblin")
+    elif key == ord('c'):
+        universe.player.save_player()
+    elif key == ord('v'):
+        universe.player.load_player()
 
 def combat_input(universe, key):
     # Placeholder for combat input handling
@@ -177,6 +186,9 @@ modes = {
     "debug": debug_input,
     "combat": combat_input,
 }
+
+# hud is the input handler for the hud elements like inventory and things like that, to add more if needed
+hud = {"INVENTORY", "DEBUG"}
 
 if charged:
     modes.update(input_ext.input_modes)
