@@ -3,8 +3,7 @@ from engine.core.base import World, Entity, Event, NPC
 
 class Test(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/village2.txt", (2, 3))
-        self.name = "Monde1"
+        super().__init__(data, "Monde1", "assets/maps/village2.txt", (2, 3))
 
         self.add_entity(Entity(self, "door1", (4, 11), 'DD',
                                [Event(data, self,"door1", "ON_INTERACT", "MOVE",
@@ -27,8 +26,7 @@ class Test(World):
 
 class Test2(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/testchateau.txt", (5, 5))
-        self.name = "Monde2"
+        super().__init__(data, "Monde2", "assets/maps/testchateau.txt", (5, 5))
 
         entity = self.add_entity(Entity(self,"door", (8, 24), 'D'))
         entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",
@@ -37,8 +35,7 @@ class Test2(World):
 
 class Test3(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/test_village.txt", (3, 3))
-        self.name = "Monde3"
+        super().__init__(data, "Monde3", "assets/maps/test_village.txt", (3, 3))
 
         entity = self.add_entity(Entity(self,"door", (9, 24), 'D'))
         entity.add_event(Event(data, self, "door","ON_INTERACT", "MOVE",

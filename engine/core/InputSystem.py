@@ -33,7 +33,7 @@ def exploration_input(universe, key):
     elif key == "INTERACT":
         ...
 
-    universe.current_world.event_system.update(universe.player, key)
+    universe.scenes[universe.current_world].event_system.update(universe.player, key)
 
 def dialogue_input(universe, key):
     if universe.dialogue_system.state == "TEXT_CHUNK":

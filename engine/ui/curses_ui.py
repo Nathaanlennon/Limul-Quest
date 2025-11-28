@@ -199,7 +199,7 @@ class CursesUI:
 
 
     def show_scene(self, stdscr):
-        scene = self.universe.current_world
+        scene = self.universe.scenes[self.universe.current_world]
         for y, ligne in enumerate(scene.map_data):
             self.draw(stdscr, "scene", y, 0, ligne)
 
@@ -213,7 +213,7 @@ class CursesUI:
         self.draw(stdscr, "scene", y, x, entity.sprite)
 
     def draw_entities(self, stdscr):
-        scene = self.universe.current_world
+        scene = self.universe.scenes[self.universe.current_world]
         for entity in scene.entities.values():
             self.draw_entity(stdscr, entity)
 
@@ -222,7 +222,7 @@ class CursesUI:
         self.draw(stdscr, "scene", y, x, event.sprite)
 
     def draw_events(self, stdscr):
-        scene = self.universe.current_world
+        scene = self.universe.scenes[self.universe.current_world]
         for event in scene.event_system.events.values():
             self.draw_event(stdscr, event)
 

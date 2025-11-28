@@ -39,8 +39,8 @@ class UniverseData:
         self.size = screen_size # (rows, cols)
         self.name = name
         self.scenes = {}
-        self.current_world = None
-        self.player = Player(self.current_world, self.current_world.spawn_player if self.current_world else (2, 2))
+        self.current_world = ""
+        self.player = Player(self.current_world if self.current_world else "", self.scenes[self.current_world] if self.current_world else (2, 2))
         self.set_world(world)
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
@@ -63,21 +63,21 @@ class UniverseData:
             world_class = World
         else :
             world_class = worlds[world]
-        self.add_scene(world_class, **kwargs)
-        self.current_world = self.scenes[world_class]
-        self.player.set_position(self.current_world.spawn_player)
-        self.player.world = self.current_world
+        self.add_scene(world, world_class, **kwargs)
+        self.current_world = world
+        self.player.set_position(self.scenes[self.current_world].spawn_player)
+        self.player.world = self.scenes[self.current_world]
 
     def get_scene(self):
         return self.current_world
 
-    def add_scene(self, scene_class,
+    def add_scene(self, world_name, scene_class,
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
-        if scene_class not in self.scenes:
+        if world_name not in self.scenes:
             if scene_class == World:
-                self.scenes[scene_class] = World(self,"assets/maps/default_map.txt",(1,1), **kwargs)
+                self.scenes[world_name] = World(self,"assets/maps/default_map.txt",(1,1), **kwargs)
             else:
-                self.scenes[scene_class] = scene_class(self, **kwargs)
+                self.scenes[world_name] = scene_class(self, **kwargs)
 
 
     # Mode gestion, mode is the way the sytem and the ui will work, for exemple dialogues and "exploration"
@@ -95,13 +95,25 @@ class UniverseData:
         filename = "saves/save_universe_{}.json".format(self.name)
         data = {}
         for k,v in self.__dict__.items():
-            if k in ("scenes", "current_scene", "player", "input_system", "dialogue_system", "combat_system", "on_mode_change"):
+            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system", "combat_system", "on_mode_change"):
                 if k == "scenes":
                     # load de chaque scène
                     scenes_data = {}
-                    for scene_class, scene in v.items():
-                        scenes_data[scene_class.__name__] = scene.extract_data()
+                    for scene_name, scene in v.items():
+                        scenes_data[scene_name] = scene.extract_data()
                     data[k] = scenes_data
+                elif k == "current_world":
+                    data[k] = v
+                elif k == "player":
+                    self.player.save_save()
+                elif k == "ext_data":
+                    data[k] = {}
+                    for ext_k, ext_v in v.items():
+                        if hasattr(ext_k, "extract_data" and callable(getattr(v, "extract_data"))):
+                            data[k][ext_k] = ext_v.extract_data()
+                        else:
+                            data[k][ext_k] = ext_v
+                # the rest of the excluded attributes are not saved
             else:
                 data[k] = v
         if save_json_with_backup(data, filename):
@@ -117,15 +129,31 @@ class UniverseData:
                 for key, value in data.items():
                     if key == 'mode':
                         self.mode_change(value)
+                    elif key == 'scenes':
+                        for scene_name, scene_data in value.items():
+                            # Chercher directement dans worlds par le nom de classe
+                            if scene_name in worlds:
+                                scene_class = worlds[scene_name]
+                                self.add_scene(scene_name, scene_class)
+                                self.scenes[scene_name].load_data(scene_data)
+                            else:
+                                logger.warning(f"Classe de scène {scene_name} non trouvée dans worlds.")
                     else:
                         setattr(self, key, value)
+            self.player.load_player()
+            self.current_world = self.player.world
+            self.player.world = self.scenes[self.current_world]
+            logger.info(f"Progression de l'univers chargée depuis {filename}")
+        else:
+            logger.warning(f"Fichier de sauvegarde introuvable : {filename}")
 
 
 class World:
-    def __init__(self, data, map, spawn_player, **kwargs):
+    def __init__(self, data, name, map, spawn_player, **kwargs):
         self.data = data
         self.walkable_tiles = ['.', ',', ';', ':', '*', ' ']
         self.entities = {}
+        self.name = name
         self.map = map  # empty map for initialisation
         self.spawn_player = spawn_player  # Default spawn position for player
         self.event_system = EventSystem(self)
@@ -145,16 +173,16 @@ class World:
             return map_data
 
     def is_walkable(self, tile):
-        x, y = tile
+        y, x = tile
         walkable = False
-        if self.map_data[x][y] in self.walkable_tiles:
+        if self.map_data[y][x] in self.walkable_tiles:
             if self.event_system.get_event(tile):
                 walkable =  self.event_system.get_event(tile).walkable
             else:
                 walkable =  True
             # vérifier les entités
             for entity in self.entities.values():
-                if entity.get_position() == tile and not entity.is_walkable():
+                if tuple(entity.get_position()) == tile and not entity.is_walkable():
                     walkable = False
         return walkable
 
@@ -166,6 +194,18 @@ class World:
         self.entities[entity.name] = entity
         return entity
 
+    def remove_entity(self, entity_name):
+        """Remove an entity from the world by its name"""
+        if entity_name in self.entities:
+            if self.entities[entity_name].events:
+                self.entities[entity_name].remove_all_events()
+            del self.entities[entity_name]
+    def remove_all_entities(self):
+        """Remove all entities from the world"""
+        for entity_name in list(self.entities.keys()):
+            self.remove_entity(entity_name)
+
+
     def extract_data(self):
         """Extract data from the world for saving purposes"""
         data = {
@@ -174,18 +214,17 @@ class World:
             "entities": {}
         }
         for name, entity in self.entities.items():
-            # data de entities
-            ...
+            data["entities"][name] = entity.extract_data()
         return data
 
     def load_data(self, data):
         """Load data into the world from a saved state"""
         self.map = data.get("map", self.map)
+        self.name = data.get("name", self.name)
         self.spawn_player = data.get("spawn_player", self.spawn_player)
         entities_data = data.get("entities", {})
         for name, entity_data in entities_data.items():
-            # load data into entities
-            ...
+            self.add_entity(Entity(self, entity_data["name"], entity_data["position"], entity_data["sprite"], walkable=entity_data.get("walkable", False)))
 
 
 class Entity:
@@ -218,8 +257,25 @@ class Entity:
         self.events[event.name] = event
         event.entity = self
         self.world.event_system.add_event(event)
+    def remove_event(self, event_name):
+        if event_name in self.events:
+            self.world.event_system.remove_event(self.events[event_name])
+            del self.events[event_name]
+    def remove_all_events(self):
+        for event_name in list(self.events.keys()):
+            self.remove_event(event_name)
     def is_walkable(self):
         return self.walkable
+
+    def extract_data(self):
+        data = {
+        }
+        for k, v in self.__dict__.items():
+            if k not in ("world", "events"):
+                data[k] = v
+
+        return data
+
 
 
 class Event:
@@ -384,9 +440,10 @@ class Player(Entity):
 
 
     def save_save(self):
-        filename = "saves/save_{}.json".format(self.name)
+        filename = "saves/{}/save_{}.json".format(self.world.data.name, self.name)
         # Crée un dictionnaire filtré pour la sauvegarde
         data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
+        data['world'] = self.world.name
 
         if save_json_with_backup(data, filename):
             logger.info(f"Progression du joueur sauvegardée dans {filename}")
@@ -394,7 +451,7 @@ class Player(Entity):
             logger.error(f"Échec de la sauvegarde de la progression du joueur dans {filename}")
 
     def load_player(self):
-        filename = "saves/save_{}.json".format(self.name)
+        filename = "saves/{}/save_{}.json".format(self.world.data.name, self.name)
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
