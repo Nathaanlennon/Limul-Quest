@@ -24,3 +24,5 @@ uniformiser la detection des fichiers en utilisant os
 faire le readme du game engine
 
 important : faire en sorte que si rien a spawn au début du combat on retente de spawn
+
+faire le spawn spécial à) la création du premier monde

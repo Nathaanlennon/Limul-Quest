@@ -35,12 +35,12 @@ def save_json_with_backup(data, filepath):
     return True
 
 class UniverseData:
-    def __init__(self, world, screen_size, name, **kwargs):
+    def __init__(self, world, screen_size, name, player, **kwargs):
         self.size = screen_size # (rows, cols)
         self.name = name
         self.scenes = {}
         self.current_world = ""
-        self.player = Player(self.current_world if self.current_world else "", self.scenes[self.current_world] if self.current_world else (2, 2))
+        self.player = Player(player, self.current_world if self.current_world else "", self.scenes[self.current_world] if self.current_world else (1, 1))
         self.set_world(world)
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
@@ -56,6 +56,8 @@ class UniverseData:
         if charged:
             self.ext_data.update(data_ext.universe_data)
 
+        self.load_save()
+
     # world gestion
     def set_world(self, world, **kwargs):
         if world not in worlds:
@@ -65,7 +67,6 @@ class UniverseData:
             world_class = worlds[world]
         self.add_scene(world, world_class, **kwargs)
         self.current_world = world
-        self.player.set_position(self.scenes[self.current_world].spawn_player)
         self.player.world = self.scenes[self.current_world]
 
     def get_scene(self):
@@ -92,10 +93,10 @@ class UniverseData:
 
 
     def save_save(self):
-        filename = "saves/save_universe_{}.json".format(self.name)
+        filename = "saves/{}/{}.json".format(self.name, self.name)
         data = {}
         for k,v in self.__dict__.items():
-            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system", "combat_system", "on_mode_change"):
+            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system", "combat_system", "on_mode_change", "mode"):
                 if k == "scenes":
                     # load de chaque scène
                     scenes_data = {}
@@ -122,14 +123,12 @@ class UniverseData:
             logger.error(f"Échec de la sauvegarde de la progression de l'univers dans {filename}")
 
     def load_save(self):
-        filename = "saves/save_universe_{}.json".format(self.name)
+        filename = "saves/{}/{}.json".format(self.name, self.name)
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
                 for key, value in data.items():
-                    if key == 'mode':
-                        self.mode_change(value)
-                    elif key == 'scenes':
+                    if key == 'scenes':
                         for scene_name, scene_data in value.items():
                             # Chercher directement dans worlds par le nom de classe
                             if scene_name in worlds:
@@ -141,7 +140,7 @@ class UniverseData:
                     else:
                         setattr(self, key, value)
             self.player.load_player()
-            self.current_world = self.player.world
+            self.set_world(self.player.world)
             self.player.world = self.scenes[self.current_world]
             logger.info(f"Progression de l'univers chargée depuis {filename}")
         else:
@@ -149,13 +148,12 @@ class UniverseData:
 
 
 class World:
-    def __init__(self, data, name, map, spawn_player, **kwargs):
+    def __init__(self, data, name, map, **kwargs):
         self.data = data
         self.walkable_tiles = ['.', ',', ';', ':', '*', ' ']
         self.entities = {}
         self.name = name
         self.map = map  # empty map for initialisation
-        self.spawn_player = spawn_player  # Default spawn position for player
         self.event_system = EventSystem(self)
 
         self.map_data = self.load_map()
@@ -210,7 +208,6 @@ class World:
         """Extract data from the world for saving purposes"""
         data = {
             "map": self.map,
-            "spawn_player": self.spawn_player,
             "entities": {}
         }
         for name, entity in self.entities.items():
@@ -221,7 +218,6 @@ class World:
         """Load data into the world from a saved state"""
         self.map = data.get("map", self.map)
         self.name = data.get("name", self.name)
-        self.spawn_player = data.get("spawn_player", self.spawn_player)
         entities_data = data.get("entities", {})
         for name, entity_data in entities_data.items():
             self.add_entity(Entity(self, entity_data["name"], entity_data["position"], entity_data["sprite"], walkable=entity_data.get("walkable", False)))
@@ -390,8 +386,8 @@ class NPC(Entity):
 
 
 class Player(Entity):
-    def __init__(self, world, position):
-        super().__init__(world, "Hero", position, '@')
+    def __init__(self,name, world, position):
+        super().__init__(world, name, position, '@')
         self.movable = True
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
@@ -440,7 +436,7 @@ class Player(Entity):
 
 
     def save_save(self):
-        filename = "saves/{}/save_{}.json".format(self.world.data.name, self.name)
+        filename = "saves/{}/{}/{}.json".format(self.world.data.name,self.name, self.name)
         # Crée un dictionnaire filtré pour la sauvegarde
         data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
         data['world'] = self.world.name
@@ -451,7 +447,7 @@ class Player(Entity):
             logger.error(f"Échec de la sauvegarde de la progression du joueur dans {filename}")
 
     def load_player(self):
-        filename = "saves/{}/save_{}.json".format(self.world.data.name, self.name)
+        filename = "saves/{}/{}/{}.json".format(self.world.data.name,self.name, self.name)
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
@@ -459,7 +455,7 @@ class Player(Entity):
                     setattr(self, key, value)
             logger.info(f"Progression du joueur chargée depuis {filename}")
         else:
-            logger.warning(f"Fichier de sauvegarde introuvable : {filename}")
+            logger.warning(f"Fichier de sauvegarde introuvable : {filename} (normal if new player)")
 
 
 """Charge les items depuis un fichier JSON. Retourne un dict vide si le fichier est absent ou invalide."""
