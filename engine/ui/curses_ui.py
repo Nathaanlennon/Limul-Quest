@@ -1,5 +1,4 @@
 import curses
-import world
 import os
 from engine.core.logging_setup import logger
 from engine.core.ItemManager import get_item
@@ -16,17 +15,7 @@ curses.initscr()
 
 # Table de correspondance Unicode -> curses ACS
 CHAR_MAP = {
-    '─': curses.ACS_HLINE,
-    '│': curses.ACS_VLINE,
-    '┌': curses.ACS_ULCORNER,
-    '┐': curses.ACS_URCORNER,
-    '└': curses.ACS_LLCORNER,
-    '┘': curses.ACS_LRCORNER,
-    '┬': curses.ACS_TTEE,
-    '┴': curses.ACS_BTEE,
-    '├': curses.ACS_LTEE,
-    '┤': curses.ACS_RTEE,
-    '┼': curses.ACS_PLUS,
+    '£': '' # when a caracter takes 2 spaces, it fucks the rendering and the collisions so £ create a collision for the remaining space and the '' makes the space invisible. Please add £ after any 2 space taking caracter in your maps
 }
 
 # mapping global, créé une seule fois
@@ -210,7 +199,7 @@ class CursesUI:
 
 
     def show_scene(self, stdscr):
-        scene = self.universe.current_scene
+        scene = self.universe.scenes[self.universe.current_world]
         for y, ligne in enumerate(scene.map_data):
             self.draw(stdscr, "scene", y, 0, ligne)
 
@@ -224,7 +213,7 @@ class CursesUI:
         self.draw(stdscr, "scene", y, x, entity.sprite)
 
     def draw_entities(self, stdscr):
-        scene = self.universe.current_scene
+        scene = self.universe.scenes[self.universe.current_world]
         for entity in scene.entities.values():
             self.draw_entity(stdscr, entity)
 
@@ -233,7 +222,7 @@ class CursesUI:
         self.draw(stdscr, "scene", y, x, event.sprite)
 
     def draw_events(self, stdscr):
-        scene = self.universe.current_scene
+        scene = self.universe.scenes[self.universe.current_world]
         for event in scene.event_system.events.values():
             self.draw_event(stdscr, event)
 
@@ -262,7 +251,7 @@ class CursesUI:
             stdscr.addstr(y + i, x, '│')
             stdscr.addstr(y + i, x + w - 1, '│')
 
-    def draw_character(self, stdscr, text, y, x):
+    def convert_text_special(self, text):
         # unused for now
         """
         it checks if the character has to be turned into a special one
@@ -272,11 +261,11 @@ class CursesUI:
         :param x:
         :return:
         """
-        for idx, char in enumerate(text):
+        text_list = list(text)
+        for idx, char in enumerate(text_list):
             if char in CHAR_MAP:
-                stdscr.addch(y, x + idx, CHAR_MAP[char])
-            else:
-                stdscr.addch(y, x + idx, char)
+                text_list[idx] = CHAR_MAP[char]
+        return ''.join(text_list)
 
     def load_sprite(self, path):
         """
@@ -328,6 +317,7 @@ class CursesUI:
             pos = self.screens[scene]["position"]
         else:
             pos = (0, 0)
+        text = self.convert_text_special(text)
         stdscr.addstr(y + pos[0], x + pos[1], text)
 
     def draw_text(self, stdscr, scene, y, x, text):
