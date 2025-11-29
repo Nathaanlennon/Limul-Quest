@@ -35,13 +35,13 @@ def save_json_with_backup(data, filepath):
     return True
 
 class UniverseData:
-    def __init__(self, world, screen_size, name, player, **kwargs):
+    def __init__(self, world, screen_size, name="world", player="hero", player_position = (1,1), **kwargs):
         self.size = screen_size # (rows, cols)
         self.name = name
         self.scenes = {}
-        self.current_world = ""
-        self.player = Player(player, self.current_world if self.current_world else "", self.scenes[self.current_world] if self.current_world else (1, 1))
-        self.set_world(world)
+        self.current_world = world
+        self.player = Player(self, player, self.current_world if self.current_world else "",  player_position)
+
 
         self.mode = "exploration"  # Possible modes: : exploration, dialogue and others that are added in extensions
         self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
@@ -57,6 +57,7 @@ class UniverseData:
             self.ext_data.update(data_ext.universe_data)
 
         self.load_save()
+        self.set_world(self.current_world)
 
     # world gestion
     def set_world(self, world, **kwargs):
@@ -129,7 +130,9 @@ class UniverseData:
                 data = json.load(file)
                 for key, value in data.items():
                     if key == 'scenes':
+                        i=0
                         for scene_name, scene_data in value.items():
+                            i+=1
                             # Chercher directement dans worlds par le nom de classe
                             if scene_name in worlds:
                                 scene_class = worlds[scene_name]
@@ -172,6 +175,8 @@ class World:
 
     def is_walkable(self, tile):
         y, x = tile
+        if y < 0 or y >= len(self.map_data) or x < 0 or x >= len(self.map_data[0]):
+            return False  # en dehors des limites de la carte
         walkable = False
         if self.map_data[y][x] in self.walkable_tiles:
             if self.event_system.get_event(tile):
@@ -386,9 +391,10 @@ class NPC(Entity):
 
 
 class Player(Entity):
-    def __init__(self,name, world, position):
+    def __init__(self,universe, name, world, position):
         super().__init__(world, name, position, '@')
         self.movable = True
+        self.universe = universe
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
 
@@ -436,9 +442,9 @@ class Player(Entity):
 
 
     def save_save(self):
-        filename = "saves/{}/{}/{}.json".format(self.world.data.name,self.name, self.name)
+        filename = "saves/{}/{}/{}.json".format(self.universe.name,self.name, self.name)
         # Crée un dictionnaire filtré pour la sauvegarde
-        data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events")}
+        data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events", "universe")}
         data['world'] = self.world.name
 
         if save_json_with_backup(data, filename):
@@ -447,7 +453,7 @@ class Player(Entity):
             logger.error(f"Échec de la sauvegarde de la progression du joueur dans {filename}")
 
     def load_player(self):
-        filename = "saves/{}/{}/{}.json".format(self.world.data.name,self.name, self.name)
+        filename = "saves/{}/{}/{}.json".format(self.universe.name,self.name, self.name)
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
