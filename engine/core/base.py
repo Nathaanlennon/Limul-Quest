@@ -47,6 +47,7 @@ class UniverseData:
         self.input_system = InputSystem.modes.get(self.mode, InputSystem.exploration_input)
 
         self.on_mode_change = None
+        self.request_text_input = None
 
         self.dialogue_system = DialogueSystem.DialogueSystem(self)
         self.combat_system = CombatSystem.CombatSystem(self.player)
@@ -92,36 +93,53 @@ class UniverseData:
         """L’UI nous donne la fonction à appeler plus tard"""
         self.on_mode_change = callback
 
-
     def save_save(self):
         filename = "saves/{}/{}.json".format(self.name, self.name)
         data = {}
-        for k,v in self.__dict__.items():
-            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system", "combat_system", "on_mode_change", "mode"):
+        for k, v in self.__dict__.items():
+            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system",
+                     "combat_system", "on_mode_change", "mode","request_text_input"):
                 if k == "scenes":
-                    # load de chaque scène
                     scenes_data = {}
                     for scene_name, scene in v.items():
-                        scenes_data[scene_name] = scene.extract_data()
+                        try:
+                            scenes_data[scene_name] = scene.extract_data()
+                        except Exception as e:
+                            logger.error(f"Failed to extract data for scene {scene_name}: {e}")
                     data[k] = scenes_data
                 elif k == "current_world":
-                    data[k] = v
+                    try:
+                        data[k] = v
+                    except Exception as e:
+                        logger.error(f"Failed to save current_world: {e}")
                 elif k == "player":
-                    self.player.save_save()
+                    try:
+                        self.player.save_save()
+                    except Exception as e:
+                        logger.error(f"Failed to save player {getattr(self.player, 'name', 'unknown')}: {e}")
                 elif k == "ext_data":
                     data[k] = {}
                     for ext_k, ext_v in v.items():
-                        if hasattr(ext_k, "extract_data" and callable(getattr(v, "extract_data"))):
-                            data[k][ext_k] = ext_v.extract_data()
-                        else:
-                            data[k][ext_k] = ext_v
+                        try:
+                            if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
+                                data[k][ext_k] = ext_v.extract_data()
+                            else:
+                                data[k][ext_k] = ext_v
+                        except Exception as e:
+                            logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
                 # the rest of the excluded attributes are not saved
             else:
-                data[k] = v
-        if save_json_with_backup(data, filename):
-            logger.info(f"Progression de l'univers sauvegardée dans {filename}")
-        else:
-            logger.error(f"Échec de la sauvegarde de la progression de l'univers dans {filename}")
+                try:
+                    data[k] = v
+                except Exception as e:
+                    logger.error(f"Failed to save attribute {k}: {e}")
+        try:
+            if save_json_with_backup(data, filename):
+                logger.info(f"Progression de l'univers sauvegardée dans {filename}")
+            else:
+                logger.error(f"Échec de la sauvegarde de la progression de l'univers dans {filename}")
+        except Exception as e:
+            logger.error(f"Unexpected error while saving universe to {filename}: {e}")
 
     def load_save(self):
         filename = "saves/{}/{}.json".format(self.name, self.name)
