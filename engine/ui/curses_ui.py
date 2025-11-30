@@ -232,7 +232,7 @@ class CursesUI:
                 result = self.validate_input(self.input_buffer)
                 if result is not None:
                     self.input_callback(result)
-                self.input_wanted = False
+                    self.input_wanted = False
                 self.input_buffer = ""
         elif key == 127 or key == curses.KEY_BACKSPACE:
             self.input_buffer = self.input_buffer[:-1]
