@@ -48,6 +48,9 @@ for i in range(10):
 def key_to_action(key):
     return KEY_MAPPING.get(key, key)
 
+
+
+
 # modes de "gameplay"
 
 def exploration_mode(self, stdscr):
@@ -169,6 +172,15 @@ class CursesUI:
 
         self.combat_system = self.universe.combat_system
 
+        self.input_wanted = False
+        self.input_buffer = ""
+        self.input_prompt = ""
+        self.input_callback = None
+
+        # Register this method so input_system can trigger text input
+        universe.request_text_input = self.start_text_input
+
+
     def run(self):
         curses.wrapper(self.main_loop)
 
@@ -177,26 +189,72 @@ class CursesUI:
 
     def main_loop(self, stdscr):
         curses.curs_set(0)
-        stdscr.nodelay(False)  # getch make things waiting | edit I have no idea wtf this means
+        stdscr.nodelay(True)  # Non-blocking getch()
 
         while True:
             stdscr.erase()
 
             if stdscr.getmaxyx()[0] <= self.universe.size[0] or stdscr.getmaxyx()[1] <= self.universe.size[1]:
                 stdscr.addstr(0, 0, "Veuillez agrandir la fenêtre")
-
             else:
                 self.mode_draw_function(self, stdscr)
-                self.draw_border(self.screens["scene"]["position"],self.screens["scene"]["size"], stdscr)
-                self.draw_border(self.screens["hud"]["position"],self.screens["hud"]["size"], stdscr)
+                self.draw_border(self.screens["scene"]["position"], self.screens["scene"]["size"], stdscr)
+                self.draw_border(self.screens["hud"]["position"], self.screens["hud"]["size"], stdscr)
+
+                if self.input_wanted:
+                    # Draw input field with cursor
+                    input_text = self.input_prompt + self.input_buffer + "_"
+                    self.draw(stdscr, "hud", 5, 1, input_text)
+
                 key = stdscr.getch()
-                stdscr.addstr(10, 10, f"Mode: {key}")
-                self.universe.input_system(self.universe, key_to_action(
-                    key))  # traite l'entrée et la convertit en action que le système peut comprendre
+                if key != -1:  # Non-blocking returns -1 if no key pressed
+                    if self.input_wanted:
+                        self.process_input_key(key)
+                    else:
+                        self.universe.input_system(self.universe, key_to_action(key))
 
             stdscr.refresh()
 
+    def start_text_input(self, callback, prompt="", input_type="string", max_length=50):
+        self.input_wanted = True
+        self.input_buffer = ""
+        self.input_prompt = prompt
+        self.input_callback = callback
+        self.input_type = input_type  # "string", "int", "float", etc.
+        self.max_length = max_length
 
+    def process_input_key(self, key):
+        if key == 27:  # ESC
+            self.input_wanted = False
+            self.input_buffer = ""
+        elif key == 10:  # ENTER
+            if self.input_callback:
+                result = self.validate_input(self.input_buffer)
+                if result is not None:
+                    self.input_callback(result)
+                self.input_wanted = False
+                self.input_buffer = ""
+        elif key == 127 or key == curses.KEY_BACKSPACE:
+            self.input_buffer = self.input_buffer[:-1]
+        elif 32 <= key <= 126:  # Printable characters
+            if len(self.input_buffer) < self.max_length:
+                self.input_buffer += chr(key)
+
+    def validate_input(self, value):
+        """Validates and converts input based on input_type."""
+        if self.input_type == "string":
+            return value
+        elif self.input_type == "int":
+            try:
+                return int(value)
+            except ValueError:
+                return None  # Invalid, don't call callback
+        elif self.input_type == "float":
+            try:
+                return float(value)
+            except ValueError:
+                return None
+        return value
 
     def show_scene(self, stdscr):
         scene = self.universe.scenes[self.universe.current_world]
