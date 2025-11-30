@@ -6,3 +6,52 @@
 2025-11-07 18:48:10,676 - WARNING - Event door dans <world.Test2 object at 0x74e0cbb626e0> désactivé : arguments manquants ['target_position']
 2025-11-07 18:53:59,410 - WARNING - Event door dans <world.Test2 object at 0x7f9018fe2890> désactivé : arguments manquants ['target_position']
 2025-11-24 12:16:25,312 - WARNING - Event door dans <world.Test2 object at 0x7801578ac3a0> désactivé : arguments manquants ['target_position']
+2025-11-30 19:48:34,909 - INFO - Created saves directory: saves
+2025-11-30 19:49:16,819 - INFO - Universe created: PPP
+2025-11-30 19:49:23,270 - INFO - Player created: zfoe in universe PPP
+2025-11-30 19:49:23,296 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 19:49:23,296 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 19:54:39,586 - INFO - Universe loaded: PPP
+2025-11-30 19:54:41,074 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 19:54:41,076 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 19:54:41,099 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 19:55:43,031 - INFO - Universe loaded: PPP
+2025-11-30 19:55:44,875 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 19:55:44,875 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 19:55:44,876 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 19:56:56,018 - INFO - Universe loaded: PPP
+2025-11-30 19:56:56,569 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 19:56:56,570 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 19:56:56,570 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:00:29,036 - INFO - Universe loaded: PPP
+2025-11-30 20:00:30,597 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:00:30,597 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:00:30,598 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:03:48,673 - INFO - Universe loaded: PPP
+2025-11-30 20:03:50,718 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:03:50,718 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:03:50,718 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:04:00,595 - INFO - Universe created: zer
+2025-11-30 20:04:05,628 - INFO - Player created: azerazer in universe zer
+2025-11-30 20:04:05,629 - WARNING - Fichier de sauvegarde introuvable : saves/zer/zer.json
+2025-11-30 20:04:05,629 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:08:28,387 - INFO - Universe loaded: PPP
+2025-11-30 20:08:28,841 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:08:28,842 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:08:28,842 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:12:05,643 - INFO - Universe created: zaererr
+2025-11-30 20:12:10,241 - INFO - Player created: azeeeeee in universe zaererr
+2025-11-30 20:12:10,242 - WARNING - Fichier de sauvegarde introuvable : saves/zaererr/zaererr.json
+2025-11-30 20:12:10,242 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:14:16,221 - INFO - Universe loaded: PPP
+2025-11-30 20:14:16,666 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:14:16,667 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:14:16,667 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:14:53,464 - INFO - Universe loaded: PPP
+2025-11-30 20:14:53,871 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:14:53,872 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:14:53,872 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
+2025-11-30 20:17:06,576 - INFO - Universe loaded: PPP
+2025-11-30 20:17:07,110 - INFO - Player loaded: zfoe from universe PPP
+2025-11-30 20:17:07,111 - WARNING - Fichier de sauvegarde introuvable : saves/PPP/PPP.json
+2025-11-30 20:17:07,111 - ERROR - Monde Monde1 non trouvé dans les données d'extensions.
