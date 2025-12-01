@@ -78,7 +78,7 @@ class UniverseData:
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
         if world_name not in self.scenes:
             if scene_class == World:
-                self.scenes[world_name] = World(self,"assets/maps/default_map.txt",(1,1), **kwargs)
+                self.scenes[world_name] = World(self, "World", "assets/maps/default_map.txt", **kwargs)
             else:
                 self.scenes[world_name] = scene_class(self, **kwargs)
 
