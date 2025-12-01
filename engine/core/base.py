@@ -146,6 +146,7 @@ class UniverseData:
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
+                self.scenes = {}
                 for key, value in data.items():
                     if key == 'scenes':
                         i=0
@@ -236,6 +237,8 @@ class World:
         }
         for name, entity in self.entities.items():
             data["entities"][name] = entity.extract_data()
+        for event in self.event_system.events:
+            data["events"][event.name] = event.extract_data()
 
 
         return data
@@ -244,9 +247,48 @@ class World:
         """Load data into the world from a saved state"""
         self.map = data.get("map", self.map)
         self.name = data.get("name", self.name)
+
+        # Properly clear existing data
+        for entity in list(self.entities.values()):
+            entity.remove_all_events()
+
+        self.entities = {}
+        self.event_system.events = []
+
+        # Load entities FIRST
         entities_data = data.get("entities", {})
         for name, entity_data in entities_data.items():
-            self.add_entity(Entity(self, entity_data["name"], entity_data["position"], entity_data["sprite"], walkable=entity_data.get("walkable", False)))
+            entity = Entity(
+                self,
+                entity_data["name"],
+                entity_data["position"],
+                entity_data["sprite"],
+                walkable=entity_data.get("walkable", False)
+            )
+            self.add_entity(entity)
+
+        # Load events SECOND
+        for name, event_data in data.get("events", {}).items():
+            entity = None
+            if event_data.get("entity"):
+                entity = self.entities.get(event_data["entity"])
+
+            event = Event(
+                self.data,
+                self,
+                event_data["name"],
+                event_data["activation_type"],
+                event_data["action_type"],
+                entity=entity,  # Pass entity directly here
+                position=event_data.get("position"),
+                activate=event_data.get("active", True),
+                **event_data.get("kwargs", {})
+            )
+
+            if entity:
+                entity.add_event(event)
+            else:
+                self.event_system.add_event(event)
 
 
 class Entity:
@@ -264,7 +306,7 @@ class Entity:
                 self.add_event(event)
                 event.entity = self
     def get_position(self):
-        return self.position
+        return tuple(self.position)
     def set_position(self, position):
         self.position = position
     def move(self, dx, dy):
@@ -300,7 +342,10 @@ class Entity:
 
     def load_data(self, data):
         for key, value in data.items():
-            setattr(self, key, value)
+            if key == "position":
+                self.position = tuple(value)
+            else:
+                setattr(self, key, value)
 
 
 
