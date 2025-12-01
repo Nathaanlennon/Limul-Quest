@@ -497,7 +497,10 @@ class Player(Entity):
     def attack(self):
             return self.damage
 
-
+    def heal(self, amount):
+        self.hp += amount
+        if self.hp > self.max_hp:
+            self.hp = self.max_hp
 
     def facing_position(self): # gives the tiles facing the player
         x, y = self.get_position()

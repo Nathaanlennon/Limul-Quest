@@ -73,8 +73,11 @@ if not os.path.exists(input_file):
 # It will be imported in the universe_data and the player_data in the core but the said core will never know nor use it, it's only for your additional extensions that you make
 
 
-# You need to import your world classes here to be able to use them in the worlds dictionary below.
-# from world import Test, Test2, Test3
+# You need to import your world classes/function here to be able to use them in the worlds dictionary below.
+# from world import Test, Test2, Test3 for exemple, if your worlds are classes defined in world.py
+# from world import * for exemple, if your worlds are functions that build worlds defined in world.py
+# (the fact that it is a class or a function doesnt change anything but it may be easier for you if you use functions to build your worlds)
+# either ways, the core class for the world is Word, please use Word either with a class (class MyWorld(Word): ) or with a function (def MyWorld(): return Word(...) )
 
 # this is where you define the different worlds that your game will have.
 # the name of the wolrd is the key and the value is the Class that defines the world.
