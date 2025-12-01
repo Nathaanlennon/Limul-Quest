@@ -73,7 +73,7 @@ class Village2(World):
         #transition to zoo
         self.add_entity(Entity(self, "zooLeft", (11, 1), ' ',
                                [Event(data, self, "zooLeft", "ON_STEP", "MOVE",
-                                      target_scene="Zoo", target_position=(10, 68))]))
+                                      target_scene="Zoo", target_position=(10, 68))],walkable=True))
 
 class zooKeeperHouse(World):
     def __init__(self, data, **kwargs):

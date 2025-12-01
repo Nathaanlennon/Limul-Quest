@@ -35,11 +35,6 @@ universe_data = {
     
 }
 
-# this is where you define the different worlds that your game will have.
-# the name of the wolrd is the key and the value is the Class that defines the world.
-worlds = {
-    #"my_world": MyWorldClass,
-}
 
 player_data = {
     
