@@ -78,7 +78,7 @@ class UniverseData:
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
         if world_name not in self.scenes:
             if scene_class == World:
-                self.scenes[world_name] = World(self,"assets/maps/default_map.txt",(1,1), **kwargs)
+                self.scenes[world_name] = World(self,"world", "assets/maps/default_map.txt", **kwargs)
             else:
                 self.scenes[world_name] = scene_class(self, **kwargs)
 
@@ -96,43 +96,43 @@ class UniverseData:
     def save_save(self):
         filename = "saves/{}/{}.json".format(self.name, self.name)
         data = {}
-        for k, v in self.__dict__.items():
-            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system",
+        for key, value in self.__dict__.items():
+            if key in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system",
                      "combat_system", "on_mode_change", "mode","request_text_input"):
-                if k == "scenes":
+                if key == "scenes":
                     scenes_data = {}
-                    for scene_name, scene in v.items():
+                    for scene_name, scene in value.items():
                         try:
                             scenes_data[scene_name] = scene.extract_data()
                         except Exception as e:
                             logger.error(f"Failed to extract data for scene {scene_name}: {e}")
-                    data[k] = scenes_data
-                elif k == "current_world":
+                    data[key] = scenes_data
+                elif key == "current_world":
                     try:
-                        data[k] = v
+                        data[key] = value
                     except Exception as e:
                         logger.error(f"Failed to save current_world: {e}")
-                elif k == "player":
+                elif key == "player":
                     try:
                         self.player.save_save()
                     except Exception as e:
                         logger.error(f"Failed to save player {getattr(self.player, 'name', 'unknown')}: {e}")
-                elif k == "ext_data":
-                    data[k] = {}
-                    for ext_k, ext_v in v.items():
+                elif key == "ext_data":
+                    data[key] = {}
+                    for ext_k, ext_v in value.items():
                         try:
                             if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
-                                data[k][ext_k] = ext_v.extract_data()
+                                data[key][ext_k] = ext_v.extract_data()
                             else:
-                                data[k][ext_k] = ext_v
+                                data[key][ext_k] = ext_v
                         except Exception as e:
                             logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
                 # the rest of the excluded attributes are not saved
             else:
                 try:
-                    data[k] = v
+                    data[key] = value
                 except Exception as e:
-                    logger.error(f"Failed to save attribute {k}: {e}")
+                    logger.error(f"Failed to save attribute {key}: {e}")
         try:
             if save_json_with_backup(data, filename):
                 logger.info(f"Progression de l'univers sauvegardée dans {filename}")
@@ -231,10 +231,13 @@ class World:
         """Extract data from the world for saving purposes"""
         data = {
             "map": self.map,
-            "entities": {}
+            "entities": {},
+            "events": {}
         }
         for name, entity in self.entities.items():
             data["entities"][name] = entity.extract_data()
+
+
         return data
 
     def load_data(self, data):
@@ -295,10 +298,14 @@ class Entity:
 
         return data
 
+    def load_data(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
+
 
 
 class Event:
-    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, **kwargs):
+    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, activate = True, **kwargs):
         """
         Initialise un événement dans le jeu.
         :param data: universe data
@@ -320,7 +327,7 @@ class Event:
         self.name = name
         self.entity = entity  # will be set when added to an entity
         self.position = position #
-        self.active = True
+        self.active = activate
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
         self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT", "MODE_CHANGE"
@@ -385,6 +392,18 @@ class Event:
         elif self.activation_type == "ALWAYS":
             return action in ["UP", "DOWN", "LEFT", "RIGHT"]
         return False
+
+    def extract_data(self):
+        data = {
+            "name": self.name,
+            "position": self.position,
+            "active": self.active,
+            "activation_type": self.activation_type,
+            "action_type": self.action_type,
+            "kwargs": self.kwargs,
+            "entity": self.entity.name if self.entity else None
+        }
+        return data
 
 
 
