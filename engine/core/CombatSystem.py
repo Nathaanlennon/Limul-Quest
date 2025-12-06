@@ -20,7 +20,6 @@ def load_enemies_list(file_path="assets/enemies/enemies.json"):
 
 
 
-
 class CombatSystem:
     def __init__(self, player):
         self.player = player
@@ -194,3 +193,9 @@ class CombatSystem:
         self.loot = []
         self.queue = []
         self.state = "START"
+
+
+combat_system = CombatSystem(None)
+
+def setup_combat_system(player):
+    combat_system.player = player
