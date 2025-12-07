@@ -7,14 +7,31 @@ class Village1(World):
         self.name = "Village1"
 
         #Exemple type de l'event door
-        self.add_entity(Entity(self, "aPreciser", (5, 5), 'D',
+        self.add_entity(Entity(self, "aPreciser", (11, 12), 'D',
                                [Event(data, self,"aPreciser", "ON_INTERACT", "MOVE",
-                  target_scene=Village2, target_position=(15, 5))]))
+                                      target_scene=Village2, target_position=(15, 5))]))
+
+        #transition to guild
+        self.add_entity(Entity(self, "guildEntry", (11, 12), 'D',
+                               [Event(data, self, "guildEntry", "ON_INTERACT", "MOVE",
+                                      target_scene=Guild, target_position=(13, 31))]))
+        self.add_entity(Entity(self, "guildEntry", (11, 13), 'D',
+                               [Event(data, self, "guildEntry", "ON_INTERACT", "MOVE",
+                                      target_scene=Guild, target_position=(13, 32))]))
+        
+        #transition to forge
+        self.add_entity(Entity(self, "guildEntry", (11, 12), 'D',
+                               [Event(data, self, "guildEntry", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(19, 21))]))
+        self.add_entity(Entity(self, "guildEntry", (11, 13), 'D',
+                               [Event(data, self, "guildEntry", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(19, 22))]))
+
 
         #transition to Village2
         self.add_entity(Entity(self, "bridgeBot", (18, 36), ' ',
                                [Event(data, self,"bridgeBot", "ON_STEP", "MOVE",
-                  target_scene=Village2, target_position=(2, 36))]))
+                                      target_scene=Village2, target_position=(2, 36))]))
         self.add_entity(Entity(self, "bridgeBot", (18, 37), ' ',
                                [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
                                       target_scene=Village2, target_position=(2, 37))]))
@@ -35,6 +52,32 @@ class Village1(World):
 
         #exemple type de l'event NPC
         self.add_entity(NPC(self, "npc1", (4, 5), 'N', dialogue="assets/dialogues/Village.json"))
+
+
+class Guild(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/guild.txt", (0, 0))
+        self.name = "Guild"
+
+        self.add_entity(Entity(self, "guildExit", (19, 21), 'D',
+                               [Event(data, self, "guildExit", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(11, 12))]))
+        self.add_entity(Entity(self, "guildExit", (19, 22), 'D',
+                               [Event(data, self, "guildExit", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(11, 13))]))
+
+
+class Forge(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, "assets/maps/forge.txt", (0, 0))
+        self.name = "Forge"
+
+        self.add_entity(Entity(self, "forgeExit", (13, 31), 'D',
+                               [Event(data, self, "forgeExit", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(10, 55))]))
+        self.add_entity(Entity(self, "forgeExit", (13, 32), 'D',
+                               [Event(data, self, "forgeExit", "ON_INTERACT", "MOVE",
+                                      target_scene=Village1, target_position=(10, 56))]))
 
 
 class Village2(World):
@@ -74,20 +117,26 @@ class Forest(World):
         self.name = "Forest"
 
         #transition to village1
-        self.add_entity(Entity(self, "forestBot", (18, 36), ' ',
+        self.add_entity(Entity(self, "forestBot", (19, 31), ' ',
                                [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                      target_scene=Village1, target_position=(2, 36))]))
-        self.add_entity(Entity(self, "forestBot", (18, 37), ' ',
+                                      target_scene=Village1, target_position=(2, 30))]))
+        self.add_entity(Entity(self, "forestBot", (19, 32), ' ',
                                [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                      target_scene=Village1, target_position=(2, 37))]))
-        self.add_entity(Entity(self, "forestBot", (18, 38), ' ',
+                                      target_scene=Village1, target_position=(2, 31))]))
+        self.add_entity(Entity(self, "forestBot", (19, 33), ' ',
                                [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                      target_scene=Village1, target_position=(2, 38))]))
+                                      target_scene=Village1, target_position=(2, 32))]))
 
         #transition to cave
-        self.add_entity(Entity(self, "forest", (6, 22), 'C',
-                               [Event(data, self, "forest", "ON_STEP", "MOVE",
-                                      target_scene=Cave, target_position=(17, 37))]))
+        self.add_entity(Entity(self, "caveEntry", (11, 30), 'C',
+                               [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+                                      target_scene=Cave, target_position=(19, 31))]))
+        self.add_entity(Entity(self, "caveEntry", (11, 31), 'C',
+                               [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+                                      target_scene=Cave, target_position=(19, 32))]))
+        self.add_entity(Entity(self, "caveEntry", (11, 32), 'C',
+                               [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+                                      target_scene=Cave, target_position=(19, 33))]))
 
 
 class Cave(World):
@@ -96,6 +145,12 @@ class Cave(World):
         self.name = "Cave"
 
         #transition to forest
-        self.add_entity(Entity(self, "entryCave", (18, 37), 'F',
-                               [Event(data, self, "entryCave", "ON_STEP", "MOVE",
-                                      target_scene=Forest, target_position=(7, 22))]))
+        self.add_entity(Entity(self, "caveExit", (19, 31), 'C',
+                               [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(11, 30))]))
+        self.add_entity(Entity(self, "caveExit", (19, 32), 'C',
+                               [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(11, 31))]))
+        self.add_entity(Entity(self, "caveExit", (19, 33), 'C',
+                               [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+                                      target_scene=Forest, target_position=(11, 32))]))
