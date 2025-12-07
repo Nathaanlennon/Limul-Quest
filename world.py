@@ -3,7 +3,7 @@ from engine.core.base import World, Entity, Event, NPC
 
 class Village1(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/village1.txt", (10, 36))
+        super().__init__(data, "Village1", "assets/maps/village1.txt")
         self.name = "Village1"
 
         #Exemple type de l'event door
@@ -82,7 +82,7 @@ class Forge(World):
 
 class Village2(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/village2.txt", (0, 0))
+        super().__init__(data, "Village2", "assets/maps/village2.txt")
         self.name = "Village2"
 
         self.add_entity(Entity(self, "bridgeTop", (1, 36), ' ',
@@ -103,7 +103,7 @@ class Village2(World):
 
 class Zoo(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/zoo.txt", (0, 0))
+        super().__init__(data, "Zoo", "assets/maps/zoo.txt")
         self.name = "Zoo"
 
         self.add_entity(Entity(self, "zooBot", (10, 69), ' ',
@@ -113,7 +113,7 @@ class Zoo(World):
 
 class Forest(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/forest.txt", (0, 0))
+        super().__init__(data, "Forest", "assets/maps/forest.txt")
         self.name = "Forest"
 
         #transition to village1
@@ -141,7 +141,7 @@ class Forest(World):
 
 class Cave(World):
     def __init__(self, data, **kwargs):
-        super().__init__(data, "assets/maps/cave.txt", (0, 0))
+        super().__init__(data, "Cave", "assets/maps/cave.txt")
         self.name = "Cave"
 
         #transition to forest
