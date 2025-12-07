@@ -33,7 +33,7 @@ class Village1(World):
                                       target_scene="Forest", target_position=(17, 38))]))
 
         #exemple type de l'event NPC
-        self.add_entity(NPC(self, "npc1", (4, 5), 'N', dialogue="assets/dialogues/Village.json"))
+        self.add_entity(NPC(self, "npc1", (4, 5), 'N', dialogue="assets/dialogues/test.json"))
 
 
 
@@ -48,21 +48,34 @@ class ButcherHouse(World):
                                [Event(data, self, "door2Butcher", "ON_INTERACT", "MOVE",
                                       target_scene="Village2", target_position=(10, 14))]))
 
+class Theatre(World):
+    def __init__(self, data, **kwargs):
+        super().__init__(data,"Theatre", "assets/maps/theatre.txt")
+
+        self.add_entity(Entity(self, "doorToVillage2", (14, 48), 'D',
+                               [Event(data, self, "doorToVillage2", "ON_INTERACT", "MOVE",
+                                      target_scene="Village2", target_position=(16, 55))]))
+
+        self.add_entity(NPC(self, "npc1", (10, 34), 'N', dialogue="assets/dialogues/test.json"))
+
+
 class Village2(World):
     def __init__(self, data, **kwargs):
         super().__init__(data,"Village2", "assets/maps/village2.txt")
 
 
+
         self.add_entity(Entity(self, "bridgeTop", (1, 36), ' ',
                                [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
-                                      target_scene="Village1", target_position=(17, 36))]))
+                                      target_scene="Village1", target_position=(17, 36))],walkable=True))
         self.add_entity(Entity(self, "bridgeTop", (1, 37), ' ',
                                [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
-                                      target_scene="Village1", target_position=(17, 37))]))
+                                      target_scene="Village1", target_position=(17, 37))],walkable=True))
         self.add_entity(Entity(self, "bridgeTop", (1, 38), ' ',
                                [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
-                                      target_scene="Village1", target_position=(17, 38))]))
+                                      target_scene="Village1", target_position=(17, 38))],walkable=True))
         
+        #door for the butcher house
         self.add_entity(Entity(self, "door1Butcher", (9, 13), 'D',
                                [Event(data, self, "door1Butcher", "ON_INTERACT", "MOVE",
                                       target_scene="ButcherHouse", target_position=(15, 34))]))
@@ -70,24 +83,31 @@ class Village2(World):
                                [Event(data, self, "door2Butcher", "ON_INTERACT", "MOVE",
                                       target_scene="ButcherHouse", target_position=(15, 35))]))
 
+        #door for the theatre
+        self.add_entity(Entity(self, "doorTheatre", (16, 54), 'D',
+                               [Event(data, self, "doorTheatre", "ON_INTERACT", "MOVE",
+                                      target_scene="Theatre", target_position=(14, 47))]))
+
         #transition to zoo
         self.add_entity(Entity(self, "zooLeft", (11, 1), ' ',
                                [Event(data, self, "zooLeft", "ON_STEP", "MOVE",
                                       target_scene="Zoo", target_position=(10, 68))],walkable=True))
+
+        self.add_entity(NPC(self, "npc1", (11, 52), 'N', dialogue="assets/dialogues/test.json"))
 
 class zooKeeperHouse(World):
     def __init__(self, data, **kwargs):
         super().__init__(data,"zooKeeperHouse", "assets/maps/zooKeeperHouse.txt")
 
 
-        self.add_entity(Entity(self, "door1Keeper", (16, 34), 'D',
+        self.add_entity(Entity(self, "door1Keeper", (14, 34), 'D',
                                [Event(data, self, "door1Keeper", "ON_INTERACT", "MOVE",
                                       target_scene="Zoo", target_position=(18, 55))]))
-        self.add_entity(Entity(self, "door2Keeper", (16, 35), 'D',
+        self.add_entity(Entity(self, "door2Keeper", (14, 35), 'D',
                                [Event(data, self, "door2Keeper", "ON_INTERACT", "MOVE",
                                       target_scene="Zoo", target_position=(18, 56))]))
         
-        self.add_entity(NPC(self, "zooKeeper", (11, 30), 'N', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "zooKeeper", (8, 44), 'N', dialogue="assets/dialogues/test.json"))
 
         
 
@@ -97,13 +117,36 @@ class Zoo(World):
 
         self.add_entity(Entity(self, "zooBot", (10, 69), ' ',
                                [Event(data, self, "zooBot", "ON_STEP", "MOVE",
-                                      target_scene=Village2, target_position=(11, 2))]))
+                                      target_scene="Village2", target_position=(11, 2))],walkable=True))
         self.add_entity(Entity(self, "door1Keeper", (17, 55), 'D',
                                [Event(data, self, "door1Keeper", "ON_INTERACT", "MOVE",
-                                      target_scene="zooKeeperHouse", target_position=(15, 34))]))
+                                      target_scene="zooKeeperHouse", target_position=(13, 34))]))
         self.add_entity(Entity(self, "door2Keeper", (17, 56), 'D',
                                [Event(data, self, "door2Keeper", "ON_INTERACT", "MOVE",
-                                      target_scene="zooKeeperHouse", target_position=(15, 35))]))
+                                      target_scene="zooKeeperHouse", target_position=(13, 35))]))
+
+
+       #we are going to use the already existing class npc for the signs in the zoo
+        self.add_entity(NPC(self, "sign1", (6, 13), '🪧', dialogue="assets/dialogues/testZoo.json")) #chat gpt dialogue for now
+        self.add_entity(NPC(self, "sign1", (6, 14), '', dialogue="assets/dialogues/test.json")) # need this one cause sign is two caracter
+
+        self.add_entity(NPC(self, "sign2", (6, 30), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign2", (6, 31), '', dialogue="assets/dialogues/test.json")) 
+
+        self.add_entity(NPC(self, "sign3", (6, 46), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign3", (6, 47), '', dialogue="assets/dialogues/test.json")) 
+
+        self.add_entity(NPC(self, "sign4", (6, 63), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign4", (6, 62), '', dialogue="assets/dialogues/test.json")) 
+
+        self.add_entity(NPC(self, "sign5", (13, 13), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign5", (13, 14), '', dialogue="assets/dialogues/test.json")) 
+
+        self.add_entity(NPC(self, "sign6", (13,  30), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign6", (13,  31), '', dialogue="assets/dialogues/test.json")) 
+
+        self.add_entity(NPC(self, "sign7", (13, 46), '🪧', dialogue="assets/dialogues/test.json"))
+        self.add_entity(NPC(self, "sign7", (13, 47), '', dialogue="assets/dialogues/test.json")) 
         
 
 

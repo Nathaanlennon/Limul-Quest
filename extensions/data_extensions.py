@@ -7,6 +7,7 @@
 
 from world import Village1;
 from world import ButcherHouse;
+from world import Theatre;
 from world import Village2;
 from world import zooKeeperHouse;
 from world import Zoo;
@@ -19,6 +20,7 @@ from world import Cave;
 worlds = {
     "Village1": Village1,
     "ButcherHouse": ButcherHouse,
+    "Theatre" : Theatre,
     "Village2": Village2,
     "zooKeeperHouse": zooKeeperHouse,
     "Zoo": Zoo,
