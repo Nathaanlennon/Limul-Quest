@@ -59,7 +59,6 @@
   {
     "speaker": "PNJ",
     "text": "Merci, au plaisir de vous revoir",
-    "require": null,
-    "effects": null
+    "next": -1
   }
 ]
