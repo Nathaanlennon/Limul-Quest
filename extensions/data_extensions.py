@@ -5,14 +5,7 @@
 # You need to import your world classes here to be able to use them in the worlds dictionary below.
 # from world import Test, Test2, Test3
 
-from world import Village1;
-from world import ButcherHouse;
-from world import Theatre;
-from world import Village2;
-from world import zooKeeperHouse;
-from world import Zoo;
-from world import Forest;
-from world import Cave;
+from world import *
 
 
 # this is where you define the different worlds that your game will have.
