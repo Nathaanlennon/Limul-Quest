@@ -8,8 +8,11 @@ from world import *
 # this is where you define the different worlds that your game will have.
 # the name of the wolrd is the key and the value is the Class that defines the world.
 worlds = {
-    "Village1" : Village1,
-    "Village2" : Village2,
+    "Village1": Village1,
+    "ButcherHouse": ButcherHouse,
+    "Theatre" : Theatre,
+    "Village2": Village2,
+    "zooKeeperHouse": zooKeeperHouse,
     "Zoo": Zoo,
     "Forest" : Forest,
     "Cave" : Cave,
