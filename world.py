@@ -59,12 +59,16 @@ class Guild(World):
         super().__init__(data, "assets/maps/guild.txt", (0, 0))
         self.name = "Guild"
 
+        #exit guild
         self.add_entity(Entity(self, "guildExit", (19, 21), 'D',
                                [Event(data, self, "guildExit", "ON_INTERACT", "MOVE",
                                       target_scene=Village1, target_position=(11, 12))]))
         self.add_entity(Entity(self, "guildExit", (19, 22), 'D',
                                [Event(data, self, "guildExit", "ON_INTERACT", "MOVE",
                                       target_scene=Village1, target_position=(11, 13))]))
+
+        #librarian
+        self.add_entity(NPC(self, "librarian", (6, 11), 'L', dialogue="assets/dialogues/librarian.json"))
 
 
 class Forge(World):
