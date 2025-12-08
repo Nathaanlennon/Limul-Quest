@@ -77,6 +77,8 @@ class DialogueSystem:
                 item_id = key.split(":", 1)[1]
                 if int(value) < 0:
                     self.universe.player.remove_from_inventory(item_id, value)
+            elif key.startswith("heal:"):
+                self.universe.player.heal(int(value))
             else:
                 self.universe.player.ext_data[key] = value
 
