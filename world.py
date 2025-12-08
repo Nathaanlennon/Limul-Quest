@@ -90,7 +90,7 @@ class Forge(World):
                                       target_scene=Village1, target_position=(10, 56))]))
 
         #blacksmith
-        self.add_entity(NPC(self, "blacksmith", (6, 59), 'B', dialogue="assets/dialogues/blacksmith.json"))
+        self.add_entity(NPC(self, "blacksmith", (12, 15), 'B', dialogue="assets/dialogues/blacksmith.json"))
 
 
 class Village2(World):
