@@ -89,6 +89,9 @@ class Forge(World):
                                [Event(data, self, "forgeExit", "ON_INTERACT", "MOVE",
                                       target_scene=Village1, target_position=(10, 56))]))
 
+        #blacksmith
+        self.add_entity(NPC(self, "blacksmith", (6, 59), 'B', dialogue="assets/dialogues/blacksmith.json"))
+
 
 class Village2(World):
     def __init__(self, data, **kwargs):
