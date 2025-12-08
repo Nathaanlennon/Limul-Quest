@@ -77,7 +77,7 @@ def Forge(data):
                                   target_scene="Village1", target_position=(10, 55))]))
 
     # blacksmith
-    self.add_entity(NPC(self, "blacksmith", (12, 15), 'B', dialogue="assets/dialogues/blacksmith.json"))
+    self.add_entity(NPC(self, "blacksmith", (12, 15), 'F', dialogue="assets/dialogues/blacksmith.json"))
     return self
 
 
@@ -116,13 +116,13 @@ def Forest(data):
     # transition to village1
     self.add_entity(Entity(self, "forestBot", (18, 32), ' ',
                            [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                  target_scene="Village1", target_position=(2, 31))], True))
+                                  target_scene="Village1", target_position=(2, 32))], True))
     self.add_entity(Entity(self, "forestBot", (18, 33), ' ',
                            [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                  target_scene="Village1", target_position=(2, 32))], True))
+                                  target_scene="Village1", target_position=(2, 33))], True))
     self.add_entity(Entity(self, "forestBot", (18, 34), ' ',
                            [Event(data, self, "forestBot", "ON_STEP", "MOVE",
-                                  target_scene="Village1", target_position=(2, 33))], True))
+                                  target_scene="Village1", target_position=(2, 34))], True))
 
     # transition to cave
     self.add_entity(Entity(self, "caveEntry", (11, 32), ' ',
