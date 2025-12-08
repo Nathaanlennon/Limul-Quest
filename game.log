@@ -1,241 +1,385 @@
-2025-12-01 08:13:19,979 - INFO - Universe loaded: zqer
-2025-12-01 08:13:20,456 - INFO - Player loaded: azerzer from universe zqer
-2025-12-01 08:13:20,457 - WARNING - Fichier de sauvegarde introuvable : saves/zqer/zqer.json
-2025-12-01 08:13:32,373 - INFO - Universe loaded: zqer
-2025-12-01 08:13:32,814 - INFO - Player loaded: azerzer from universe zqer
-2025-12-01 08:13:32,815 - WARNING - Fichier de sauvegarde introuvable : saves/zqer/zqer.json
-2025-12-01 08:15:20,709 - INFO - Universe loaded: zqer
-2025-12-01 08:15:21,130 - INFO - Player loaded: azerzer from universe zqer
-2025-12-01 08:15:21,131 - WARNING - Fichier de sauvegarde introuvable : saves/zqer/zqer.json
-2025-12-01 08:16:43,544 - INFO - Universe loaded: zqer
-2025-12-01 08:16:43,970 - INFO - Player loaded: azerzer from universe zqer
-2025-12-01 08:16:43,970 - WARNING - Fichier de sauvegarde introuvable : saves/zqer/zqer.json
-2025-12-01 08:27:19,915 - INFO - Universe loaded: zqer
-2025-12-01 08:27:20,400 - INFO - Player loaded: azerzer from universe zqer
-2025-12-01 08:27:20,405 - WARNING - Fichier de sauvegarde introuvable : saves/zqer/zqer.json
-2025-12-06 19:57:01,712 - INFO - Created saves directory: saves
-2025-12-06 19:57:05,673 - INFO - Universe created: azer
-2025-12-06 19:57:10,194 - INFO - Player created: azer in universe azer
-2025-12-06 19:57:10,204 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:21:48,718 - INFO - Universe loaded: azer
-2025-12-06 20:21:49,433 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:21:49,433 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:42:30,634 - INFO - Universe loaded: azer
-2025-12-06 20:42:31,097 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:42:31,097 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:43:56,501 - INFO - Universe loaded: azer
-2025-12-06 20:43:56,753 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:43:56,753 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:44:13,618 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
-2025-12-06 20:45:08,105 - INFO - Universe loaded: azer
-2025-12-06 20:45:08,347 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:45:08,348 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:54:06,873 - INFO - Universe loaded: azer
-2025-12-06 20:54:07,113 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:54:07,114 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:57:42,971 - INFO - Universe loaded: azer
-2025-12-06 20:57:43,191 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:57:43,191 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 20:57:57,879 - ERROR - Monde Theatre non trouvé dans les données d'extensions.
-2025-12-06 20:59:24,497 - INFO - Universe loaded: azer
-2025-12-06 20:59:24,708 - INFO - Player loaded: azer from universe azer
-2025-12-06 20:59:24,708 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:01:16,579 - INFO - Universe loaded: azer
-2025-12-06 21:01:16,798 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:01:16,798 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:02:01,585 - INFO - Universe loaded: azer
-2025-12-06 21:02:01,806 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:02:01,806 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:02:25,713 - INFO - Universe loaded: azer
-2025-12-06 21:02:25,933 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:02:25,934 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:02:39,062 - ERROR - Monde Theatre non trouvé dans les données d'extensions.
-2025-12-06 21:04:15,139 - INFO - Universe loaded: azer
-2025-12-06 21:04:15,573 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:04:15,573 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:04:25,674 - ERROR - Monde Theatre non trouvé dans les données d'extensions.
-2025-12-06 21:06:11,079 - INFO - Universe loaded: azer
-2025-12-06 21:06:11,311 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:06:11,312 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:06:22,754 - ERROR - Monde Theatre non trouvé dans les données d'extensions.
-2025-12-06 21:08:26,819 - INFO - Universe loaded: azer
-2025-12-06 21:08:27,059 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:08:27,059 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:08:49,426 - ERROR - Monde Theatre non trouvé dans les données d'extensions.
-2025-12-06 21:11:22,382 - INFO - Universe loaded: azer
-2025-12-06 21:11:22,678 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:11:22,679 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:12:42,690 - INFO - Universe loaded: azer
-2025-12-06 21:12:42,894 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:12:42,895 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:13:52,517 - INFO - Universe loaded: azer
-2025-12-06 21:13:52,794 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:13:52,795 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:14:59,741 - INFO - Universe loaded: azer
-2025-12-06 21:14:59,993 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:14:59,993 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:15:29,056 - INFO - Universe loaded: azer
-2025-12-06 21:15:29,315 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:15:29,315 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:15:52,922 - INFO - Universe loaded: azer
-2025-12-06 21:15:53,309 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:15:53,309 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:16:09,460 - INFO - Universe loaded: azer
-2025-12-06 21:16:09,800 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:16:09,800 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:16:21,689 - INFO - Universe loaded: azer
-2025-12-06 21:16:21,923 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:16:21,924 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:16:43,863 - INFO - Universe loaded: azer
-2025-12-06 21:16:44,071 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:16:44,072 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:19:12,134 - INFO - Universe loaded: azer
-2025-12-06 21:19:12,426 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:19:12,426 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:21:11,942 - INFO - Universe loaded: azer
-2025-12-06 21:21:12,227 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:21:12,227 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:21:23,044 - INFO - Universe loaded: azer
-2025-12-06 21:21:23,314 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:21:23,314 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:21:53,762 - INFO - Universe loaded: azer
-2025-12-06 21:21:54,156 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:21:54,156 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:22:18,633 - INFO - Universe loaded: azer
-2025-12-06 21:22:18,887 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:22:18,887 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:23:09,532 - INFO - Universe loaded: azer
-2025-12-06 21:23:09,796 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:23:09,797 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:24:33,406 - INFO - Universe loaded: azer
-2025-12-06 21:24:33,611 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:24:33,611 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:25:09,776 - INFO - Universe loaded: azer
-2025-12-06 21:25:09,986 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:25:09,986 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:28:05,007 - INFO - Universe loaded: azer
-2025-12-06 21:28:05,214 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:28:05,214 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:28:21,325 - INFO - Universe loaded: azer
-2025-12-06 21:28:22,121 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:28:22,121 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:30:26,158 - INFO - Universe loaded: azer
-2025-12-06 21:30:26,408 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:30:26,408 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:31:18,109 - INFO - Universe loaded: azer
-2025-12-06 21:31:18,323 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:31:18,323 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:31:36,081 - INFO - Universe loaded: azer
-2025-12-06 21:31:36,343 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:31:36,343 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 21:31:55,973 - INFO - Universe loaded: azer
-2025-12-06 21:31:56,173 - INFO - Player loaded: azer from universe azer
-2025-12-06 21:31:56,174 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:02:30,611 - INFO - Universe loaded: azer
-2025-12-06 22:02:30,921 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:02:30,922 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:02:55,253 - INFO - Universe loaded: azer
-2025-12-06 22:02:55,512 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:02:55,513 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:03:17,766 - INFO - Universe loaded: azer
-2025-12-06 22:03:18,050 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:03:18,050 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:03:37,075 - INFO - Universe loaded: azer
-2025-12-06 22:03:37,350 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:03:37,350 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:04:02,618 - INFO - Universe loaded: azer
-2025-12-06 22:04:02,899 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:04:02,899 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:05:39,478 - INFO - Universe loaded: azer
-2025-12-06 22:05:39,746 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:05:39,746 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:05:50,184 - INFO - Universe loaded: azer
-2025-12-06 22:05:50,417 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:05:50,418 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:07:30,175 - INFO - Universe loaded: azer
-2025-12-06 22:07:30,453 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:07:30,454 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:07:55,542 - INFO - Universe loaded: azer
-2025-12-06 22:07:55,823 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:07:55,824 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:08:31,573 - INFO - Universe loaded: azer
-2025-12-06 22:08:32,225 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:08:32,225 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:08:41,796 - INFO - Universe loaded: azer
-2025-12-06 22:08:42,034 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:08:42,034 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:10:18,636 - INFO - Universe loaded: azer
-2025-12-06 22:10:18,852 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:10:18,852 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:13:22,452 - INFO - Universe loaded: azer
-2025-12-06 22:13:22,670 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:13:22,671 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:16:27,850 - INFO - Universe loaded: azer
-2025-12-06 22:16:28,063 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:16:28,063 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:18:07,114 - INFO - Universe loaded: azer
-2025-12-06 22:18:07,361 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:18:07,361 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:19:26,253 - INFO - Universe loaded: azer
-2025-12-06 22:19:26,498 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:19:26,499 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:21:10,773 - INFO - Universe loaded: azer
-2025-12-06 22:21:11,069 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:21:11,069 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:21:45,590 - INFO - Universe loaded: azer
-2025-12-06 22:21:45,831 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:21:45,832 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:22:04,053 - INFO - Universe loaded: azer
-2025-12-06 22:22:04,417 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:22:04,417 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-06 22:22:16,538 - INFO - Universe loaded: azer
-2025-12-06 22:22:17,482 - INFO - Player loaded: azer from universe azer
-2025-12-06 22:22:17,482 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:12:44,644 - INFO - Universe loaded: azer
-2025-12-07 16:12:44,884 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:12:44,886 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:13:44,712 - INFO - Universe loaded: azer
-2025-12-07 16:13:44,966 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:13:44,967 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:14:01,689 - INFO - Universe loaded: azer
-2025-12-07 16:14:01,912 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:14:01,912 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:14:27,387 - INFO - Universe loaded: azer
-2025-12-07 16:14:27,669 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:14:27,669 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:14:50,545 - INFO - Universe loaded: azer
-2025-12-07 16:14:50,800 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:14:50,800 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:15:22,124 - INFO - Universe loaded: azer
-2025-12-07 16:15:22,388 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:15:22,389 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:17:19,162 - INFO - Universe loaded: azer
-2025-12-07 16:17:19,368 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:17:19,369 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:17:59,783 - INFO - Universe loaded: azer
-2025-12-07 16:18:00,172 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:18:00,173 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:19:07,218 - INFO - Universe loaded: azer
-2025-12-07 16:19:07,437 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:19:07,437 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:19:43,120 - INFO - Universe loaded: azer
-2025-12-07 16:19:43,399 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:19:43,399 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:20:15,434 - INFO - Universe loaded: azer
-2025-12-07 16:20:16,029 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:20:16,030 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:22:05,640 - INFO - Universe loaded: azer
-2025-12-07 16:22:06,033 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:22:06,033 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:22:53,552 - INFO - Universe loaded: azer
-2025-12-07 16:22:53,894 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:22:53,894 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:26:50,237 - INFO - Universe loaded: azer
-2025-12-07 16:26:50,500 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:26:50,500 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:30:19,943 - INFO - Universe loaded: azer
-2025-12-07 16:30:20,242 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:30:20,243 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
-2025-12-07 16:31:21,525 - INFO - Universe loaded: azer
-2025-12-07 16:31:21,746 - INFO - Player loaded: azer from universe azer
-2025-12-07 16:31:21,747 - WARNING - Fichier de sauvegarde introuvable : saves/azer/azer.json
+2025-12-01 08:36:00,365 - INFO - Created saves directory: saves
+2025-12-01 08:40:48,208 - INFO - Universe created: 0
+2025-12-01 08:45:11,502 - INFO - Universe loaded: 0
+2025-12-01 08:45:13,819 - WARNING - Invalid player selection in universe 0, retrying...
+2025-12-01 08:45:19,353 - INFO - Player created: tom in universe 0
+2025-12-01 08:45:19,355 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 08:45:19,356 - ERROR - Monde Village1 non trouvé dans les données d'extensions.
+2025-12-01 08:46:48,969 - INFO - Universe loaded: 0
+2025-12-01 08:46:49,624 - INFO - Player loaded: tom from universe 0
+2025-12-01 08:46:49,628 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 08:46:49,629 - ERROR - Monde Village1 non trouvé dans les données d'extensions.
+2025-12-01 08:47:45,364 - INFO - Universe loaded: 0
+2025-12-01 08:47:45,934 - INFO - Player loaded: tom from universe 0
+2025-12-01 08:47:45,937 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 08:47:45,938 - ERROR - Monde Village1 non trouvé dans les données d'extensions.
+2025-12-01 08:47:45,938 - WARNING - Fichier de map introuvable : assets/maps/Village1.txt, chargement de la map par défaut.
+2025-12-01 08:48:06,647 - INFO - Universe loaded: 0
+2025-12-01 08:48:07,621 - INFO - Player loaded: tom from universe 0
+2025-12-01 08:48:07,624 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 08:48:07,624 - ERROR - Monde Village1 non trouvé dans les données d'extensions.
+2025-12-01 09:07:41,464 - INFO - Universe loaded: 0
+2025-12-01 09:07:41,919 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:07:41,922 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:08:19,011 - INFO - Universe loaded: 0
+2025-12-01 09:08:19,446 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:08:19,449 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:10:27,261 - INFO - Universe loaded: 0
+2025-12-01 09:10:27,664 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:10:27,668 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:11:51,330 - INFO - Universe loaded: 0
+2025-12-01 09:11:51,750 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:11:51,755 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:11:55,896 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-01 09:13:10,915 - INFO - Universe loaded: 0
+2025-12-01 09:13:11,333 - WARNING - Invalid player selection in universe 0, retrying...
+2025-12-01 09:13:12,711 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:13:12,713 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:13:17,936 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-01 09:14:56,175 - INFO - Universe loaded: 0
+2025-12-01 09:14:56,570 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:14:56,575 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:17:13,520 - INFO - Universe loaded: 0
+2025-12-01 09:17:13,905 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:17:13,908 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:17:49,486 - INFO - Universe loaded: 0
+2025-12-01 09:17:49,890 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:17:49,894 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-01 09:18:11,965 - INFO - Universe loaded: 0
+2025-12-01 09:18:12,384 - INFO - Player loaded: tom from universe 0
+2025-12-01 09:18:12,386 - WARNING - Fichier de sauvegarde introuvable : saves/0/0.json
+2025-12-08 18:56:43,166 - INFO - Universe created: FishWorld
+2025-12-08 18:56:49,856 - INFO - Player created: Tom in universe FishWorld
+2025-12-08 18:56:49,857 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 18:57:31,857 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-08 18:58:17,910 - INFO - Universe loaded: FishWorld
+2025-12-08 18:58:20,012 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 18:58:20,015 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 18:58:29,887 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-08 18:58:50,574 - INFO - Universe loaded: FishWorld
+2025-12-08 18:58:51,120 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 18:58:51,123 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 18:59:51,650 - INFO - Universe loaded: FishWorld
+2025-12-08 18:59:52,287 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 18:59:52,290 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 18:59:59,903 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-08 19:00:25,958 - INFO - Universe loaded: FishWorld
+2025-12-08 19:00:27,218 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:00:27,222 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:00:33,947 - ERROR - Monde <class 'world.Village2'> non trouvé dans les données d'extensions.
+2025-12-08 19:00:50,106 - INFO - Universe loaded: FishWorld
+2025-12-08 19:00:51,085 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:00:51,090 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:01:19,936 - INFO - Universe loaded: FishWorld
+2025-12-08 19:01:20,539 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:01:20,543 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:01:51,682 - INFO - Universe loaded: FishWorld
+2025-12-08 19:01:52,306 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:01:52,310 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:02:21,256 - INFO - Universe loaded: FishWorld
+2025-12-08 19:02:21,788 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:02:21,792 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:03:22,223 - INFO - Universe loaded: FishWorld
+2025-12-08 19:03:22,719 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:03:22,721 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:03:56,408 - INFO - Universe loaded: FishWorld
+2025-12-08 19:03:56,889 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:03:56,891 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:05:49,951 - INFO - Universe loaded: FishWorld
+2025-12-08 19:05:50,545 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:05:50,547 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:07:52,378 - INFO - Universe loaded: FishWorld
+2025-12-08 19:07:54,097 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:07:54,100 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:08:35,570 - INFO - Universe loaded: FishWorld
+2025-12-08 19:08:36,231 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:08:36,233 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:11:14,746 - INFO - Universe loaded: FishWorld
+2025-12-08 19:11:15,286 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:11:15,289 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:11:56,496 - INFO - Universe loaded: FishWorld
+2025-12-08 19:11:57,039 - WARNING - Invalid player selection in universe FishWorld, retrying...
+2025-12-08 19:11:57,933 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:11:57,937 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:12:33,182 - INFO - Universe loaded: FishWorld
+2025-12-08 19:12:33,698 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:12:33,700 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:13:43,850 - INFO - Universe loaded: FishWorld
+2025-12-08 19:13:44,570 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:13:44,572 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:14:32,240 - INFO - Universe loaded: FishWorld
+2025-12-08 19:14:32,790 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:14:32,795 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:15:19,717 - INFO - Universe loaded: FishWorld
+2025-12-08 19:15:20,211 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:15:20,214 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:19:43,964 - INFO - Universe loaded: FishWorld
+2025-12-08 19:19:46,045 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:19:46,050 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:19:55,523 - ERROR - Monde <class 'world.Guild'> non trouvé dans les données d'extensions.
+2025-12-08 19:20:52,534 - INFO - Universe loaded: FishWorld
+2025-12-08 19:20:53,093 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:20:53,096 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:21:00,309 - ERROR - Monde <class 'world.Guild'> non trouvé dans les données d'extensions.
+2025-12-08 19:22:07,595 - INFO - Universe loaded: FishWorld
+2025-12-08 19:22:08,173 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:22:08,174 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:22:14,785 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:22:50,057 - INFO - Universe loaded: FishWorld
+2025-12-08 19:22:50,356 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:22:50,360 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:23:19,610 - INFO - Universe loaded: FishWorld
+2025-12-08 19:23:20,128 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:23:20,130 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:23:30,399 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 19:24:36,254 - INFO - Universe loaded: FishWorld
+2025-12-08 19:24:36,665 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:24:36,667 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:25:23,622 - INFO - Universe loaded: FishWorld
+2025-12-08 19:25:24,297 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:25:24,299 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:25:34,309 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 19:26:35,143 - INFO - Universe loaded: FishWorld
+2025-12-08 19:26:35,582 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:26:35,584 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:26:45,666 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:27:07,105 - INFO - Universe loaded: FishWorld
+2025-12-08 19:27:07,648 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:27:07,653 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:27:14,922 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:27:34,756 - INFO - Universe loaded: FishWorld
+2025-12-08 19:27:35,221 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:27:35,226 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:28:43,602 - INFO - Universe loaded: FishWorld
+2025-12-08 19:28:44,220 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:28:44,222 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:28:52,480 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:29:40,276 - INFO - Universe loaded: FishWorld
+2025-12-08 19:29:40,738 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:29:40,742 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:29:46,611 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:30:31,957 - INFO - Universe loaded: FishWorld
+2025-12-08 19:30:32,615 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:30:32,618 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:30:41,060 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 19:32:52,991 - INFO - Universe loaded: FishWorld
+2025-12-08 19:32:53,425 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:32:53,429 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:33:00,300 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:33:18,852 - INFO - Universe loaded: FishWorld
+2025-12-08 19:33:19,241 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:33:19,245 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:33:25,934 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:33:30,719 - INFO - Universe loaded: FishWorld
+2025-12-08 19:33:31,093 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:33:31,095 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:33:35,014 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 19:38:54,656 - INFO - Universe loaded: FishWorld
+2025-12-08 19:38:55,054 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:38:55,057 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:38:59,923 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 19:39:06,002 - INFO - Universe loaded: FishWorld
+2025-12-08 19:39:06,441 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 19:39:06,446 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 19:39:11,471 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 20:04:13,037 - INFO - Universe loaded: FishWorld
+2025-12-08 20:04:13,795 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:04:13,796 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:05:49,792 - INFO - Universe loaded: FishWorld
+2025-12-08 20:05:50,193 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:05:50,195 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:06:30,273 - INFO - Universe loaded: FishWorld
+2025-12-08 20:06:30,623 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:06:30,624 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:07:04,886 - INFO - Universe loaded: FishWorld
+2025-12-08 20:07:05,519 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:07:05,521 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:07:58,839 - INFO - Universe loaded: FishWorld
+2025-12-08 20:07:59,172 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:07:59,173 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:08:50,989 - INFO - Universe loaded: FishWorld
+2025-12-08 20:08:52,118 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:08:52,119 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:11:47,031 - INFO - Universe loaded: FishWorld
+2025-12-08 20:11:47,432 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:11:47,434 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:12:21,251 - INFO - Universe loaded: FishWorld
+2025-12-08 20:12:21,567 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:12:21,568 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:12:31,238 - ERROR - Monde Forge non trouvé dans les données d'extensions.
+2025-12-08 20:13:20,270 - INFO - Universe loaded: FishWorld
+2025-12-08 20:13:20,623 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:13:20,624 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:14:52,758 - INFO - Universe loaded: FishWorld
+2025-12-08 20:14:52,987 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:14:52,988 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:14:56,868 - ERROR - Monde Guild non trouvé dans les données d'extensions.
+2025-12-08 20:16:56,688 - INFO - Universe loaded: FishWorld
+2025-12-08 20:16:56,888 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:16:56,889 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:22:59,704 - INFO - Universe loaded: FishWorld
+2025-12-08 20:22:59,919 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:22:59,921 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:23:29,058 - INFO - Universe loaded: FishWorld
+2025-12-08 20:23:29,337 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:23:29,338 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:24:32,242 - INFO - Universe loaded: FishWorld
+2025-12-08 20:24:32,968 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:24:32,970 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:25:00,483 - INFO - Universe loaded: FishWorld
+2025-12-08 20:25:00,718 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:25:00,719 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:30:11,826 - INFO - Universe loaded: FishWorld
+2025-12-08 20:30:12,205 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:30:12,206 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:36:24,029 - INFO - Universe loaded: FishWorld
+2025-12-08 20:36:24,248 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:36:24,249 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:38:10,736 - INFO - Universe loaded: FishWorld
+2025-12-08 20:38:10,928 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:38:10,930 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:40:03,795 - INFO - Universe loaded: FishWorld
+2025-12-08 20:40:03,992 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:40:03,993 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:42:44,061 - INFO - Universe loaded: FishWorld
+2025-12-08 20:42:44,310 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:42:44,311 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:43:15,701 - INFO - Universe loaded: FishWorld
+2025-12-08 20:43:16,105 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:43:16,106 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:44:16,407 - INFO - Universe loaded: FishWorld
+2025-12-08 20:44:16,681 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:44:16,682 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:44:33,571 - INFO - Universe loaded: FishWorld
+2025-12-08 20:44:33,846 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:44:33,848 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:46:13,601 - INFO - Universe loaded: FishWorld
+2025-12-08 20:46:13,807 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:46:13,808 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:46:34,454 - INFO - Universe loaded: FishWorld
+2025-12-08 20:46:34,682 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:46:34,683 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:49:15,417 - INFO - Universe loaded: FishWorld
+2025-12-08 20:49:15,638 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:49:15,639 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:49:39,871 - INFO - Universe loaded: FishWorld
+2025-12-08 20:49:40,147 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:49:40,148 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:50:35,760 - INFO - Universe loaded: FishWorld
+2025-12-08 20:50:35,966 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:50:35,968 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:53:28,508 - INFO - Universe loaded: FishWorld
+2025-12-08 20:53:28,813 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:53:28,813 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:54:00,298 - INFO - Universe loaded: FishWorld
+2025-12-08 20:54:00,529 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:54:00,529 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:54:27,490 - INFO - Universe loaded: FishWorld
+2025-12-08 20:54:27,691 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:54:27,693 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:54:56,642 - INFO - Universe loaded: FishWorld
+2025-12-08 20:54:56,840 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:54:56,841 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:55:36,760 - INFO - Universe loaded: FishWorld
+2025-12-08 20:55:37,075 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:55:37,078 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:57:02,848 - INFO - Universe loaded: FishWorld
+2025-12-08 20:57:03,061 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:57:03,064 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:57:38,594 - INFO - Universe loaded: FishWorld
+2025-12-08 20:57:38,797 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:57:38,799 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 20:58:26,431 - INFO - Universe loaded: FishWorld
+2025-12-08 20:58:26,665 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 20:58:26,666 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:00:28,672 - INFO - Universe loaded: FishWorld
+2025-12-08 21:00:28,882 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:00:28,885 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:01:09,383 - INFO - Universe loaded: FishWorld
+2025-12-08 21:01:09,604 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:01:09,606 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:02:04,617 - INFO - Universe loaded: FishWorld
+2025-12-08 21:02:04,806 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:02:04,807 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:02:39,103 - INFO - Universe loaded: FishWorld
+2025-12-08 21:02:39,296 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:02:39,297 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:04:24,272 - INFO - Universe loaded: FishWorld
+2025-12-08 21:04:24,444 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:04:24,447 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:05:25,583 - INFO - Universe loaded: FishWorld
+2025-12-08 21:05:25,781 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:05:25,783 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:06:15,840 - INFO - Universe loaded: FishWorld
+2025-12-08 21:06:16,044 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:06:16,045 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:06:43,731 - INFO - Universe loaded: FishWorld
+2025-12-08 21:06:43,948 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:06:43,951 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:07:09,530 - INFO - Universe loaded: FishWorld
+2025-12-08 21:07:09,717 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:07:09,719 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:08:20,071 - INFO - Universe loaded: FishWorld
+2025-12-08 21:08:20,257 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:08:20,258 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:09:43,352 - INFO - Universe loaded: FishWorld
+2025-12-08 21:09:43,530 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:09:43,532 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:10:57,404 - INFO - Universe loaded: FishWorld
+2025-12-08 21:10:57,593 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:10:57,594 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:12:38,447 - INFO - Universe loaded: FishWorld
+2025-12-08 21:12:38,636 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:12:38,637 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:18:52,935 - INFO - Universe loaded: FishWorld
+2025-12-08 21:18:53,167 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:18:53,170 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:19:41,195 - INFO - Universe loaded: FishWorld
+2025-12-08 21:19:42,691 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:19:42,693 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:20:33,662 - INFO - Universe loaded: FishWorld
+2025-12-08 21:20:34,504 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:20:34,504 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:20:52,801 - INFO - Universe loaded: FishWorld
+2025-12-08 21:20:53,051 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:20:53,054 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:21:28,345 - INFO - Universe loaded: FishWorld
+2025-12-08 21:21:29,367 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:21:29,369 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:22:27,799 - INFO - Universe loaded: FishWorld
+2025-12-08 21:22:28,740 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:22:28,741 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:23:03,546 - INFO - Universe loaded: FishWorld
+2025-12-08 21:23:03,949 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:23:03,952 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:23:40,891 - INFO - Universe loaded: FishWorld
+2025-12-08 21:23:41,333 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:23:41,334 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:24:29,789 - INFO - Universe loaded: FishWorld
+2025-12-08 21:24:30,035 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:24:30,037 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:25:14,373 - INFO - Universe loaded: FishWorld
+2025-12-08 21:25:14,970 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:25:14,971 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:26:00,158 - INFO - Universe loaded: FishWorld
+2025-12-08 21:26:00,550 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:26:00,551 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:26:23,997 - INFO - Universe loaded: FishWorld
+2025-12-08 21:26:24,356 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:26:24,358 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:27:46,622 - INFO - Universe loaded: FishWorld
+2025-12-08 21:27:47,057 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:27:47,058 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:28:36,606 - INFO - Universe loaded: FishWorld
+2025-12-08 21:28:36,821 - WARNING - Invalid player selection in universe FishWorld, retrying...
+2025-12-08 21:28:38,164 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:28:38,166 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:29:20,050 - INFO - Universe loaded: FishWorld
+2025-12-08 21:29:20,279 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:29:20,281 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:31:29,782 - INFO - Universe loaded: FishWorld
+2025-12-08 21:31:29,978 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:31:29,979 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
+2025-12-08 21:31:41,915 - INFO - Universe loaded: FishWorld
+2025-12-08 21:31:42,246 - INFO - Player loaded: Tom from universe FishWorld
+2025-12-08 21:31:42,247 - WARNING - Fichier de sauvegarde introuvable : saves/FishWorld/FishWorld.json
