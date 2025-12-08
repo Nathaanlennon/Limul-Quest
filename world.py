@@ -70,6 +70,12 @@ class Guild(World):
         #librarian
         self.add_entity(NPC(self, "librarian", (6, 11), 'L', dialogue="assets/dialogues/librarian.json"))
 
+        #teacher
+        self.add_entity(NPC(self, "teacher", (7, 37), 'E', dialogue="assets/dialogues/teacher.json"))
+
+        #banker
+        self.add_entity(NPC(self, "banker", (6, 59), 'B', dialogue="assets/dialogues/banker.json"))
+
 
 class Forge(World):
     def __init__(self, data, **kwargs):

@@ -4,14 +4,14 @@
     "text": "Bonjour noble voyageur, que désirez-vous ?",
     "options": [
       {
-        "text": "Je veux emprunter un livre s'il vous plaît",
+        "text": "Bonjour, je veux retirer de l'argent s'il vous plaît",
         "next": 1
       },
       {
         "require": {
           "has_item:book": true
         },
-        "text": "Je veux rendre un livre s'il vous plaît",
+        "text": "Bonjour, je veux déposer de l'argent s'il vous plaît",
         "next": 2
       },
       {
@@ -22,43 +22,31 @@
   },
   {
     "speaker": "PNJ",
-    "text": "Très bien livre voulez vous ?",
+    "text": "Très bien combien voulez-vous retirer?",
     "options": [
       {
-        "text": "Livre 1",
-        "next": 3
-      },
-      {
-        "text": "Livre 2",
-        "next": 3
-      },
-      {
-        "text": "Livre 3",
+        "text": "Créer le programme pour donner un nombre",
         "next": 3
       }
     ]
   },
   {
     "speaker": "PNJ",
-    "text": "Ok ça marche quel livre veux-tu me rendre ?",
+    "text": "Très bien, combien voulez-vous déposer ?",
     "options": [
       {
-        "text": "Aucun, merci.",
+        "text": "Rien, merci.",
         "next": -1
       },
       {
-        "text": "Livre 1",
-        "next": 3
-      },
-      {
-        "text": "Livre 2",
+        "text": "Créer programme pour donner un nombre",
         "next": 3
       }
     ]
   },
   {
     "speaker": "PNJ",
-    "text": "Merci, au plaisir de vous revoir",
+    "text": "Merci beaucoup, au plaisir de vous revoir",
     "require": null,
     "effects": null
   }
