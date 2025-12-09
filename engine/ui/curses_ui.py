@@ -136,10 +136,10 @@ def combat_mode(self, stdscr):
         elif q0 == "ITEM_CHOICE":
             self.draw(stdscr, "hud", 1 + 1, 1, "Choose your item:")
             self.draw(stdscr, "hud", 1 + 1 + 1, 1, "0. Back")
-            inventory_items = list(self.universe.player.inventory.keys())
+            inventory_items = list(self.universe.player.inventory.items.keys())
             for idx, item_name in enumerate(inventory_items):
                 item_data = get_item(item_name)
-                quantity = self.universe.player.inventory[item_name]
+                quantity = self.universe.player.inventory.items[item_name]
                 if quantity > 0 and item_data["type"] == "consumable":
                     self.draw(stdscr, "hud", 1 + 2 + 1 + idx, 1, f"{idx + 1}. {item_data['name']} x{quantity}")
         elif q0 == "CHOOSE_TARGET":

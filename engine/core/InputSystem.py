@@ -159,9 +159,9 @@ def combat_input(universe, key):
                         combat_system.queue.pop(0)
                         combat_system.queue.insert(0, "PLAYER_CHOICE")
                         return
-                    inventory_items = list(universe.player.inventory.keys())
+                    inventory_items = list(universe.player.inventory.items.keys())
                     if 1 <= key <= len(inventory_items):
-                        if not universe.player.inventory[inventory_items[key - 1]]:
+                        if not universe.player.inventory.items[inventory_items[key - 1]]:
                             # If the item quantity is zero, ignore the choice
                             return
                         item_data = ItemManager.get_item(inventory_items[key - 1])

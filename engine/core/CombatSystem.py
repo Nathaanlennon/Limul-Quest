@@ -112,7 +112,7 @@ class CombatSystem:
     def give_loot(self):
         """Donne le loot au joueur après le combat."""
         for item_id, quantity in self.loot:
-            self.player.add_to_inventory(item_id, quantity)
+            self.player.inventory.add_item(item_id, quantity)
         self.loot = []
 
     def player_turn(self):
@@ -145,7 +145,7 @@ class CombatSystem:
         target.hp = min(target.max_hp, target.hp + amount)
         self.queue.append('{} heals {} HP'.format(target.name, amount))
     def use_object(self, user, obj, target = None):
-        if obj["id"] in user.inventory:
+        if obj["id"] in user.inventory.items:
             if target is None:
                 target = self.player
             if obj["type"] == "consumable" and "effect" in obj:
@@ -155,7 +155,7 @@ class CombatSystem:
                 elif "damage" in obj["effect"]:
                     damage_amount = obj["effect"]["damage"]
                     self.receive_damage(target, damage_amount)
-            user.remove_from_inventory(obj["id"], 1)
+            user.inventory.remove_item(obj["id"], 1)
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""
