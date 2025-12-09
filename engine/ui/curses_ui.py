@@ -35,6 +35,7 @@ KEY_MAPPING = {
     curses.KEY_DOWN: "DOWN",
     curses.KEY_LEFT: "LEFT",
     curses.KEY_RIGHT: "RIGHT",
+    9: "TAB",
 }
 HUD_ACTIONS = {"INVENTORY", "QUIT", "DEBUG"}
 HUD_KEYS = {}
@@ -79,6 +80,9 @@ def dialogue_mode(self, stdscr):
 def inventory_mode(self, stdscr):
     if not item_list_renderer.focused:
         self.render_item_list(stdscr, "hud", "[Inventory]")
+        # I want you to add a line in the last line to indicate to the user that he can press tab to change to the other inventary, not a button please
+        if dealItem.mode != "use":
+            self.draw(stdscr, "hud", self.screens["hud"]["size"][0]-2, 1, "TAB to switch")
     else:
         self.draw_item_detail(stdscr, "scene", dealItem.item_id)
         if dealItem.mode == "use":

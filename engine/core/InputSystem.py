@@ -4,6 +4,7 @@ import engine.core.ItemManager as ItemManager
 from engine.core.CombatSystem import combat_system
 from engine.core.DialogueSystem import dialogue_system
 from engine.core.ItemManager import item_list_renderer, dealItem
+from engine.core.ShopSystem import shop_manager
 
 
 if os.path.exists("extensions/input_extensions.py") and os.path.isfile("extensions/input_extensions.py"):
@@ -31,7 +32,6 @@ def exploration_input(universe, key):
         if key == "INVENTORY":
             dealItem.mode = "use"
             item_list_renderer.set_list(universe.player.inventory.items)
-            item_list_renderer.current_index = 0
         universe.mode_change(key.lower())
 
 
@@ -63,6 +63,14 @@ def dialogue_input(universe, key):
 
 def inventory_input(universe, key):
     if not item_list_renderer.focused:
+        if dealItem.mode != "use":
+            if key == "TAB":
+                if dealItem.mode == "buy":
+                    dealItem.mode = "sell"
+                    item_list_renderer.set_list(dealItem.inventory_a.items)
+                else:
+                    dealItem.mode = "buy"
+                    item_list_renderer.set_list(shop_manager.current_shop_filtered_items)
         if key == "INVENTORY" or key == "ESCAPE":
             universe.mode_change("exploration")
         elif key == "RIGHT":
@@ -71,6 +79,7 @@ def inventory_input(universe, key):
             # Prevent going below zero
             if item_list_renderer.current_index > 0:
                 item_list_renderer.current_index -= 1
+
         else:
             if not dealItem.active:
                 item = item_list_renderer.get_item(key)
@@ -83,11 +92,18 @@ def inventory_input(universe, key):
             dealItem.active = False
             item_list_renderer.focused = False
         else:
-            universe.request_text_input(
-                dealItem.execute,
-                prompt="How many do you wanna buy : ",
-                input_type="int"
-            )
+            if dealItem.mode == "buy":
+                universe.request_text_input(
+                    dealItem.execute,
+                    prompt="How many do you wanna buy : ",
+                    input_type="int"
+                )
+            elif dealItem.mode == "sell":
+                universe.request_text_input(
+                    dealItem.execute,
+                    prompt="How many do you wanna sell : ",
+                    input_type="int"
+                )
 def shop_input(universe, key):
     if key == "ESCAPE":
         universe.mode_change("exploration")

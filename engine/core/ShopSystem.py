@@ -8,6 +8,7 @@ class ShopManager:
         self.shops = [] # list of inventories representing shops
         self.player = player
         self.current_shop = None
+        self.current_shop_filtered_items = {}
         # load shops from assets/shops/shops.json
         shops_file = "assets/shops/shops.json"
         if os.path.exists(shops_file) and os.path.isfile(shops_file):
@@ -56,20 +57,33 @@ class ShopManager:
     def set_shop(self, shop_id):
         if 0<=shop_id < len(self.shops):
             self.current_shop = self.shops[shop_id]
-            dealItem.setup_dealer(inventory_a=self.player.inventory, inventory_b=self.current_shop, mode="buy")
             # set items in item_list_renderer
-            item_list = {}
+            self.current_shop_filtered_items = {}
             for item, data in self.current_shop.items.items():
                 if self.require(item):
-                    item_list[item] = data["quantity"]
-            item_list_renderer.set_list(item_list)
-            item_list_renderer.current_index = 0
+                    self.current_shop_filtered_items[item] = data["quantity"]
+            item_list_renderer.set_list(self.current_shop_filtered_items)
+            dealItem.setup_dealer(inventory_a=self.player.inventory, inventory_b=self.current_shop, mode="buy")
 
         else:
-            logger.warning(f"Shop '{shop_id}' introuvable dans la base de données de shops.")
+            logger.warning(f"Shop '{shop_id}' introuvable dans la base de données d e shops.")
             self.current_shop = None
 
-
+    # def check_requirements(self, requirements, inventory_list):
+    #     """
+    #
+    #     :param requirements: dictionnary of requirements to check, type/subtype:value ; level:value
+    #     :param inventory_list: dictionnary of items, item_id:quantity
+    #     :return: the filtered inventory_list with only the items that meet the requirements
+    #     """
+    #     if not requirements:
+    #         return inventory_list
+    #     filtered_inventory = {}
+    #     for item_id in inventory_list.keys():
+    #         if
+    #     return filtered_inventory
+    #
+    #
 
 
 

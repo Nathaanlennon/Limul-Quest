@@ -63,6 +63,8 @@ class ItemsListRenderer:
         return self.items_ids[idx] if 0 <= idx < len(self.items) else None
 
     def set_list(self, items):
+        self.items = {}
+        self.items_ids = []
         for k, v in items.items():
             self.items[k] = v
             self.items_ids.append(k)
@@ -85,14 +87,27 @@ class Inventory:
 
     def remove_item(self, item_id, quantity=1):
         if item_id in self.items:
-            if self.items[item_id]["quantity"] != "infinite":
-                self.items[item_id]["quantity"] -= quantity
+            if isinstance(self.items[item_id], int):
+                self.items[item_id] -= quantity
                 if self.items[item_id] <= 0:
                     del self.items[item_id]
+            elif isinstance(self.items[item_id], dict):
+                if self.items[item_id]["quantity"] != "infinite":
+                    self.items[item_id]["quantity"] -= quantity
+                    if self.items[item_id] <= 0:
+                        del self.items[item_id]
 
     def get_quantity(self, item_id):
         item = self.items.get(item_id, 0)
         return item["quantity"] if isinstance(item, dict) else item
+
+    # i need to make a method that will export a list of the items and their quantities as a dictionary
+    def get_list(self):
+        item_list = {}
+        for item_id, data in self.items.items():
+            item_list[item_id] = data["quantity"] if isinstance(data, dict) else data
+        return item_list
+
     def export_data(self):
         return {
             "items": self.items,
@@ -116,13 +131,14 @@ class DealItem:
 
     def execute(self, input):
         if self.mode == "sell":
-            if self.inventory_b == "infinite" or self.inventory_b.money >= self.item_data.get("price", 0) * input:
+            if self.inventory_b.money == "infinite" or self.inventory_b.money >= self.item_data.get("price", 0) * input:
                 if self.inventory_a.get_quantity(self.item_id) >= input:
                     self.inventory_a.remove_item(self.item_id, input)
-                    if self.inventory_b != "infinite":
+                    if self.inventory_b.money != "infinite":
                         self.inventory_b.add_item(self.item_id, input)
                         self.inventory_b.money -= self.item_data.get("price", 0) * input
                     self.inventory_a.money += self.item_data.get("price", 0) * input
+
         elif self.mode == "buy":
             if self.inventory_a.money >= self.item_data.get("price", 0) * input:
                 if self.inventory_b.get_quantity(self.item_id) == "infinite" or self.inventory_b.get_quantity(self.item_id) >= input:
