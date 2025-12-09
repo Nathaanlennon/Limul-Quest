@@ -78,7 +78,7 @@ class UniverseData:
                   **kwargs):  # args et kwargs servent à dire qu'on peut mettre autant de paramètres qu'on veut, utile pour le chargement d'une sauvegarde
         if world_name not in self.scenes:
             if scene_class == World:
-                self.scenes[world_name] = World(self,"World","assets/maps/default_map.txt", **kwargs)
+                self.scenes[world_name] = World(self, "World", "assets/maps/default_map.txt", **kwargs)
             else:
                 self.scenes[world_name] = scene_class(self, **kwargs)
 
@@ -96,43 +96,43 @@ class UniverseData:
     def save_save(self):
         filename = "saves/{}/{}.json".format(self.name, self.name)
         data = {}
-        for k, v in self.__dict__.items():
-            if k in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system",
+        for key, value in self.__dict__.items():
+            if key in ("scenes", "current_world", "player", "ext_data", "input_system", "dialogue_system",
                      "combat_system", "on_mode_change", "mode","request_text_input"):
-                if k == "scenes":
+                if key == "scenes":
                     scenes_data = {}
-                    for scene_name, scene in v.items():
+                    for scene_name, scene in value.items():
                         try:
                             scenes_data[scene_name] = scene.extract_data()
                         except Exception as e:
                             logger.error(f"Failed to extract data for scene {scene_name}: {e}")
-                    data[k] = scenes_data
-                elif k == "current_world":
+                    data[key] = scenes_data
+                elif key == "current_world":
                     try:
-                        data[k] = v
+                        data[key] = value
                     except Exception as e:
                         logger.error(f"Failed to save current_world: {e}")
-                elif k == "player":
+                elif key == "player":
                     try:
                         self.player.save_save()
                     except Exception as e:
                         logger.error(f"Failed to save player {getattr(self.player, 'name', 'unknown')}: {e}")
-                elif k == "ext_data":
-                    data[k] = {}
-                    for ext_k, ext_v in v.items():
+                elif key == "ext_data":
+                    data[key] = {}
+                    for ext_k, ext_v in value.items():
                         try:
                             if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
-                                data[k][ext_k] = ext_v.extract_data()
+                                data[key][ext_k] = ext_v.extract_data()
                             else:
-                                data[k][ext_k] = ext_v
+                                data[key][ext_k] = ext_v
                         except Exception as e:
                             logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
                 # the rest of the excluded attributes are not saved
             else:
                 try:
-                    data[k] = v
+                    data[key] = value
                 except Exception as e:
-                    logger.error(f"Failed to save attribute {k}: {e}")
+                    logger.error(f"Failed to save attribute {key}: {e}")
         try:
             if save_json_with_backup(data, filename):
                 logger.info(f"Progression de l'univers sauvegardée dans {filename}")
@@ -146,6 +146,7 @@ class UniverseData:
         if os.path.exists(filename) and os.path.isfile(filename):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
+                self.scenes = {}
                 for key, value in data.items():
                     if key == 'scenes':
                         i=0
@@ -231,19 +232,63 @@ class World:
         """Extract data from the world for saving purposes"""
         data = {
             "map": self.map,
-            "entities": {}
+            "entities": {},
+            "events": {}
         }
         for name, entity in self.entities.items():
             data["entities"][name] = entity.extract_data()
+        for event in self.event_system.events:
+            data["events"][event.name] = event.extract_data()
+
+
         return data
 
     def load_data(self, data):
         """Load data into the world from a saved state"""
         self.map = data.get("map", self.map)
         self.name = data.get("name", self.name)
+
+        # Properly clear existing data
+        for entity in list(self.entities.values()):
+            entity.remove_all_events()
+
+        self.entities = {}
+        self.event_system.events = []
+
+        # Load entities FIRST
         entities_data = data.get("entities", {})
         for name, entity_data in entities_data.items():
-            self.add_entity(Entity(self, entity_data["name"], entity_data["position"], entity_data["sprite"], walkable=entity_data.get("walkable", False)))
+            entity = Entity(
+                self,
+                entity_data["name"],
+                entity_data["position"],
+                entity_data["sprite"],
+                walkable=entity_data.get("walkable", False)
+            )
+            self.add_entity(entity)
+
+        # Load events SECOND
+        for name, event_data in data.get("events", {}).items():
+            entity = None
+            if event_data.get("entity"):
+                entity = self.entities.get(event_data["entity"])
+
+            event = Event(
+                self.data,
+                self,
+                event_data["name"],
+                event_data["activation_type"],
+                event_data["action_type"],
+                entity=entity,  # Pass entity directly here
+                position=event_data.get("position"),
+                activate=event_data.get("active", True),
+                **event_data.get("kwargs", {})
+            )
+
+            if entity:
+                entity.add_event(event)
+            else:
+                self.event_system.add_event(event)
 
 
 class Entity:
@@ -261,7 +306,7 @@ class Entity:
                 self.add_event(event)
                 event.entity = self
     def get_position(self):
-        return self.position
+        return tuple(self.position)
     def set_position(self, position):
         self.position = position
     def move(self, dx, dy):
@@ -295,10 +340,17 @@ class Entity:
 
         return data
 
+    def load_data(self, data):
+        for key, value in data.items():
+            if key == "position":
+                self.position = tuple(value)
+            else:
+                setattr(self, key, value)
+
 
 
 class Event:
-    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, **kwargs):
+    def __init__(self, data, world, name, activation_type, action_type, entity=None, position = None, activate = True, **kwargs):
         """
         Initialise un événement dans le jeu.
         :param data: universe data
@@ -320,7 +372,7 @@ class Event:
         self.name = name
         self.entity = entity  # will be set when added to an entity
         self.position = position #
-        self.active = True
+        self.active = activate
         self.activation_type = activation_type # e.g., "ON_STEP", "ON_INTERACT", "ALWAYS"
         self.walkable = activation_type == "ON_STEP"  # if ON_STEP, the event tile is walkable
         self.action_type = action_type # e.g., "MOVE", "DIALOGUE", "COMBAT", "MODE_CHANGE"
@@ -386,6 +438,18 @@ class Event:
             return action in ["UP", "DOWN", "LEFT", "RIGHT"]
         return False
 
+    def extract_data(self):
+        data = {
+            "name": self.name,
+            "position": self.position,
+            "active": self.active,
+            "activation_type": self.activation_type,
+            "action_type": self.action_type,
+            "kwargs": self.kwargs,
+            "entity": self.entity.name if self.entity else None
+        }
+        return data
+
 
 
 class NPC(Entity):
@@ -433,7 +497,10 @@ class Player(Entity):
     def attack(self):
             return self.damage
 
-
+    def heal(self, amount):
+        self.hp += amount
+        if self.hp > self.max_hp:
+            self.hp = self.max_hp
 
     def facing_position(self): # gives the tiles facing the player
         x, y = self.get_position()

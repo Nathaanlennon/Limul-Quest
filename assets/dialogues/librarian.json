@@ -1,0 +1,64 @@
+[
+  {
+    "speaker": "PNJ",
+    "text": "Bonjour noble voyageur, que désirez-vous ?",
+    "options": [
+      {
+        "text": "Je veux emprunter un livre s'il vous plaît",
+        "next": 1
+      },
+      {
+        "require": {
+          "has_item:book": true
+        },
+        "text": "Je veux rendre un livre s'il vous plaît",
+        "next": 2
+      },
+      {
+        "text": "Excusez-moi je me suis trompé",
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Très bien livre voulez vous ?",
+    "options": [
+      {
+        "text": "Livre 1",
+        "next": 3
+      },
+      {
+        "text": "Livre 2",
+        "next": 3
+      },
+      {
+        "text": "Livre 3",
+        "next": 3
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Ok ça marche quel livre veux-tu me rendre ?",
+    "options": [
+      {
+        "text": "Aucun, merci.",
+        "next": -1
+      },
+      {
+        "text": "Livre 1",
+        "next": 3
+      },
+      {
+        "text": "Livre 2",
+        "next": 3
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Merci, au plaisir de vous revoir",
+    "next": -1
+  }
+]
