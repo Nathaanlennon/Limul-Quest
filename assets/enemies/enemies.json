@@ -6,7 +6,6 @@
     "damage": 5,
     "defense": 2,
     "loot": {
-      "gold_coin" : 0.5,
       "iron_sword" : 0.1
     },
     "abilities": [
@@ -14,6 +13,23 @@
         "name": "Coup de dague",
         "damage": 6,
         "accuracy": 0.8
+      }
+    ]
+  },
+  "slime": {
+    "id": "slime",
+    "name": "Slime",
+    "hp": 8,
+    "damage": 3,
+    "defense": 1,
+    "loot": {
+      "slime_gel" : 0.7
+    },
+    "abilities": [
+      {
+        "name": "Éclaboussure",
+        "damage": 4,
+        "accuracy": 0.9
       }
     ]
   }

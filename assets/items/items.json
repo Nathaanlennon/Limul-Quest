@@ -49,5 +49,12 @@
     "type": "quest_item",
     "description": "Une clé ancienne couverte de rouille. Ouvre peut-être une porte oubliée.",
     "price": 0
+  },
+  "slime_gel": {
+    "id": "slime_gel",
+    "name": "Gelée de Slime",
+    "type": "junk",
+    "description": "Une substance visqueuse laissée par les slimes. Utile pour fabriquer des potions.",
+    "price": 5
   }
 }

@@ -21,14 +21,14 @@ def Village1(data):
                                   target_scene="Forge", target_position=(17, 21))]))
 
     # transition to Village2
-    self.add_entity(Entity(self, "bridgeBot", (18, 36), ' ',
-                           [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeBot1", (18, 36), ' ',
+                           [Event(data, self, "bridgeBot1", "ON_STEP", "MOVE",
                                   target_scene="Village2", target_position=(2, 36))], True))
-    self.add_entity(Entity(self, "bridgeBot", (18, 37), ' ',
-                           [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeBot2", (18, 37), ' ',
+                           [Event(data, self, "bridgeBot2", "ON_STEP", "MOVE",
                                   target_scene="Village2", target_position=(2, 37))], True))
-    self.add_entity(Entity(self, "bridgeBot", (18, 38), ' ',
-                           [Event(data, self, "bridgeBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeBot3", (18, 38), ' ',
+                           [Event(data, self, "bridgeBot3", "ON_STEP", "MOVE",
                                   target_scene="Village2", target_position=(2, 38))], True))
 
     # transition to forest
@@ -84,14 +84,14 @@ def Forge(data):
 def Village2(data, **kwargs):
     self = World(data, "Village2", "assets/maps/village2.txt")
 
-    self.add_entity(Entity(self, "bridgeTop", (1, 36), ' ',
-                           [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeTop1", (1, 36), ' ',
+                           [Event(data, self, "bridgeTop1", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(17, 36))], walkable=True))
-    self.add_entity(Entity(self, "bridgeTop", (1, 37), ' ',
-                           [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeTop2", (1, 37), ' ',
+                           [Event(data, self, "bridgeTop2", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(17, 37))], walkable=True))
-    self.add_entity(Entity(self, "bridgeTop", (1, 38), ' ',
-                           [Event(data, self, "bridgeTop", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "bridgeTop3", (1, 38), ' ',
+                           [Event(data, self, "bridgeTop3", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(17, 38))], walkable=True))
 
     # door for the butcher house
@@ -176,22 +176,22 @@ def Zoo(data, **kwargs):
                         dialogue="assets/dialogues/test.json"))  # need this one cause sign is two caracter
 
     self.add_entity(NPC(self, "sign2", (6, 30), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign2", (6, 31), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign2.1", (6, 31), '', dialogue="assets/dialogues/test.json"))
 
     self.add_entity(NPC(self, "sign3", (6, 46), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign3", (6, 47), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign3.1", (6, 47), '', dialogue="assets/dialogues/test.json"))
 
     self.add_entity(NPC(self, "sign4", (6, 63), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign4", (6, 62), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign4.1", (6, 62), '', dialogue="assets/dialogues/test.json"))
 
     self.add_entity(NPC(self, "sign5", (13, 13), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign5", (13, 14), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign5.1", (13, 14), '', dialogue="assets/dialogues/test.json"))
 
     self.add_entity(NPC(self, "sign6", (13, 30), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign6", (13, 31), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign6.1", (13, 31), '', dialogue="assets/dialogues/test.json"))
 
     self.add_entity(NPC(self, "sign7", (13, 46), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign7", (13, 47), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign7.1", (13, 47), '', dialogue="assets/dialogues/test.json"))
 
     return self
 
@@ -200,28 +200,28 @@ def Forest(data):
     self = World(data, "Forest", "assets/maps/forest.txt")
 
     # transition to village1
-    self.add_entity(Entity(self, "forestBot", (18, 32), ' ',
-                           [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "forestBot1", (18, 32), ' ',
+                           [Event(data, self, "forestBot1", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(2, 32))], True))
-    self.add_entity(Entity(self, "forestBot", (18, 33), ' ',
-                           [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "forestBot2", (18, 33), ' ',
+                           [Event(data, self, "forestBot2", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(2, 33))], True))
-    self.add_entity(Entity(self, "forestBot", (18, 34), ' ',
-                           [Event(data, self, "forestBot", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "forestBot3", (18, 34), ' ',
+                           [Event(data, self, "forestBot3", "ON_STEP", "MOVE",
                                   target_scene="Village1", target_position=(2, 34))], True))
 
     # transition to cave
-    self.add_entity(Entity(self, "caveEntry", (11, 32), ' ',
-                           [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveEntry1", (10, 32), '',
+                           [Event(data, self, "caveEntry1", "ON_STEP", "MOVE",
                                   target_scene="Cave", target_position=(17, 31))], True))
-    self.add_entity(Entity(self, "caveEntry", (11, 33), ' ',
-                           [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveEntry2", (10, 33), '',
+                           [Event(data, self, "caveEntry2", "ON_STEP", "MOVE",
                                   target_scene="Cave", target_position=(17, 32))], True))
-    self.add_entity(Entity(self, "caveEntry", (11, 34), ' ',
-                           [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveEntry3", (10, 34), '',
+                           [Event(data, self, "caveEntry3", "ON_STEP", "MOVE",
                                   target_scene="Cave", target_position=(17, 33))], True))
-    self.add_entity(Entity(self, "caveEntry", (11, 35), ' ',
-                           [Event(data, self, "caveEntry", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveEntry4", (10, 35), '',
+                           [Event(data, self, "caveEntry4", "ON_STEP", "MOVE",
                                   target_scene="Cave", target_position=(17, 34))], True))
     return self
 
@@ -230,23 +230,25 @@ def Cave(data):
     self = World(data, "Cave", "assets/maps/cave.txt")
 
     # transition to forest
-    self.add_entity(Entity(self, "caveExit", (18, 31), ' ',
-                           [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveExit1", (18, 31), ' ',
+                           [Event(data, self, "caveExit1", "ON_STEP", "MOVE",
                                   target_scene="Forest", target_position=(12, 32))], True))
-    self.add_entity(Entity(self, "caveExit", (18, 32), ' ',
-                           [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveExit2", (18, 32), ' ',
+                           [Event(data, self, "caveExit2", "ON_STEP", "MOVE",
                                   target_scene="Forest", target_position=(12, 33))], True))
-    self.add_entity(Entity(self, "caveExit", (18, 33), ' ',
-                           [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveExit3", (18, 33), ' ',
+                           [Event(data, self, "caveExit3", "ON_STEP", "MOVE",
                                   target_scene="Forest", target_position=(12, 34))], True))
-    self.add_entity(Entity(self, "caveExit", (18, 34), ' ',
-                           [Event(data, self, "caveExit", "ON_STEP", "MOVE",
+    self.add_entity(Entity(self, "caveExit4", (18, 34), ' ',
+                           [Event(data, self, "caveExit4", "ON_STEP", "MOVE",
                                   target_scene="Forest", target_position=(12, 35))], True))
 
     self.event_system.add_event(Event(data, self, "combat_event", "ALWAYS", "COMBAT",
                                       enemies=[
                                           ("goblin", 1),
-                                          ("goblin", 1)
+                                          ("goblin", 0.01),
+                                          ("slime", 0.2)
+
                                       ], proba=0.15))
 
     return self
