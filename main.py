@@ -13,8 +13,8 @@ def main():
 
         # Charger l'univers ici
 
-    data = UniverseData("Monde1", (20 * 2, 71),
-                        universe_name, player_name, (2,3))  # size is the size with the map and interface, number of lines and columns
+    data = UniverseData("Village1", (20 * 2, 71),
+                        universe_name, player_name, (10,35  ))  # size is the size with the map and interface, number of lines and columns
 
     from engine.ui.curses_ui import CursesUI
 
