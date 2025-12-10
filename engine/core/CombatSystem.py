@@ -96,14 +96,38 @@ class CombatSystem:
         """Effectue une attaque basique sur la cible."""
 
         attack_value = attacker.damage
+        inv = getattr(attacker, "inventory", None)
+        equip = getattr(inv, "equipment", {}) if inv else {}
+
+        weapon_id = equip.get("weapon")
+        if weapon_id:
+            attack_value += ItemManager.get_item_part(weapon_id, "damages") or 0
+
         damage = random.randint(attack_value - 2, attack_value + 2)
         self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
         self.receive_damage(target, damage)
 
     def receive_damage(self, target, damage):
         """Réduit les points de vie de l'ennemi."""
-        hit = max(0,damage - target.defense)
+        # Liste des emplacements qui peuvent apporter de l'armure
+        ARMOR_SLOTS = ["headgear", "chestplate", "leggings", "boots", "shield"]
+
+        armor = target.defense
+
+        inv = getattr(target, "inventory", None)
+        equip = getattr(inv, "equipment", {}) if inv else {}
+
+        # Additionne l'armure fournie par chaque pièce d'équipement
+        for slot in ARMOR_SLOTS:
+            item = equip.get(slot)
+            if item:
+                # get_item_part peut retourner None, donc fallback 0
+                armor += ItemManager.get_item_part(item, "armor") or 0
+
+        hit = max(0,damage - armor)
         target.hp -= hit
+        if target.hp < 0:
+            target.hp = 0
         self.queue.append('DAMAGE: {} takes {} damage'.format(target.name, hit))
         if target.hp <= 0:
             self.queue.append('DEATH: {} has been defeated'.format(target.name))

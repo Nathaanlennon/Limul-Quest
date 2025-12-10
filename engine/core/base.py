@@ -512,21 +512,12 @@ class Player(Entity):
         )
         return x + dx, y + dy
 
-    def add_to_inventory(self, item_id, quantity=1):
-        if item_id in self.inventory:
-            self.inventory.items[item_id] += quantity
-        else:
-            self.inventory.items[item_id] = quantity
 
-    def remove_from_inventory(self, item_id, quantity=1):
-        if item_id in self.inventory and self.inventory.items[item_id] >= quantity:
-            self.inventory.items[item_id] -= quantity
-            if self.inventory.items[item_id] <= 0:
-                del self.inventory.items[item_id]
 
     def death(self):
         """Gère la mort du joueur. À implémenter."""
         logger.info("Le joueur est mort")
+        exit()
 
 
     def save_save(self):

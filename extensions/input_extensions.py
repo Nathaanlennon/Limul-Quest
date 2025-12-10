@@ -62,6 +62,8 @@ def debug_input(universe, key):
         )
     elif key == ord('j'):
         universe.mode_change("mode1")
+    elif key == ord('k'):
+        exit()
 
 def mode1(universe, key):
     if key == "INTERACT":

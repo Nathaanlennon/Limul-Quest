@@ -78,6 +78,15 @@ class Inventory:
         self.items = {}  # dict of item_id: quantity
         self.money = money
         self.name = "Inventory"
+        self.equipment = {
+            "headgear": "",
+            "chestplate": "",
+            "leggings": "",
+            "boots": "",
+            "weapon": "",
+            "shield": "",
+            "special": ""
+        }
 
     def add_item(self, item_id, quantity=1):
         if item_id in self.items:
@@ -118,6 +127,15 @@ class Inventory:
         self.items = data.get("items", {})
         self.money = data.get("money", 0)
         self.name = data.get("name", "Inventory")
+        self.equipment = data.get("equipment", {
+            "headgear": "",
+            "chestplate": "",
+            "leggings": "",
+            "boots": "",
+            "weapon": "",
+            "shield": "",
+            "special": ""
+        })
 
 class DealItem:
     def __init__(self, item_id = None, inventory_a=None, inventory_b=None, mode=None):
