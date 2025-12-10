@@ -31,6 +31,7 @@ def exploration_input(universe, key):
     elif key in hud:
         if key == "INVENTORY":
             dealItem.mode = "use"
+            dealItem.inventory_a = universe.player.inventory
             item_list_renderer.set_list(universe.player.inventory.items)
         universe.mode_change(key.lower())
 
@@ -67,10 +68,10 @@ def inventory_input(universe, key):
             if key == "TAB":
                 if dealItem.mode == "buy":
                     dealItem.mode = "sell"
-                    item_list_renderer.set_list(dealItem.inventory_a.items)
+                    item_list_renderer.set_list(dealItem.inventory_a.items, "Inventory")
                 else:
                     dealItem.mode = "buy"
-                    item_list_renderer.set_list(shop_manager.current_shop_filtered_items)
+                    item_list_renderer.set_list(shop_manager.current_shop_filtered_items, "Shop")
         if key == "INVENTORY" or key == "ESCAPE":
             universe.mode_change("exploration")
         elif key == "RIGHT":
@@ -104,6 +105,8 @@ def inventory_input(universe, key):
                     prompt="How many do you wanna sell : ",
                     input_type="int"
                 )
+            elif dealItem.mode == "use":
+                dealItem.execute()
 def shop_input(universe, key):
     if key == "ESCAPE":
         universe.mode_change("exploration")

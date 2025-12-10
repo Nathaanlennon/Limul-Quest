@@ -42,6 +42,7 @@ class ItemsListRenderer:
         self.pages = []
         self.focused = False
         self.current_index = 0
+        self.name = ""
 
     def get_item(self, key):
         # Accept int or single-char str: '0'-'9' -> 0-9, 'a'-'z'/'A'-'Z' -> 10-35 (base36-like)
@@ -62,13 +63,14 @@ class ItemsListRenderer:
         idx = idx + self.max_items_per_page * self.current_index -1
         return self.items_ids[idx] if 0 <= idx < len(self.items) else None
 
-    def set_list(self, items):
+    def set_list(self, items, name= "Inventory"):
         self.items = {}
         self.items_ids = []
         for k, v in items.items():
             self.items[k] = v
             self.items_ids.append(k)
         self.current_index = 0
+        self.name = name
 
 
 item_list_renderer = ItemsListRenderer()
@@ -146,7 +148,7 @@ class DealItem:
         self.item_data = get_item(item_id)
         self.active = False
 
-    def execute(self, input):
+    def execute(self, input=1):
         if self.mode == "sell":
             if self.inventory_b.money == "infinite" or self.inventory_b.money >= self.item_data.get("price", 0) * input:
                 if self.inventory_a.get_quantity(self.item_id) >= input:
@@ -163,6 +165,15 @@ class DealItem:
                         self.inventory_b.remove_item(self.item_id, input)
                     self.inventory_a.add_item(self.item_id, input)
                     self.inventory_a.money -= self.item_data.get("price", 0) * input
+        elif self.mode == "use":
+            if self.inventory_a.get_quantity(self.item_id):
+                item_type = get_item_part(self.item_id, "type")
+                if item_type == "equipment":
+                    slot = get_item_part(self.item_id, "position")
+                    self.inventory_a.equipment[slot] = self.item_id
+                # For other item types, implement their effects here
+
+
         self.active=False
     def set_up_item(self, item_id):
         self.item_id = item_id

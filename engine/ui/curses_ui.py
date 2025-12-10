@@ -4,6 +4,7 @@ from engine.core.logging_setup import logger
 from engine.core.ItemManager import item_list_renderer, get_item, dealItem, get_item_part
 from engine.core.CombatSystem import combat_system
 from engine.core.DialogueSystem import dialogue_system
+from engine.core.ShopSystem import shop_manager
 
 if os.path.exists("extensions/ui_extensions.py") and os.path.isfile("extensions/ui_extensions.py"):
     import extensions.ui_extensions as ui_ext
@@ -79,10 +80,28 @@ def dialogue_mode(self, stdscr):
 
 def inventory_mode(self, stdscr):
     if not item_list_renderer.focused:
-        self.render_item_list(stdscr, "hud", "[Inventory]")
+        self.render_item_list(stdscr, "hud", f"[{item_list_renderer.name}]")
         # I want you to add a line in the last line to indicate to the user that he can press tab to change to the other inventary, not a button please
         if dealItem.mode != "use":
             self.draw(stdscr, "hud", self.screens["hud"]["size"][0]-2, 1, "TAB to switch")
+            money = 'ထ ' if shop_manager.current_shop.money == 'infinite' else shop_manager.current_shop.money
+            self.draw(stdscr, "hud", self.screens["hud"]["size"][0]-2, self.screens["hud"]["size"][1]- 22, f"Shop money : {money} G")
+
+        # equiped and shit :
+        # show everything equiped, so the key and the name of the value, from player.inventory
+        self.draw(stdscr, "scene", 1,1, "[equipement]")
+        idx = 0
+        for key, value in self.universe.player.inventory.equipment.items():
+            self.draw(stdscr, "scene", 2+idx, 1, f"{key} : {value}")
+            idx += 1
+
+        # stats :
+        self.draw(stdscr, "scene", 1, self.screens["scene"]["size"][1]//2, "[Stats]")
+        self.draw(stdscr, "scene", 2, self.screens["scene"]["size"][1]//2, f"HP : {self.universe.player.hp}")
+        self.draw(stdscr, "scene", 3, self.screens["scene"]["size"][1]//2, f"Money : {self.universe.player.inventory.money}")
+
+
+
     else:
         self.draw_item_detail(stdscr, "scene", dealItem.item_id)
         if dealItem.mode == "use":
@@ -98,6 +117,9 @@ def inventory_mode(self, stdscr):
         elif dealItem.mode == "sell":
             self.draw_button(stdscr, "hud", 1, 1, "0 : Back")
             self.draw_button(stdscr, "hud", 4, 1, f"1 : Sell Item for {get_item_part(dealItem.item_id, 'price')} G")
+
+
+
 
 def shop_mode(self, stdscr):
     self.render_item_list(stdscr, "hud", "[Shop]")

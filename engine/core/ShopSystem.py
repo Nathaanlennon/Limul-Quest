@@ -62,7 +62,7 @@ class ShopManager:
             for item, data in self.current_shop.items.items():
                 if self.require(item):
                     self.current_shop_filtered_items[item] = data["quantity"]
-            item_list_renderer.set_list(self.current_shop_filtered_items)
+            item_list_renderer.set_list(self.current_shop_filtered_items, "Shop")
             dealItem.setup_dealer(inventory_a=self.player.inventory, inventory_b=self.current_shop, mode="buy")
 
         else:
