@@ -1,6 +1,9 @@
 import json  # used to load dialogues from JSON files
 import os    # used to check file paths
 
+from engine.core.ItemManager import dealItem
+from engine.core.ShopSystem import shop_manager
+
 class DialogueSystem:
     """Manage dialogue flow for the game: loading dialogues,
     handling choices, and advancing lines or branches.
@@ -77,8 +80,13 @@ class DialogueSystem:
                 item_id = key.split(":", 1)[1]
                 if int(value) < 0:
                     self.universe.player.remove_from_inventory(item_id, value)
-            elif key.startswith("heal:"):
+            elif key == "heal":
                 self.universe.player.heal(int(value))
+            elif key == "shop":
+                shop_id = value
+                shop_manager.set_shop(shop_id)
+                self.universe.mode_change("inventory")
+
             else:
                 self.universe.player.ext_data[key] = value
 
@@ -159,6 +167,11 @@ class DialogueSystem:
         self.current_dialogue = ""
         # if index is out of range or set to -1, return to exploration mode in universe
         if self.index == -1 or self.index >= len(self.dialogues):
-            self.universe.mode_change("exploration")
+            if self.universe.mode != "inventory":
+                self.universe.mode_change("exploration")
         else:
             self.set_current_dialogue()
+
+dialogue_system = DialogueSystem(None)  # Placeholder, will be set with universe reference later
+def setup_dialogue_system(universe):
+    dialogue_system.universe = universe

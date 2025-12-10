@@ -7,8 +7,14 @@
 #Example:
 #def custom_mode(self, stdscr):
 #    # Custom mode implementation
+import conteur as conteur
+
+def mode1(self, stdscr):
+    self.draw(stdscr,"hud", 1,1, f"Mode1 : {conteur.a}")
+    self.draw_button()
 
 ui_modes = {
+    "mode1": mode1
     #cutom_mode: custom_mode,
 }
 

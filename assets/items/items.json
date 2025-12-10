@@ -5,7 +5,7 @@
     "type": "primary_weapon",
     "damages": 15,
     "description": "Une simple épée forgée en fer. Efficace contre les ennemis faibles.",
-    "value": 50
+    "price": 50
   },
   "health_potion": {
     "id": "health_potion",
@@ -15,7 +15,7 @@
       "heal": 50
     },
     "description": "Restaure 50 points de vie.",
-    "value": 10
+    "price": 10
   },
   "bomb": {
     "id": "bomb",
@@ -25,29 +25,36 @@
       "damage": 40
     },
     "description": "Explose et inflige 40 points de dégâts à un ennemi",
-    "value": 25
+    "price": 25
   },
   "wooden_shield": {
     "id": "wooden_shield",
     "name": "Bouclier en bois",
-    "type": "secondary_weapon",
-    "damages_blocked": 5,
+    "type": "shield",
+    "armor": 50,
     "description": "Un petit bouclier qui bloque les attaques légères.",
-    "value": 30
+    "price": 30
   },
   "hunter_bow": {
     "id": "hunter_bow",
     "name": "Arc de chasseur",
-    "type": "primary_weapon",
+    "type": "weapon",
     "damages": 12,
     "description": "Arc léger pour les attaques à distance.",
-    "value": 70
+    "price": 70
   },
   "rusty_key": {
     "id": "rusty_key",
     "name": "Clé rouillée",
     "type": "quest_item",
     "description": "Une clé ancienne couverte de rouille. Ouvre peut-être une porte oubliée.",
-    "value": 0
+    "price": 0
+  },
+  "slime_gel": {
+    "id": "slime_gel",
+    "name": "Gelée de Slime",
+    "type": "junk",
+    "description": "Une substance visqueuse laissée par les slimes. Utile pour fabriquer des potions.",
+    "price": 5
   }
 }

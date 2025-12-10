@@ -1,0 +1,34 @@
+modifier les event pour prendre en compte l'entité qui interragit avec -> player a des chances de devoir aller dans la lsite des entités aussi
+faire en sorte que les event aient pas accès à world et univers et faire des fonction callback
+faire en sorte qu'on puisse créer des event autre part et les introduire dans event plus tard
+peut-etre faire en sorte que les event soient plus liés aux entités
+
+TODO: gros probleme : si assets/default_map n'existe pas le programme crashera
+
+inverser les clés et valeurs pour le mapping pour pouvoir faire des mofications de touches par l'utilisateur ?
+
+
+systeme qui remplace les caractères dans les map
+
+finir inventaire, cad afficher les informations
+
+faire dialogue et inventaire proprement
+
+dialogue : utiliser la personne qui parle pour afficher l'image avec le nom du fichier étant pareil. Charger tous les fichiers dans un dictionnaire.
+
+verifier que les assets existent / réparer le script pour le rendre executable au lieu de l'importer
+
+uniformiser la detection des fichiers en utilisant os
+
+faire le readme du game engine
+
+important : faire en sorte que si rien a spawn au début du combat on retente de spawn
+
+faire le spawn spécial à) la création du premier monde
+
+IMPORTANT dialogeu pour changer de mode de jeu
+
+sorte de fichier / variable avec infos pour l'ui genre par exemple résultat de fonction
+faire un systeme de popup qui va par dessus tout et prend un tour
+
+#POUR REGLER LE PROBLEME : INVENTAIRE MIT AUX NORMES ID : QUANTITÉ ET À L'INITIALTISAION DU SHOP, FAIRE LA VÉRIF DES CONDITIONS

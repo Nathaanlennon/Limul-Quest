@@ -37,11 +37,10 @@
         "next": 2
       },
       {
-        "text": "tu es vla moche",
+        "text": "shop",
         "next": -1,
         "effects": {
-          "insulted_npc": true,
-          "give_item:health_potion": 1
+          "shop": 0
         }
       }
     ]
