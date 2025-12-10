@@ -4,7 +4,7 @@ from engine.core.base import World, Entity, Event, NPC
 def Village1(data):
     self = World(data, "Village1", "assets/maps/village1.txt")
 
-    # transition to guild
+    #transition to guild
     self.add_entity(Entity(self, "guildEntryG", (10, 11), 'D',
                            [Event(data, self, "guildEntryG", "ON_INTERACT", "MOVE",
                                   target_scene="Guild", target_position=(11, 30))]))
@@ -12,7 +12,7 @@ def Village1(data):
                            [Event(data, self, "guildEntryD", "ON_INTERACT", "MOVE",
                                   target_scene="Guild", target_position=(11, 31))]))
 
-    # transition to forge
+    #transition to forge
     self.add_entity(Entity(self, "forgeEntryG", (9, 54), 'D',
                            [Event(data, self, "forgeEntryG", "ON_INTERACT", "MOVE",
                                   target_scene="Forge", target_position=(17, 20))]))
