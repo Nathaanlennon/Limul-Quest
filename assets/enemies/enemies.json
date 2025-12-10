@@ -6,7 +6,7 @@
     "damage": 80,
     "defense": 2,
     "loot": {
-      "iron_sword" : 0.1
+      "iron_sword" : 1
     },
     "abilities": [
       {

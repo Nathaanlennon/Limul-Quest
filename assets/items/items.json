@@ -2,7 +2,8 @@
   "iron_sword": {
     "id": "iron_sword",
     "name": "Épée en fer",
-    "type": "primary_weapon",
+    "type": "equipment",
+    "position":"weapon",
     "damages": 15,
     "description": "Une simple épée forgée en fer. Efficace contre les ennemis faibles.",
     "price": 50
@@ -30,7 +31,8 @@
   "wooden_shield": {
     "id": "wooden_shield",
     "name": "Bouclier en bois",
-    "type": "shield",
+    "type": "equipment",
+    "position":"shield",
     "armor": 50,
     "description": "Un petit bouclier qui bloque les attaques légères.",
     "price": 30
@@ -38,7 +40,8 @@
   "hunter_bow": {
     "id": "hunter_bow",
     "name": "Arc de chasseur",
-    "type": "weapon",
+    "type": "equipment",
+    "position":"weapon",
     "damages": 12,
     "description": "Arc léger pour les attaques à distance.",
     "price": 70
