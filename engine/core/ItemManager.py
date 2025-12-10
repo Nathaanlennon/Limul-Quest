@@ -118,11 +118,10 @@ class Inventory:
         return item_list
 
     def export_data(self):
-        return {
-            "items": self.items,
-            "money": self.money,
-            "name": self.name
-        }
+        data = {}
+        for k, v in self.__dict__.items():
+            data[k] = v
+        return data
     def load_data(self, data):
         self.items = data.get("items", {})
         self.money = data.get("money", 0)

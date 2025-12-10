@@ -559,6 +559,9 @@ class Player(Entity):
                         self.inventory.load_data(value)
                     elif key == "ext_data":
                         ...
+                    else:
+                        # load des attributs :
+                        setattr(self, key, value)
 
             logger.info(f"Progression du joueur chargée depuis {filename}")
         else:
