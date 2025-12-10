@@ -3,7 +3,7 @@
     "id": "goblin",
     "name": "Gobelin",
     "hp": 10,
-    "damage": 5,
+    "damage": 80,
     "defense": 2,
     "loot": {
       "iron_sword" : 0.1

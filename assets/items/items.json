@@ -31,7 +31,7 @@
     "id": "wooden_shield",
     "name": "Bouclier en bois",
     "type": "shield",
-    "armor": 5,
+    "armor": 50,
     "description": "Un petit bouclier qui bloque les attaques légères.",
     "price": 30
   },
@@ -39,7 +39,7 @@
     "id": "hunter_bow",
     "name": "Arc de chasseur",
     "type": "weapon",
-    "damages": 120,
+    "damages": 12,
     "description": "Arc léger pour les attaques à distance.",
     "price": 70
   },
