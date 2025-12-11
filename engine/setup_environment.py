@@ -87,10 +87,17 @@ worlds = {
 
 # VERY IMPORTANT: those data dictionaries bellow can contain any type you want, including objects 
 # BUT : if you use objects instances, you HAVE TO MAKE SURE that the classes has a function called "extract_data" that will return a serializable version of the object as a dictionary
+# You also need a function load_data(self, data) that will load the data from a dictionary to the object
 # if you don't do that, saving/loading the game will not work properly.
 universe_data = {
     
 }
+
+# If your objects need universe, add the instance in the list below, and self.universe in your class, so the program will do instance.universe = self
+#you will need to import the instances at the top of the file too to do it.
+instances = [
+# exemple: instance1, instance2
+]
 
 
 player_data = {
