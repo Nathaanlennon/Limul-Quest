@@ -34,6 +34,9 @@ def exploration_input(universe, key):
             dealItem.inventory_a = universe.player.inventory
             item_list_renderer.set_list(universe.player.inventory.items)
         universe.mode_change(key.lower())
+    elif key == "QUIT":
+        universe.save_save()
+        exit()
 
 
 

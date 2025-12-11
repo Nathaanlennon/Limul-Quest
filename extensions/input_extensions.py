@@ -7,6 +7,7 @@
 
 from engine.core.logging_setup import logger
 from engine.core.CombatSystem import combat_system
+from test import saucisse
 import conteur as conteur
 
 #exemple:
@@ -64,6 +65,8 @@ def debug_input(universe, key):
         universe.mode_change("mode1")
     elif key == ord('k'):
         exit()
+    elif key == ord('u'):
+        saucisse.length += 1
 
 def mode1(universe, key):
     if key == "INTERACT":

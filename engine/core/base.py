@@ -58,6 +58,9 @@ class UniverseData:
         # extension data
         if charged:
             self.ext_data.update(data_ext.universe_data)
+        # set universe for instances
+        for instance in instances:
+            instance.universe = self
 
         self.load_save()
         self.set_world(self.current_world)
@@ -122,13 +125,12 @@ class UniverseData:
                 elif key == "ext_data":
                     data[key] = {}
                     for ext_k, ext_v in value.items():
-                        try:
-                            if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
-                                data[key][ext_k] = ext_v.extract_data()
-                            else:
-                                data[key][ext_k] = ext_v
-                        except Exception as e:
-                            logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
+                        if ext_k == "instances":
+                            data[key][ext_k] = {}
+                            for inst_name, inst in ext_v.items():
+                                data[key][ext_k][inst_name] = inst.extract_data()
+                        else:
+                            data[key][ext_k] = ext_v
                 # the rest of the excluded attributes are not saved
             else:
                 try:
@@ -162,7 +164,12 @@ class UniverseData:
                             else:
                                 logger.warning(f"Classe de scène {scene_name} non trouvée dans worlds.")
                     elif key == 'ext_data':
-                        ...
+                        for ext_k, ext_v in value.items():
+                            if ext_k == "instances":
+                                for inst_name, inst_data in ext_v.items():
+                                    self.ext_data["instances"][inst_name].load_data(inst_data)
+                            else:
+                                self.ext_data[ext_k] = ext_v
                     else:
                         setattr(self, key, value)
             self.player.load_player()
@@ -532,13 +539,12 @@ class Player(Entity):
                 elif key == "ext_data":
                     data[key] = {}
                     for ext_k, ext_v in value.items():
-                        try:
-                            if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
-                                data[key][ext_k] = ext_v.extract_data()
-                            else:
-                                data[key][ext_k] = ext_v
-                        except Exception as e:
-                            logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
+                        if ext_k == "instances":
+                            data[key][ext_k] = {}
+                            for inst_name, inst in ext_v.items():
+                                data[key][ext_k][inst_name] = inst.extract_data()
+                        else:
+                            data[key][ext_k] = ext_v
 
             else:
                 data[key] = value
@@ -557,8 +563,13 @@ class Player(Entity):
                 for key, value in data.items():
                     if key == "inventory":
                         self.inventory.load_data(value)
-                    elif key == "ext_data":
-                        ...
+                    elif key == 'ext_data':
+                        for ext_k, ext_v in value.items():
+                            if ext_k == "instances":
+                                for inst_name, inst_data in ext_v.items():
+                                    self.ext_data["instances"][inst_name].load_data(inst_data)
+                            else:
+                                self.ext_data[ext_k] = ext_v
                     else:
                         # load des attributs :
                         setattr(self, key, value)
@@ -579,6 +590,8 @@ else:
 
 if charged:
     worlds = data_ext.worlds
+    instances= data_ext.instances
 else:
     worlds = {}
+    instances = []
 

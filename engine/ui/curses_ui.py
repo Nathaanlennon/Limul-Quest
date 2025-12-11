@@ -214,6 +214,7 @@ class CursesUI:
         }
 
 
+
         if charged:
             self.modes.update(ui_ext.ui_modes)
 
