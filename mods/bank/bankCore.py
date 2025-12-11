@@ -36,15 +36,15 @@ class Bank:
             self.active = True
 
     def transfert(self, montant):
-        if self.state == "deposit":
-            if montant <= self.universe.player.inventory.money:
+        if montant <= self.universe.player.inventory.money:
+            if self.state == "deposit":
                 self.accounts[self.current_account] += montant
                 self.universe.player.inventory.money -= montant
-        elif self.state == "withdraw":
-            if montant <= self.accounts[self.universe.player.name]:
+            elif self.state == "withdraw":
                 self.accounts[self.universe.player.name] -= montant
                 self.universe.player.inventory.money += montant
-        self.active = False
+            self.active = False
+            self.state = "final"
 
 
 bankManager = Bank()
