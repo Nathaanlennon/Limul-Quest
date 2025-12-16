@@ -25,9 +25,7 @@ worlds = {
 # BUT : if you use objects instances, you HAVE TO MAKE SURE that the classes has a function called "extract_data" that will return a serializable version of the object as a dictionary
 # if you don't do that, saving/loading the game will not work properly.
 universe_data = {
-
 }
 
 player_data = {
-    
 }
