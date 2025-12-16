@@ -1,11 +1,13 @@
+# python
 import logging
 
 logger = logging.getLogger("game_logger")
 logger.setLevel(logging.INFO)
 
-# Création du handler fichier
-file_handler = logging.FileHandler("game.log", mode="a")
+# Truncate `game.log` at startup by opening it in write mode
+file_handler = logging.FileHandler("game.log", mode="w", encoding="utf-8")
 file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 
-# Ajouter le handler au logger
-logger.addHandler(file_handler)
+# Avoid adding duplicate handlers if this module is re-imported
+if not logger.handlers:
+    logger.addHandler(file_handler)

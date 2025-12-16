@@ -1,7 +1,10 @@
 import os
 from engine.core.logging_setup import logger
 import engine.core.ItemManager as ItemManager
-
+from engine.core.CombatSystem import combat_system
+from engine.core.DialogueSystem import dialogue_system
+from engine.core.ItemManager import item_list_renderer, dealItem
+from engine.core.ShopSystem import shop_manager
 
 
 if os.path.exists("extensions/input_extensions.py") and os.path.isfile("extensions/input_extensions.py"):
@@ -26,7 +29,14 @@ def exploration_input(universe, key):
         universe.player.move(0, 1)   # Déplacer vers la droite
         universe.player.orientation = "RIGHT"
     elif key in hud:
+        if key == "INVENTORY":
+            dealItem.mode = "use"
+            dealItem.inventory_a = universe.player.inventory
+            item_list_renderer.set_list(universe.player.inventory.items)
         universe.mode_change(key.lower())
+    elif key == "QUIT":
+        universe.save_save()
+        exit()
 
 
 
@@ -36,117 +46,171 @@ def exploration_input(universe, key):
     universe.scenes[universe.current_world].event_system.update(universe.player, key)
 
 def dialogue_input(universe, key):
-    if universe.dialogue_system.state == "TEXT_CHUNK":
-        if universe.dialogue_system.current_dialogue == "":
-            if universe.dialogue_system.as_choices():
-                universe.dialogue_system.state = "CHOICE"
-                universe.dialogue_system.set_choices()
+    if dialogue_system.state == "TEXT_CHUNK":
+        if dialogue_system.current_dialogue == "":
+            if dialogue_system.as_choices():
+                dialogue_system.state = "CHOICE"
+                dialogue_system.set_choices()
             else:
-                universe.dialogue_system.state = "NEXT_LINE"
+                dialogue_system.state = "NEXT_LINE"
 
         if key == "INTERACT":
             ...
-    elif universe.dialogue_system.state == "CHOICE":
+    elif dialogue_system.state == "CHOICE":
         if isinstance(key, int):  # renvoie d'un chiffre via le mapping
-            if 1 <= key <= len(universe.dialogue_system.choices):
-                universe.dialogue_system.set_next_line(choice_index=key - 1)
+            if 1 <= key <= len(dialogue_system.choices):
+                dialogue_system.set_next_line(choice_index=key - 1)
 
-    elif universe.dialogue_system.state == "NEXT_LINE":
+    elif dialogue_system.state == "NEXT_LINE":
         if key == "INTERACT":
-            universe.dialogue_system.set_next_line()
+            dialogue_system.set_next_line()
 
 def inventory_input(universe, key):
-    if key == "INVENTORY":
+    if not item_list_renderer.focused:
+        if dealItem.mode != "use":
+            if key == "TAB":
+                if dealItem.mode == "buy":
+                    dealItem.mode = "sell"
+                    item_list_renderer.set_list(dealItem.inventory_a.items, "Inventory")
+                else:
+                    dealItem.mode = "buy"
+                    item_list_renderer.set_list(shop_manager.current_shop_filtered_items, "Shop")
+        if key == "INVENTORY" or key == "ESCAPE":
+            universe.mode_change("exploration")
+        elif key == "RIGHT":
+            item_list_renderer.current_index += 1
+        elif key == "LEFT":
+            # Prevent going below zero
+            if item_list_renderer.current_index > 0:
+                item_list_renderer.current_index -= 1
+
+        else:
+            if not dealItem.active:
+                item = item_list_renderer.get_item(key)
+                if item is not None:
+                    item_list_renderer.focused = True
+                    dealItem.set_up_item(item)
+                    dealItem.active = True
+    else:
+        if key == 0:
+            dealItem.active = False
+            item_list_renderer.focused = False
+        else:
+            if dealItem.mode == "buy":
+                universe.request_text_input(
+                    dealItem.execute,
+                    prompt="How many do you wanna buy : ",
+                    input_type="int"
+                )
+            elif dealItem.mode == "sell":
+                universe.request_text_input(
+                    dealItem.execute,
+                    prompt="How many do you wanna sell : ",
+                    input_type="int"
+                )
+            elif dealItem.mode == "use":
+                dealItem.execute()
+def shop_input(universe, key):
+    if key == "ESCAPE":
         universe.mode_change("exploration")
-    elif key == ord('g'):
-        universe.load_save()
+    elif key == "RIGHT":
+        item_list_renderer.current_index += 1
+    elif key == "LEFT":
+        # Prevent going below zero
+        if item_list_renderer.current_index > 0:
+            item_list_renderer.current_index -= 1
+    else:
+        item = item_list_renderer.get_item(key)
+        if item is not None:
+            item_list_renderer.focused = True
+            dealItem.setup_dealer(universe.player.inventory, None, "use", item)
 
 def debug_input(universe, key):
     ...
 
 def combat_input(universe, key):
     # Placeholder for combat input handling
-    if universe.combat_system.state == "START":
+    if combat_system.state == "START":
         if key == "INTERACT":
-            universe.combat_system.player_turn()
-    elif universe.combat_system.state == "PLAYER_TURN":
-        if universe.combat_system.queue:
-            if universe.combat_system.queue[0] == "PLAYER_CHOICE":
+            combat_system.player_turn()
+    elif combat_system.state == "PLAYER_TURN":
+        if combat_system.queue:
+            if combat_system.queue[0] == "PLAYER_CHOICE":
                 if isinstance(key, int):
                     if key == 1:
-                        universe.combat_system.player_action["action"] = "attack"
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+                        combat_system.player_action["action"] = "attack"
+                        combat_system.queue.pop(0)
+                        combat_system.queue.insert(0, "CHOOSE_TARGET")
                     elif key == 2:
-                        universe.combat_system.queue.append("ABILITY_CHOICE")
-                        universe.combat_system.queue.pop(0)
+                        combat_system.queue.append("ABILITY_CHOICE")
+                        combat_system.queue.pop(0)
                     elif key == 3:
-                        universe.combat_system.queue.append("ITEM_CHOICE")
-                        universe.combat_system.queue.pop(0)
-            elif universe.combat_system.queue[0] == "ABILITY_CHOICE":
+                        combat_system.queue.append("ITEM_CHOICE")
+                        combat_system.queue.pop(0)
+            elif combat_system.queue[0] == "ABILITY_CHOICE":
                 if isinstance(key, int):
                     if key == 0:
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        combat_system.queue.pop(0)
+                        combat_system.queue.insert(0, "PLAYER_CHOICE")
                         return
                     abilities = list(universe.player.ext_data["abilities"].values())
                     if 1 <= key <= len(abilities):
-                        universe.combat_system.player_action["action"] = "ability"
-                        universe.combat_system.player_action["data"] = abilities[key - 1]
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
-            elif universe.combat_system.queue[0] == "ITEM_CHOICE":
+                        combat_system.player_action["action"] = "ability"
+                        combat_system.player_action["data"] = abilities[key - 1]
+                        combat_system.queue.pop(0)
+                        combat_system.queue.insert(0, "CHOOSE_TARGET")
+            elif combat_system.queue[0] == "ITEM_CHOICE":
                 if isinstance(key, int):
                     if key == 0:
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        combat_system.queue.pop(0)
+                        combat_system.queue.insert(0, "PLAYER_CHOICE")
                         return
-                    inventory_items = list(universe.player.inventory.keys())
+                    inventory_items = list(universe.player.inventory.items.keys())
                     if 1 <= key <= len(inventory_items):
-                        if not universe.player.inventory[inventory_items[key - 1]]:
+                        if not universe.player.inventory.items[inventory_items[key - 1]]:
                             # If the item quantity is zero, ignore the choice
                             return
                         item_data = ItemManager.get_item(inventory_items[key - 1])
                         if item_data["type"] != "consumable":
                             # If the item is not usable in combat, ignore the choice
                             return
-                        universe.combat_system.player_action["action"] = "use_item"
-                        universe.combat_system.player_action["data"] = item_data
+                        combat_system.player_action["action"] = "use_item"
+                        combat_system.player_action["data"] = item_data
                         if "damage" in item_data["effect"]:
-                            universe.combat_system.queue.pop(0)
-                            universe.combat_system.queue.insert(0, "CHOOSE_TARGET")
+                            combat_system.queue.pop(0)
+                            combat_system.queue.insert(0, "CHOOSE_TARGET")
                         else:
-                            universe.combat_system.queue.pop(0)
-                            universe.combat_system.execute_player_action()
+                            combat_system.queue.pop(0)
+                            combat_system.execute_player_action()
 
-            elif universe.combat_system.queue[0] == "CHOOSE_TARGET":
+            elif combat_system.queue[0] == "CHOOSE_TARGET":
                 if isinstance(key, int):
                     if key == 0:
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.queue.insert(0, "PLAYER_CHOICE")
+                        combat_system.queue.pop(0)
+                        combat_system.queue.insert(0, "PLAYER_CHOICE")
                         return
-                    if 1 <= key <= len(universe.combat_system.fighters):
-                        universe.combat_system.player_action["target"] = universe.combat_system.fighters[key - 1]
-                        universe.combat_system.queue.pop(0)
-                        universe.combat_system.execute_player_action()
+                    if 1 <= key <= len(combat_system.fighters):
+                        combat_system.player_action["target"] = combat_system.fighters[key - 1]
+                        combat_system.queue.pop(0)
+                        combat_system.execute_player_action()
 
             else:
                 # In combat, any key press could advance the combat log
-                universe.combat_system.queue.pop(0)
-        if not universe.combat_system.queue:
+                combat_system.queue.pop(0)
+        if not combat_system.queue:
             # If the queue is empty, proceed to the next round
-            universe.combat_system.enemies_turn()
-    elif universe.combat_system.state == "ENEMIES_TURN":
+            combat_system.enemies_turn()
+    elif combat_system.state == "ENEMIES_TURN":
         # During enemies' turn, we can just wait for the turn to end
-        if universe.combat_system.queue:
+        if combat_system.queue:
             # In combat, any key press could advance the combat log
-            universe.combat_system.queue.pop(0)
-        if not universe.combat_system.queue:
-            universe.combat_system.new_round()
-    elif universe.combat_system.state == "VICTORY":
+            combat_system.queue.pop(0)
+        if not combat_system.queue:
+            combat_system.new_round()
+    elif combat_system.state == "VICTORY":
         if key == "INTERACT":
-            universe.combat_system.give_loot()
-            universe.combat_system.reset_combat()
+            combat_system.give_loot()
+            combat_system.reset_combat()
             universe.mode_change("exploration")
 
 
@@ -155,6 +219,7 @@ modes = {
     "exploration": exploration_input,
     "dialogue": dialogue_input,
     "inventory": inventory_input,
+    "shop": shop_input,
     "debug": debug_input,
     "combat": combat_input,
 }

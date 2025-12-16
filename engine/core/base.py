@@ -2,9 +2,11 @@ from os.path import exists
 
 from engine.core.EventSystem import EventSystem
 import engine.core.InputSystem as InputSystem
-import engine.core.DialogueSystem as DialogueSystem
-import engine.core.CombatSystem as CombatSystem
+from engine.core.DialogueSystem import setup_dialogue_system, dialogue_system
+from engine.core.CombatSystem import setup_combat_system, combat_system
+from engine.core.ShopSystem import setup_shops
 from engine.core.logging_setup import logger
+from engine.core.ItemManager import Inventory
 import os
 import random
 import json
@@ -49,13 +51,16 @@ class UniverseData:
         self.on_mode_change = None
         self.request_text_input = None
 
-        self.dialogue_system = DialogueSystem.DialogueSystem(self)
-        self.combat_system = CombatSystem.CombatSystem(self.player)
-
+        setup_dialogue_system(self)
+        setup_combat_system(self.player)
+        setup_shops(self.player)
         self.ext_data = {}
         # extension data
         if charged:
             self.ext_data.update(data_ext.universe_data)
+        # set universe for instances
+        for instance in instances:
+            instance.universe = self
 
         self.load_save()
         self.set_world(self.current_world)
@@ -120,13 +125,12 @@ class UniverseData:
                 elif key == "ext_data":
                     data[key] = {}
                     for ext_k, ext_v in value.items():
-                        try:
-                            if hasattr(ext_v, "extract_data") and callable(getattr(ext_v, "extract_data")):
-                                data[key][ext_k] = ext_v.extract_data()
-                            else:
-                                data[key][ext_k] = ext_v
-                        except Exception as e:
-                            logger.error(f"Failed to extract ext_data for {ext_k}: {e}")
+                        if ext_k == "instances":
+                            data[key][ext_k] = {}
+                            for inst_name, inst in ext_v.items():
+                                data[key][ext_k][inst_name] = inst.extract_data()
+                        else:
+                            data[key][ext_k] = ext_v
                 # the rest of the excluded attributes are not saved
             else:
                 try:
@@ -159,6 +163,13 @@ class UniverseData:
                                 self.scenes[scene_name].load_data(scene_data)
                             else:
                                 logger.warning(f"Classe de scène {scene_name} non trouvée dans worlds.")
+                    elif key == 'ext_data':
+                        for ext_k, ext_v in value.items():
+                            if ext_k == "instances":
+                                for inst_name, inst_data in ext_v.items():
+                                    self.ext_data["instances"][inst_name].load_data(inst_data)
+                            else:
+                                self.ext_data[ext_k] = ext_v
                     else:
                         setattr(self, key, value)
             self.player.load_player()
@@ -418,13 +429,13 @@ class Event:
                 self.data.player.set_position(self.kwargs["target_position"])
             elif self.action_type == "DIALOGUE":
                 self.data.mode_change("dialogue")
-                self.data.dialogue_system.set_dialogues(self.kwargs["dialogue"])
+                dialogue_system.set_dialogues(self.kwargs["dialogue"])
             elif self.action_type == "COMBAT":
                 if random.random() <= self.kwargs["proba"]:
                     self.data.mode_change("combat")
                     for (enemy, proba) in self.kwargs["enemies"]:
                         if random.random() <= proba:
-                            self.data.combat_system.add_fighter(enemy)
+                            combat_system.add_fighter(enemy)
             elif self.action_type == "MODE_CHANGE":
                 self.data.mode_change(self.kwargs["mode"])
 
@@ -460,7 +471,7 @@ class NPC(Entity):
         self.add_event(
             Event(
                 world.data, self.world,
-                f"dialogue_event_{name}",
+                f"dialogue_eventted, lets>_{name}",
                 "ON_INTERACT",
                 "DIALOGUE",
                 self,
@@ -480,9 +491,7 @@ class Player(Entity):
 
         self.orientation = "DOWN"  # Possible orientations: UP, DOWN, LEFT, RIGHT
 
-        self.inventory = { # dictionnary, id of the item is the key, the value is the quantity
-
-        }
+        self.inventory = Inventory()
         self.ext_data = {
             "abilities": {}
         }
@@ -493,6 +502,7 @@ class Player(Entity):
         self.hp = self.max_hp
         self.damage = 10
         self.defense = 5
+
 
     def attack(self):
             return self.damage
@@ -509,27 +519,35 @@ class Player(Entity):
         )
         return x + dx, y + dy
 
-    def add_to_inventory(self, item_id, quantity=1):
-        if item_id in self.inventory:
-            self.inventory[item_id] += quantity
-        else:
-            self.inventory[item_id] = quantity
 
-    def remove_from_inventory(self, item_id, quantity=1):
-        if item_id in self.inventory and self.inventory[item_id] >= quantity:
-            self.inventory[item_id] -= quantity
-            if self.inventory[item_id] <= 0:
-                del self.inventory[item_id]
 
     def death(self):
         """Gère la mort du joueur. À implémenter."""
         logger.info("Le joueur est mort")
+        exit()
 
 
     def save_save(self):
         filename = "saves/{}/{}/{}.json".format(self.universe.name,self.name, self.name)
         # Crée un dictionnaire filtré pour la sauvegarde
-        data = {k: v for k, v in self.__dict__.items() if k not in ("world", "events", "universe")}
+        data = {}
+        for key, value in self.__dict__.items():
+            # Exclude attributes that should not be serialized; add extra conditions as needed
+            if key in ("world", "events", "universe", "inventory", "ext_data"):
+                if key == "inventory":
+                    data[key] = value.export_data()
+                elif key == "ext_data":
+                    data[key] = {}
+                    for ext_k, ext_v in value.items():
+                        if ext_k == "instances":
+                            data[key][ext_k] = {}
+                            for inst_name, inst in ext_v.items():
+                                data[key][ext_k][inst_name] = inst.extract_data()
+                        else:
+                            data[key][ext_k] = ext_v
+
+            else:
+                data[key] = value
         data['world'] = self.world.name
 
         if save_json_with_backup(data, filename):
@@ -543,7 +561,19 @@ class Player(Entity):
             with open(filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
                 for key, value in data.items():
-                    setattr(self, key, value)
+                    if key == "inventory":
+                        self.inventory.load_data(value)
+                    elif key == 'ext_data':
+                        for ext_k, ext_v in value.items():
+                            if ext_k == "instances":
+                                for inst_name, inst_data in ext_v.items():
+                                    self.ext_data["instances"][inst_name].load_data(inst_data)
+                            else:
+                                self.ext_data[ext_k] = ext_v
+                    else:
+                        # load des attributs :
+                        setattr(self, key, value)
+
             logger.info(f"Progression du joueur chargée depuis {filename}")
         else:
             logger.warning(f"Fichier de sauvegarde introuvable : {filename} (normal if new player)")
@@ -560,6 +590,8 @@ else:
 
 if charged:
     worlds = data_ext.worlds
+    instances= data_ext.instances
 else:
     worlds = {}
+    instances = []
 

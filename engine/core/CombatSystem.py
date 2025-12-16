@@ -20,7 +20,6 @@ def load_enemies_list(file_path="assets/enemies/enemies.json"):
 
 
 
-
 class CombatSystem:
     def __init__(self, player):
         self.player = player
@@ -97,14 +96,38 @@ class CombatSystem:
         """Effectue une attaque basique sur la cible."""
 
         attack_value = attacker.damage
+        inv = getattr(attacker, "inventory", None)
+        equip = getattr(inv, "equipment", {}) if inv else {}
+
+        weapon_id = equip.get("weapon")
+        if weapon_id:
+            attack_value += ItemManager.get_item_part(weapon_id, "damages") or 0
+
         damage = random.randint(attack_value - 2, attack_value + 2)
         self.queue.append('ATTACK: {} hits {}'.format(attacker.name, target.name))
         self.receive_damage(target, damage)
 
     def receive_damage(self, target, damage):
         """Réduit les points de vie de l'ennemi."""
-        hit = max(0,damage - target.defense)
+        # Liste des emplacements qui peuvent apporter de l'armure
+        ARMOR_SLOTS = ["headgear", "chestplate", "leggings", "boots", "shield"]
+
+        armor = target.defense
+
+        inv = getattr(target, "inventory", None)
+        equip = getattr(inv, "equipment", {}) if inv else {}
+
+        # Additionne l'armure fournie par chaque pièce d'équipement
+        for slot in ARMOR_SLOTS:
+            item = equip.get(slot)
+            if item:
+                # get_item_part peut retourner None, donc fallback 0
+                armor += ItemManager.get_item_part(item, "armor") or 0
+
+        hit = max(0,damage - armor)
         target.hp -= hit
+        if target.hp < 0:
+            target.hp = 0
         self.queue.append('DAMAGE: {} takes {} damage'.format(target.name, hit))
         if target.hp <= 0:
             self.queue.append('DEATH: {} has been defeated'.format(target.name))
@@ -113,7 +136,7 @@ class CombatSystem:
     def give_loot(self):
         """Donne le loot au joueur après le combat."""
         for item_id, quantity in self.loot:
-            self.player.add_to_inventory(item_id, quantity)
+            self.player.inventory.add_item(item_id, quantity)
         self.loot = []
 
     def player_turn(self):
@@ -146,7 +169,7 @@ class CombatSystem:
         target.hp = min(target.max_hp, target.hp + amount)
         self.queue.append('{} heals {} HP'.format(target.name, amount))
     def use_object(self, user, obj, target = None):
-        if obj["id"] in user.inventory:
+        if obj["id"] in user.inventory.items:
             if target is None:
                 target = self.player
             if obj["type"] == "consumable" and "effect" in obj:
@@ -156,7 +179,7 @@ class CombatSystem:
                 elif "damage" in obj["effect"]:
                     damage_amount = obj["effect"]["damage"]
                     self.receive_damage(target, damage_amount)
-            user.remove_from_inventory(obj["id"], 1)
+            user.inventory.remove_item(obj["id"], 1)
 
     def enemies_turn(self):
         """Effectue le tour des ennemis."""
@@ -194,3 +217,9 @@ class CombatSystem:
         self.loot = []
         self.queue = []
         self.state = "START"
+
+
+combat_system = CombatSystem(None)
+
+def setup_combat_system(player):
+    combat_system.player = player

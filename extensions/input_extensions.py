@@ -7,6 +7,7 @@
 
 import time
 from engine.core.logging_setup import logger
+from engine.core.CombatSystem import combat_system
 import mods.penduProject.penduCore as penduCore
 
 #exemple:

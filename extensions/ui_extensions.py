@@ -21,7 +21,6 @@ def pendu(self, stdscr):
     else :
             stdscr.clear()
             self.draw(stdscr,"hud", 10,10, f"Vous avez perdu !")
-            time.sleep(2)
             penduCore.hasLost = False
 
     position = self.screens["scene"]["size"][1] // 2
