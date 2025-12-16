@@ -5,6 +5,7 @@
 #Note that the input is defined by a mapping from key codes to action strings in the engine/ui/curses_ui.py file.
 #You can create your own mapping in ui_extensions.py if needed.
 
+import time
 from engine.core.logging_setup import logger
 import mods.penduProject.penduCore as penduCore
 
@@ -46,14 +47,14 @@ def pendu(universe, key):
 
 
     if penduCore.levelChoice == 0 :
-        def handle_int(num):
+        def handleUserTry(num):
                 if num>0 and num<4 :
                     penduCore.levelChoice = num
                     penduCore.chosenWord = penduCore.getRandomWord(num)
                     penduCore.wordBeingFound = penduCore.updateWord()
 
         universe.request_text_input(
-                handle_int,
+                handleUserTry,
                 prompt="Veuillez rentrer le niveau voulu (entre 1 et 3): ",
                 input_type="int"
             )
@@ -62,7 +63,7 @@ def pendu(universe, key):
 
         if penduCore.mistakes < 6 : 
                 
-                def handle_int(letter):
+                def handleUserTry(letter):
                  if not (len(letter) > 1) and letter!= "" :
 
                     checkedLetter = penduCore.checkLetter(letter) # fonction qui renvoi la lettre si dans le mot false sinon, 
@@ -77,16 +78,23 @@ def pendu(universe, key):
                         penduCore.wordBeingFound = penduCore.appendLetters(checkedLetter)
 
                 universe.request_text_input(
-                        handle_int,
+                        handleUserTry,
                         prompt="Veuillez rentrer une lettre du mot : ",
                         input_type="string"
                     )
         
         elif penduCore.mistakes == 6 :
-           
            penduCore.hasLost = True
-
-
+           time.sleep(2)
+           universe.mode_change("exploration")
+           penduCore.penduSpriteShowed = []
+           penduCore.levelChoice = 0
+           penduCore.chosenWord = ""
+           penduCore.listWords = []
+           penduCore.mistakes = 0
+           penduCore.hasLost = False
+           penduCore.lettersFound = []
+           penduCore.wordBeingFound = ""
         
 
 input_modes = {

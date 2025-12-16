@@ -81,3 +81,4 @@ def appendLetters(letter):
 def updateSprite():
       updatedSprite = penduSprite[mistakes-1]
       return updatedSprite
+      
