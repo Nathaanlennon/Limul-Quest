@@ -7,49 +7,40 @@ SAVES_DIR = "saves"
 class library:
     def __init__(self, universe = None):
         self.state = "beging"
-        self.book = {
-            1 : "Livre sort de feu",
-            2 : "Livre sort d'eau",
-            3 : "Livre sort de terre",
-            4 : "Livre sort de vent"
-        }
+        self.book_no_take = ["Livre de feu",
+                             "Livre d'eau"]
         self.universe = universe
-        self.setup_accounts()
-        self.current_account = ""
+        self.current_account = "Tom"  #self.universe.player.name
         self.active = False
+        self.accounts = {}
+        self.setup_accounts()
+        self.max = 2
+
 
     def extract_data(self):
         data = {
-            "book" : self.book
+            "accounts": self.accounts
         }
         return data
 
     def load_data(self, data):
-        self.book.update(data["book"])
+        self.accounts = data["accounts"]
 
     def setup_accounts(self):
         universe_path = os.path.join(SAVES_DIR, "FishWorld")#self.universe.name
         players = [d for d in os.listdir(universe_path)
                    if os.path.isdir(os.path.join(universe_path, d))]
-        for player in players:
-            self.book[player] = 0
+
+        for player_name in players:
+            self.accounts[player_name] = []
         #self.accounts[self.universe.player.name] = 0
 
-    def set_current_account(self, name_account):
-        if name_account in self.accounts:
-            self.current_account = name_account
-            self.active = True
+    def verification(self):
+        return len(self.accounts[self.universe.player.name]) <= self.max #à définir
 
-    def transfert(self, montant):
-        if montant <= self.universe.player.inventory.money:
-            if self.state == "deposit":
-                self.accounts[self.current_account] += montant
-                self.universe.player.inventory.money -= montant
-            elif self.state == "withdraw":
-                self.accounts[self.universe.player.name] -= montant
-                self.universe.player.inventory.money += montant
-            self.active = False
-            self.state = "final"
+    def available_books(self):
+        intersection = list(set(self.book_no_take) & set(self.accounts["Tom"]))#self.universe.player.name
+        return intersection
 
 
 libraryManager = library()
