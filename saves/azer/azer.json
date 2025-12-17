@@ -1,0 +1,275 @@
+{
+    "size": [
+        40,
+        71
+    ],
+    "name": "azer",
+    "scenes": {
+        "Village1": {
+            "map": "assets/maps/village1.txt",
+            "entities": {
+                "guildEntryG": {
+                    "name": "guildEntryG",
+                    "position": [
+                        10,
+                        11
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "guildEntryD": {
+                    "name": "guildEntryD",
+                    "position": [
+                        10,
+                        12
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "forgeEntryG": {
+                    "name": "forgeEntryG",
+                    "position": [
+                        9,
+                        54
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "forgeEntryD": {
+                    "name": "forgeEntryD",
+                    "position": [
+                        9,
+                        55
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "bridgeBot1": {
+                    "name": "bridgeBot1",
+                    "position": [
+                        18,
+                        36
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeBot2": {
+                    "name": "bridgeBot2",
+                    "position": [
+                        18,
+                        37
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeBot3": {
+                    "name": "bridgeBot3",
+                    "position": [
+                        18,
+                        38
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop1": {
+                    "name": "forestTop1",
+                    "position": [
+                        1,
+                        32
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop2": {
+                    "name": "forestTop2",
+                    "position": [
+                        1,
+                        33
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop": {
+                    "name": "forestTop",
+                    "position": [
+                        1,
+                        34
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                }
+            },
+            "events": {
+                "guildEntryG": {
+                    "name": "guildEntryG",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Guild",
+                        "target_position": [
+                            11,
+                            30
+                        ]
+                    },
+                    "entity": "guildEntryG"
+                },
+                "guildEntryD": {
+                    "name": "guildEntryD",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Guild",
+                        "target_position": [
+                            11,
+                            31
+                        ]
+                    },
+                    "entity": "guildEntryD"
+                },
+                "forgeEntryG": {
+                    "name": "forgeEntryG",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forge",
+                        "target_position": [
+                            17,
+                            20
+                        ]
+                    },
+                    "entity": "forgeEntryG"
+                },
+                "forgeEntryD": {
+                    "name": "forgeEntryD",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forge",
+                        "target_position": [
+                            17,
+                            21
+                        ]
+                    },
+                    "entity": "forgeEntryD"
+                },
+                "bridgeBot1": {
+                    "name": "bridgeBot1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            36
+                        ]
+                    },
+                    "entity": "bridgeBot1"
+                },
+                "bridgeBot2": {
+                    "name": "bridgeBot2",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            37
+                        ]
+                    },
+                    "entity": "bridgeBot2"
+                },
+                "bridgeBot3": {
+                    "name": "bridgeBot3",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            38
+                        ]
+                    },
+                    "entity": "bridgeBot3"
+                },
+                "forestTop1": {
+                    "name": "forestTop1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            32
+                        ]
+                    },
+                    "entity": "forestTop1"
+                },
+                "forestTop2": {
+                    "name": "forestTop2",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            33
+                        ]
+                    },
+                    "entity": "forestTop2"
+                },
+                "forestTop": {
+                    "name": "forestTop",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            34
+                        ]
+                    },
+                    "entity": "forestTop"
+                }
+            }
+        }
+    },
+    "current_world": "Village1",
+    "ext_data": {
+        "instances": {
+            "saucisse": {
+                "length": 0,
+                "test": "oui"
+            }
+        }
+    }
+}
