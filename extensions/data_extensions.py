@@ -14,19 +14,18 @@ from world import *
 from mods.bank.bankCore import bankManager
 from mods.library.libraryCore import libraryManager
 
-
 worlds = {
     "Village1": Village1,
     "ButcherHouse": ButcherHouse,
-    "Theatre" : Theatre,
+    "Theatre": Theatre,
     "Village2": Village2,
     "zooKeeperHouse": zooKeeperHouse,
     "Zoo": Zoo,
-    "Forest" : Forest,
-    "Cave" : Cave,
-    "Guild" : Guild,
-    "Forge" : Forge,
-    #"my_world": MyWorldClass,
+    "Forest": Forest,
+    "Cave": Cave,
+    "Guild": Guild,
+    "Forge": Forge,
+    # "my_world": MyWorldClass,
 }
 
 # VERY IMPORTANT: those data dictionaries bellow can contain any type you want, including objects 
@@ -34,7 +33,7 @@ worlds = {
 # You also need a function load_data(self, data) that will load the data from a dictionary to the object
 # if you don't do that, saving/loading the game will not work properly.
 universe_data = {
-    "instances":{
+    "instances": {
         "bankManager": bankManager,
         "libraryManager": libraryManager
     }
@@ -43,16 +42,22 @@ universe_data = {
 # If your objects need universe, add the instance in the list below, and self.universe in your class, so the program will do instance.universe = self
 # you will need to import the instances at the top of the file too to do it.
 # in those classes you HAVE TO HAVE the init_universe(self, universe) function that will set self.universe = universe at least, it's because yoy maybe need to init things that needs universe
-#you will need to import the instances at the top of the file too to do it.
+# you will need to import the instances at the top of the file too to do it.
 instances = [
     bankManager,
     libraryManager
-# exemple: instance1, instance2
+    # exemple: instance1, instance2
 ]
-
 
 player_data = {
     "instances": {
 
+    },
+    "abilities": {
+        "blabla&#39;s strike": {
+            "name": "Hache tranchante",
+            "damage": 25,
+            "accuracy": 0.5
+        }
     }
 }

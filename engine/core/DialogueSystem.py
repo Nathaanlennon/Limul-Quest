@@ -40,7 +40,7 @@ class DialogueSystem:
                 subkey = key.split(":", 1)[1]
                 if subkey.startswith("has_item:"):
                     item_id = subkey.split(":", 1)[1]
-                    if self.universe.player.inventory.get(item_id, 0) < 1:
+                    if self.universe.player.inventory.items.get(item_id, 0) < 1:
                         return False
                 else:
                     if self.universe.player.ext_data.get(subkey) != value:
@@ -51,7 +51,7 @@ class DialogueSystem:
                     return False
             elif key.startswith("has_item:"):
                 item_id = key.split(":", 1)[1]
-                if self.universe.player.inventory.get(item_id, 0) < 1:
+                if self.universe.player.inventory.items.get(item_id, 0) < 1:
                     return False
             else:
                 if self.universe.player.ext_data.get(key) != value:
@@ -75,11 +75,11 @@ class DialogueSystem:
             elif key.startswith("give_item:"):
                 item_id = key.split(":", 1)[1]
                 if int(value) > 0:
-                    self.universe.player.add_to_inventory(item_id, int(value))
+                    self.universe.player.inventory.add_item(item_id, int(value))
             elif key.startswith("remove_item:"):
                 item_id = key.split(":", 1)[1]
                 if int(value) < 0:
-                    self.universe.player.remove_from_inventory(item_id, value)
+                    self.universe.player.inventory.remove_item(item_id, value)
             elif key == "heal":
                 self.universe.player.heal(int(value))
             elif key == "shop":
@@ -169,7 +169,7 @@ class DialogueSystem:
         self.current_dialogue = ""
         # if index is out of range or set to -1, return to exploration mode in universe
         if self.index == -1 or self.index >= len(self.dialogues):
-            if self.universe.mode != "inventory":
+            if self.universe.mode == "dialogue":
                 self.universe.mode_change("exploration")
         else:
             self.set_current_dialogue()

@@ -381,6 +381,7 @@ class Event:
         - MOVE: target_scene (class), target_position (tuple)
         - DIALOGUE: dialogue (str, path to dialogue file)
         - COMBAT: enemies (list of couples (enemy, proba)), proba (int)
+        - MODE_CHANGE: mode (str, new mode to switch to)
         ------------------------------------------------------
         """
         self.data = data
@@ -438,9 +439,8 @@ class Event:
             elif self.action_type == "COMBAT":
                 if random.random() <= self.kwargs["proba"]:
                     self.data.mode_change("combat")
-                    for (enemy, proba) in self.kwargs["enemies"]:
-                        if random.random() <= proba:
-                            combat_system.add_fighter(enemy)
+                    combat_system.setup_combat(self.kwargs["enemies"])
+                    combat_system.max_enemies = self.kwargs.get("max_enemies", 3)
             elif self.action_type == "MODE_CHANGE":
                 self.data.mode_change(self.kwargs["mode"])
 

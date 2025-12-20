@@ -1,0 +1,72 @@
+[
+  {
+    "speaker": "PNJ",
+    "text": "Bonjour, voyageur. Si tu vois ce pendu derrière moi, ce n’est pas un hasard… C’est un criminel qui a trahi ses camarades et vendu leurs équipements pour le profit.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Un pendu ? Pour quoi faire ?",
+        "next": 1
+      },
+      {
+        "text": "Je préfère ne pas m’en mêler.",
+        "next": -1
+      },
+      {
+        "text": "Je connais déjà laisse moi jouer.",
+        "effects": {"mode" : "pendu"},
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Ce jeu n’est pas qu’un châtiment. Tu peux aussi jouer et gagner entre 1 et 3 pièces, selon la difficulté que tu choisis. Plus c’est dur, plus la récompense est élevée.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Explique-moi les règles.",
+        "next": 2
+      },
+      {
+        "text": "L’or ne m’intéresse pas.",
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Les règles sont simples : un mot secret est choisi. Tu proposes des lettres une par une. Chaque erreur rapproche le pendu de son sort final. Trop d’erreurs, et tu perds. Si tu découvres le mot à temps, tu gagnes et le pendu sera épargné jusqu'à la prochaine fois.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Compris !",
+        "next": 3
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Tu veux jouer ?",
+    "require": null,
+    "effects" : null,
+    "options": [
+      {
+        "text": "Oui !",
+        "effects": {"mode" : "pendu"},
+        "next": -1
+      },
+      {
+        "text": "Tu peux réexpliquer les règles ?",
+        "next": 2
+      },
+      {
+        "text": "Non, pas cette fois.",
+        "next": -1
+      }
+    ]
+  }
+]

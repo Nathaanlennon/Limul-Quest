@@ -225,6 +225,7 @@ class CursesUI:
         self.input_buffer = ""
         self.input_prompt = ""
         self.input_callback = None
+        self.input_y, self.input_x = (5,1)
 
         # Register this method so input_system can trigger text input
         universe.request_text_input = self.start_text_input
@@ -256,7 +257,7 @@ class CursesUI:
                 if self.input_wanted:
                     # Draw input field with cursor
                     input_text = self.input_prompt + self.input_buffer + "_"
-                    self.draw(stdscr, "hud", 5, 1, input_text)
+                    self.draw(stdscr, "hud", self.input_y, self.input_x, input_text)
 
                 key = stdscr.getch()
                 if key != -1:  # Non-blocking returns -1 if no key pressed
@@ -267,13 +268,15 @@ class CursesUI:
 
             stdscr.refresh()
 
-    def start_text_input(self, callback, prompt="", input_type="string", max_length=50):
+    def start_text_input(self, callback, prompt="", input_type="string", max_length=50,y=5,x=1):
         self.input_wanted = True
         self.input_buffer = ""
         self.input_prompt = prompt
         self.input_callback = callback
         self.input_type = input_type  # "string", "int", "float", etc.
         self.max_length = max_length
+        self.input_y = y
+        self.input_x = x
 
     def process_input_key(self, key):
         if key == 27:  # ESC
@@ -389,7 +392,7 @@ class CursesUI:
         max_x = 0
         max_y = 0
 
-        with open(path, "r") as f:
+        with open(path, "r", encoding='utf-8') as f:
             for line in f:
                 line = line.rstrip("\n")
                 sprite_lines.append(line)
