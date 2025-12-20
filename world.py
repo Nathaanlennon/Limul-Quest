@@ -62,7 +62,8 @@ def Guild(data):
     self.add_entity(NPC(self, "teacher", (7, 37), 'E', dialogue="assets/dialogues/teacher.json"))
 
     # banker
-    self.add_entity(NPC(self, "banker", (6, 59), 'B', dialogue="assets/dialogues/banker.json"))
+    self.add_entity(Entity(self, "banker", (6, 59), 'B',
+                        [Event(data, self, "banker", "ON_INTERACT", "MODE_CHANGE", mode = "bank")]))
     return self
 
 
