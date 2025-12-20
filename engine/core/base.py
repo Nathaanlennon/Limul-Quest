@@ -6,7 +6,7 @@ from engine.core.DialogueSystem import setup_dialogue_system, dialogue_system
 from engine.core.CombatSystem import setup_combat_system, combat_system
 from engine.core.ShopSystem import setup_shops
 from engine.core.logging_setup import logger
-from engine.core.ItemManager import Inventory
+from engine.core.ItemManager import Inventory, dealItem, item_list_renderer
 import os
 import random
 import json
@@ -51,19 +51,24 @@ class UniverseData:
         self.on_mode_change = None
         self.request_text_input = None
 
-        setup_dialogue_system(self)
-        setup_combat_system(self.player)
-        setup_shops(self.player)
+
+
         self.ext_data = {}
         # extension data
         if charged:
             self.ext_data.update(data_ext.universe_data)
         # set universe for instances
         for instance in instances:
-            instance.universe = self
+            instance.init_universe(self)
 
         self.load_save()
         self.set_world(self.current_world)
+
+        setup_dialogue_system(self)
+        setup_combat_system(self.player)
+        setup_shops(self.player)
+        dealItem.setup_dealer(self.player)
+        item_list_renderer.set_list(self.player.inventory.items)
 
     # world gestion
     def set_world(self, world, **kwargs):

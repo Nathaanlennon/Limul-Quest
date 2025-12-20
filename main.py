@@ -2,14 +2,15 @@ import os
 os.chdir(os.path.dirname(__file__))
 from engine.core.base import UniverseData
 import engine.core.SaveManager as SaveManager
+import sys
 
 
 
 
 
 def main():
-    universe_name = SaveManager.choose_universe()
-    player_name = SaveManager.choose_player(universe_name)
+    universe_name = sys.argv[1]
+    player_name = sys.argv[2]
 
         # Charger l'univers ici
 

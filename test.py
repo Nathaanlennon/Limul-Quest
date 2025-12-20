@@ -14,6 +14,9 @@ class Saucisse:
     def load_data(self, data):
         self.length = data["length"]
 
+    def init_universe(self, universe):
+        self.universe = universe
+
 
 
 saucisse = Saucisse()# set universe for instances
