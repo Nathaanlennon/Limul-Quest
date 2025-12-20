@@ -30,9 +30,7 @@ def exploration_input(universe, key):
         universe.player.orientation = "RIGHT"
     elif key in hud:
         if key == "INVENTORY":
-            dealItem.mode = "use"
-            dealItem.inventory_a = universe.player.inventory
-            item_list_renderer.set_list(universe.player.inventory.items)
+            ...
         universe.mode_change(key.lower())
     elif key == "QUIT":
         universe.save_save()
@@ -77,6 +75,10 @@ def inventory_input(universe, key):
                     item_list_renderer.set_list(shop_manager.current_shop_filtered_items, "Shop")
         if key == "INVENTORY" or key == "ESCAPE":
             universe.mode_change("exploration")
+            dealItem.mode = "use"
+            dealItem.inventory_a = universe.player.inventory
+            item_list_renderer.set_list(universe.player.inventory.items)
+
         elif key == "RIGHT":
             item_list_renderer.current_index += 1
         elif key == "LEFT":

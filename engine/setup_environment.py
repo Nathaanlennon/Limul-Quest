@@ -95,6 +95,7 @@ universe_data = {
 
 # If your objects need universe, add the instance in the list below, and self.universe in your class, so the program will do instance.universe = self
 #you will need to import the instances at the top of the file too to do it.
+# in those classes you HAVE TO HAVE the init_universe(self, universe) function that will set self.universe = universe at least, it's because yoy maybe need to init things that needs universe
 instances = [
 # exemple: instance1, instance2
 ]

@@ -42,6 +42,13 @@
         "effects": {
           "shop": 0
         }
+      },
+      {
+        "text": "mode blblb",
+        "next": -1,
+        "effects": {
+          "mode": "inventory"
+        }
       }
     ]
   },

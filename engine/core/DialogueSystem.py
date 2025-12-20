@@ -86,6 +86,8 @@ class DialogueSystem:
                 shop_id = value
                 shop_manager.set_shop(shop_id)
                 self.universe.mode_change("inventory")
+            elif key=="mode":
+                self.universe.mode_change(value)
 
             else:
                 self.universe.player.ext_data[key] = value
