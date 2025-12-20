@@ -49,7 +49,7 @@ def pendu(universe, key):
 
     if penduCore.levelChoice == 0 :
         def handleUserTry(num):
-                if num>0 and num<4 :
+                if 0 < num < 4:
                     penduCore.levelChoice = num
                     penduCore.chosenWord = penduCore.getRandomWord(num)
                     penduCore.wordBeingFound = penduCore.updateWord()
@@ -84,8 +84,8 @@ def pendu(universe, key):
                         handleUserTry,
                         prompt="Veuillez rentrer une lettre du mot : ",
                         input_type="string",
-                        x = 5,
-                        y = 1
+                        y = 5,
+                        x = 1
                     )
 
                 if penduCore.wordBeingFound == penduCore.chosenWord :

@@ -24,10 +24,10 @@ def pendu(self, stdscr):
             self.draw(stdscr,"hud", 3,1, f"Nombre de chances restantes  : {6 -penduCore.mistakes}")
             self.draw(stdscr,"hud", 4,1, f"Le mot à deviner est : {penduCore.wordBeingFound}")    
  
-    elif penduCore.hasLost == True :
+    elif penduCore.hasLost:
             self.draw(stdscr,"hud", 4,1, f"Vous avez perdu !")
  
-    elif penduCore.hasWon == True :
+    elif penduCore.hasWon:
         self.draw(stdscr,"hud", 4,1, f"Vous avez gagné !")
 
 

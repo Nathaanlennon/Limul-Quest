@@ -257,6 +257,6 @@ def Cave(data):
                                           ("orc", 0.05),
                                           ("spider", 0.15)
 
-                                      ], proba=1, max_enemies=3))
+                                      ], proba=0.15, max_enemies=3))
 
     return self
