@@ -410,7 +410,7 @@ class CursesUI:
         a,b = self.screens[scene]["position"]
         for idx, line in enumerate(sprite_lines):
             # Chaque ligne est dessinée à la position (y + idx, x)
-            stdscr.addstr(y + idx+a, x+b, line)
+            self.draw(stdscr, scene, y + idx+a, x+b, line)
 
     def draw(self, stdscr, scene, y, x, text):
         """

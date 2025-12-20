@@ -139,7 +139,7 @@ class Inventory:
         })
 
 class DealItem:
-    def __init__(self, item_id = None, inventory_a=None, inventory_b=None, mode=None):
+    def __init__(self, item_id = None, inventory_a=None, inventory_b=None, mode="use"):
         # sell will be from inventory_a to inventory_b ; buy will be from inventory_b to inventory_a
         self.item_id = item_id
         self.inventory_a = inventory_a  # e.g., player's inventory most of the time ; we will suppose that iventory_a as not an "infinite" money
@@ -179,7 +179,7 @@ class DealItem:
         self.item_id = item_id
         self.item_data = get_item(item_id)
 
-    def setup_dealer(self, inventory_a, inventory_b = None, mode = None, item = None):
+    def setup_dealer(self, inventory_a, inventory_b = None, mode = "use", item = None):
         self.inventory_a = inventory_a
         self.inventory_b = inventory_b
         self.mode = mode

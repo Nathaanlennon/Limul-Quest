@@ -20,11 +20,11 @@ python -m pip install windows-curses
 run : 
 go on the project repository and run the main.py file
 ```bash
-py -3 `main.py`
+py -3 `launch_game.py`
 ```
 
 Linux:
 go on the repository and run
 ```bash
-python3 main.py
+python3 launch_game.py
 ```
