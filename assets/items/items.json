@@ -64,8 +64,54 @@
     "damages": 20,
     "description": "Une hache robuste en fer, idéale pour les combats rapprochés et pour couper du bois.",
     "price": 70
+
   },
-
-
-
+  "fire_book": {
+    "id": "fire_book",
+    "name": "Livre de feu",
+    "type": "quest_item",
+    "capacity": {
+      "boule_de_feu": {
+        "name": "Boule de feu",
+        "damage": 75,
+        "accuracy": 0.8
+      }
+    }
+  },
+  "water_book": {
+    "id": "water_book",
+    "name": "Livre d'eau",
+    "type": "quest_item",
+    "capacity": {
+      "Jet_eau": {
+        "name": "Jet d'eau",
+        "damage": 60,
+        "accuracy": 0.9
+      }
+    }
+  },
+  "earth_book": {
+    "id": "earth_book",
+    "name": "Livre de terre",
+    "type": "quest_item",
+    "capacity": {
+      "Tremblement_de_terre": {
+        "name": "Tremblement de terre",
+        "damage": 100,
+        "accuracy": 0.6
+      }
+    }
+  },
+  "wind_book": {
+    "id": "wind_book",
+    "name": "Livre de vent",
+    "type": "quest_item",
+    "capacity": {
+      "Tempete": {
+        "name": "Tempete",
+        "damage": 55,
+        "accuracy": 0.95
+      }
+    }
+  }
 }

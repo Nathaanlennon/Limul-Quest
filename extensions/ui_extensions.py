@@ -14,6 +14,7 @@ import mods.bank.bankCore as bankCore
 from mods.library.libraryCore import libraryManager
 import mods.library.libraryCore as libraryCore
 from engine.core.logging_setup import logger
+from engine.core.ItemManager import get_item_part
 
 def pendu(self, stdscr):
     if penduCore.hasLost == False and penduCore.hasWon == False :
@@ -39,14 +40,14 @@ def pendu(self, stdscr):
 
 
 def bank(self, stdscr):
-    self.draw(stdscr, "scene", 1, 1, f"Argent en poche : {self.universe.player.inventory.money}")
+    self.draw(stdscr, "scene", 1, 1, f"Argent de poche : {self.universe.player.inventory.money}")
 
     if not bankManager.active:
         if bankManager.state == "beging":
-            self.draw(stdscr,"hud", 1,1, f"Bonjour, bienvenue chez Limulbank ! Que voulez-vous faire ?")
-            self.draw(stdscr,"hud", 2,1, f"1 - Bonjour, j'aimerais déposer de l'argent, s'il vous plaît")
-            self.draw(stdscr,"hud", 3,1, f"2 - Bonjour, je voudrais retirer de l'argent, s'il vous plaît")
-            self.draw(stdscr,"hud", 4,1, f"3 - Bonjour, désolé je me suis trompé")
+            self.draw(stdscr,"hud", 1, 1, f"Bonjour, bienvenue chez Limulbank ! Que voulez-vous faire ?")
+            self.draw(stdscr,"hud", 2, 1, f"1 - Bonjour, j'aimerais de l'argent, s'il vous plaît")
+            self.draw(stdscr,"hud", 3, 1, f"2 - Bonjour, j'aimerais retirer de l'argent")
+            self.draw(stdscr,"hud", 4, 1, f"3 - Bonjour, désolé je me suis trompé")
 
         elif bankManager.state == "deposit":
             self.draw(stdscr, "hud", 1, 1, f"Choisissez un compte")
@@ -77,19 +78,34 @@ def library(self, stdscr):
             self.draw(stdscr,"hud", 4,1, f"3 - Bonjour, désolé je me suis trompé")
 
         elif libraryManager.state == "borrow":
-            self.draw(stdscr, "hud", 1, 1, f"Choisissez un livre :")
-            n = 0
-            for book in libraryManager.available_books():
-                self.draw(stdscr, "hud", 2+n, 1, f"{book}")
-                n += 1
-            """
             if libraryManager.verification():
                 self.draw(stdscr, "hud", 1, 1, f"Choisissez un livre :")
                 n = 1
-                for book in libraryManager.available_books():
-                    self.draw(stdscr, "hud", 1 + n, 1, f"{n} : {book}")
+                for book in libraryManager.intersection:
+                    self.draw(stdscr, "hud", 1+n, 1, f"{n} : {get_item_part(book, 'name')}")
                     n += 1
-            """
+            else:
+                self.draw(stdscr, "hud", 1, 1, f"Désolé mais vous avez emprunter trop de livre !")
+
+        elif libraryManager.state == "return":
+            if libraryManager.verification():
+                self.draw(stdscr, "hud", 1, 1,f"Quel livre voulez vous rendre ?")
+                n = 1
+                for book in libraryManager.accounts[libraryManager.universe.player.name]:
+                    self.draw(stdscr, "hud", 1+n, 1, f"{n} : {get_item_part(book, 'name')}")
+            else:
+                self.draw(stdscr, "hud", 1, 1, f"Désolé mais vous n'avez aucun livre à rendre !")
+
+        elif libraryManager.state == "erreur":
+            self.draw(stdscr, "hud", 1, 1, f"D'accord pas de soucis passez une bonne journée")
+
+
+        elif libraryManager.state == "final":
+            self.draw(stdscr, "hud", 1, 1, f"Merci, n'hésiter pas à revenir, bonne journée")
+
+    if libraryManager.active:
+        self.draw(stdscr, "hud", 1, 1, f"Vous avez selectionner le {get_item_part(libraryManager.selected_book, 'name')}")
+
 
 
 ui_modes = {

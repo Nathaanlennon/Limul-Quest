@@ -186,17 +186,41 @@ def library(universe, key):
             elif key == 3:
                 libraryManager.state = "erreur"
 
-            elif libraryManager.state == "return":
-                libraryManager.active = True
+        elif libraryManager.state == "borrow":
+            if libraryManager.verification():
+                universe.request_text_input(
+                    libraryManager.select_book,
+                    prompt = "Numéro du livre voulu : ",
+                    input_type = "int"
+                )
+            else:
+                libraryManager.state = "final"
 
-            elif libraryManager.state == "erreur":
-                ...
+        elif libraryManager.state == "return":
+            if libraryManager.verification():
+                universe.request_text_input(
+                    libraryManager.select_book,
+                    prompt = "Numéro du livre à rendre : ",
+                    input_type = "int",
+                )
+            else:
+                libraryManager.state = "final"
+
+        elif libraryManager.state == "erreur":
+            libraryManager.active = False
+            libraryManager.state = "beging"
+            universe.mode_change("exploration")
+
+        elif libraryManager.state == "final":
+            libraryManager.active = False
+            libraryManager.state = "beging"
+            universe.mode_change("exploration")
 
     if libraryManager.active:
         universe.request_text_input(
-            libraryManager.transfert,
-            prompt = "Saisir le montant voulu : ",
-            input_type = "int"
+            libraryManager.borrowing,
+            prompt="(o:oui / n:non) : ",
+            input_type="string"
         )
 
 
