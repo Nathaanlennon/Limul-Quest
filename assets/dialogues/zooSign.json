@@ -1,0 +1,34 @@
+[
+  {
+    "speaker": "PNJ",
+    "text": "Bienvenue au Zoo des monstres du Village ! Ici, tu pourras observer toutes sortes de créatures étranges et fascinantes.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Merci ! Je suis curieux de voir les monstres.",
+        "next": 1
+      },
+      {
+        "text": "Je fais juste un tour.",
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "PNJ",
+    "text": "Prochainement, tu pourras utiliser nos fameuses Pokéballs pour capturer des Pokémon, mais elles n’ont pas encore été produites. Une fois que tu auras capturé un monstre, amène-le au gardien du zoo et tu pourras obtenir des informations exclusives sur les créatures en question.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Ça a l’air passionnant !",
+        "next": -1
+      },
+      {
+        "text": "Je préfère observer sans capturer.",
+        "next": -1
+      }
+    ]
+  }
+]

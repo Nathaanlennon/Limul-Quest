@@ -7,11 +7,35 @@
 #Example:
 #def custom_mode(self, stdscr):
 #    # Custom mode implementation
+import time
+import mods.penduProject.penduCore as penduCore
 from mods.bank.bankCore import bankManager
 import mods.bank.bankCore as bankCore
 from mods.library.libraryCore import libraryManager
 import mods.library.libraryCore as libraryCore
 from engine.core.logging_setup import logger
+
+def pendu(self, stdscr):
+    if penduCore.hasLost == False and penduCore.hasWon == False :
+        self.draw(stdscr,"hud", 1,1, f"Bonjour et bienvenue au pendu !")
+        if penduCore.levelChoice !=0 :
+            self.draw(stdscr,"hud", 2,1, f"Le niveau choisi est  : {penduCore.levelChoice}")
+            self.draw(stdscr,"hud", 3,1, f"Nombre de chances restantes  : {6 -penduCore.mistakes}")
+            self.draw(stdscr,"hud", 4,1, f"Le mot à deviner est : {penduCore.wordBeingFound}")    
+ 
+    elif penduCore.hasLost == True :
+            self.draw(stdscr,"hud", 4,1, f"Vous avez perdu !")
+ 
+    elif penduCore.hasWon == True :
+        self.draw(stdscr,"hud", 4,1, f"Vous avez gagné !")
+
+
+
+    position = self.screens["scene"]["size"][1] // 2
+    pilotiSprite, (maxx, maxy) = self.load_sprite("mods/penduProject/pilotiSprite.txt")
+    self.draw_sprite("scene", pilotiSprite, 1,position - maxx//2, stdscr)
+    self.draw_sprite("scene", penduCore.penduSpriteShowed, 9,24, stdscr)
+
 
 
 def bank(self, stdscr):
@@ -70,7 +94,8 @@ def library(self, stdscr):
 
 ui_modes = {
     "bank": bank,
-    "library": library
+    "library": library,
+    "pendu": pendu
     # cutom_mode: custom_mode,
 }
 

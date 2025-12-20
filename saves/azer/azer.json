@@ -1,0 +1,478 @@
+{
+    "size": [
+        40,
+        71
+    ],
+    "name": "azer",
+    "scenes": {
+        "Village1": {
+            "map": "assets/maps/village1.txt",
+            "entities": {
+                "guildEntryG": {
+                    "name": "guildEntryG",
+                    "position": [
+                        10,
+                        11
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "guildEntryD": {
+                    "name": "guildEntryD",
+                    "position": [
+                        10,
+                        12
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "forgeEntryG": {
+                    "name": "forgeEntryG",
+                    "position": [
+                        9,
+                        54
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "forgeEntryD": {
+                    "name": "forgeEntryD",
+                    "position": [
+                        9,
+                        55
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "bridgeBot1": {
+                    "name": "bridgeBot1",
+                    "position": [
+                        18,
+                        36
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeBot2": {
+                    "name": "bridgeBot2",
+                    "position": [
+                        18,
+                        37
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeBot3": {
+                    "name": "bridgeBot3",
+                    "position": [
+                        18,
+                        38
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop1": {
+                    "name": "forestTop1",
+                    "position": [
+                        1,
+                        32
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop2": {
+                    "name": "forestTop2",
+                    "position": [
+                        1,
+                        33
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "forestTop": {
+                    "name": "forestTop",
+                    "position": [
+                        1,
+                        34
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                }
+            },
+            "events": {
+                "guildEntryG": {
+                    "name": "guildEntryG",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Guild",
+                        "target_position": [
+                            11,
+                            30
+                        ]
+                    },
+                    "entity": "guildEntryG"
+                },
+                "guildEntryD": {
+                    "name": "guildEntryD",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Guild",
+                        "target_position": [
+                            11,
+                            31
+                        ]
+                    },
+                    "entity": "guildEntryD"
+                },
+                "forgeEntryG": {
+                    "name": "forgeEntryG",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forge",
+                        "target_position": [
+                            17,
+                            20
+                        ]
+                    },
+                    "entity": "forgeEntryG"
+                },
+                "forgeEntryD": {
+                    "name": "forgeEntryD",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forge",
+                        "target_position": [
+                            17,
+                            21
+                        ]
+                    },
+                    "entity": "forgeEntryD"
+                },
+                "bridgeBot1": {
+                    "name": "bridgeBot1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            36
+                        ]
+                    },
+                    "entity": "bridgeBot1"
+                },
+                "bridgeBot2": {
+                    "name": "bridgeBot2",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            37
+                        ]
+                    },
+                    "entity": "bridgeBot2"
+                },
+                "bridgeBot3": {
+                    "name": "bridgeBot3",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village2",
+                        "target_position": [
+                            2,
+                            38
+                        ]
+                    },
+                    "entity": "bridgeBot3"
+                },
+                "forestTop1": {
+                    "name": "forestTop1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            32
+                        ]
+                    },
+                    "entity": "forestTop1"
+                },
+                "forestTop2": {
+                    "name": "forestTop2",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            33
+                        ]
+                    },
+                    "entity": "forestTop2"
+                },
+                "forestTop": {
+                    "name": "forestTop",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Forest",
+                        "target_position": [
+                            17,
+                            34
+                        ]
+                    },
+                    "entity": "forestTop"
+                }
+            }
+        },
+        "Village2": {
+            "map": "assets/maps/village2.txt",
+            "entities": {
+                "bridgeTop1": {
+                    "name": "bridgeTop1",
+                    "position": [
+                        1,
+                        36
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeTop2": {
+                    "name": "bridgeTop2",
+                    "position": [
+                        1,
+                        37
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "bridgeTop3": {
+                    "name": "bridgeTop3",
+                    "position": [
+                        1,
+                        38
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "door1Butcher": {
+                    "name": "door1Butcher",
+                    "position": [
+                        9,
+                        13
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "door2Butcher": {
+                    "name": "door2Butcher",
+                    "position": [
+                        9,
+                        14
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "doorTheatre": {
+                    "name": "doorTheatre",
+                    "position": [
+                        16,
+                        54
+                    ],
+                    "sprite": "D",
+                    "movable": false,
+                    "walkable": false
+                },
+                "zooLeft": {
+                    "name": "zooLeft",
+                    "position": [
+                        11,
+                        1
+                    ],
+                    "sprite": " ",
+                    "movable": false,
+                    "walkable": true
+                },
+                "npc1": {
+                    "name": "npc1",
+                    "position": [
+                        11,
+                        52
+                    ],
+                    "sprite": "N",
+                    "movable": false,
+                    "walkable": false
+                }
+            },
+            "events": {
+                "bridgeTop1": {
+                    "name": "bridgeTop1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village1",
+                        "target_position": [
+                            17,
+                            36
+                        ]
+                    },
+                    "entity": "bridgeTop1"
+                },
+                "bridgeTop2": {
+                    "name": "bridgeTop2",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village1",
+                        "target_position": [
+                            17,
+                            37
+                        ]
+                    },
+                    "entity": "bridgeTop2"
+                },
+                "bridgeTop3": {
+                    "name": "bridgeTop3",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Village1",
+                        "target_position": [
+                            17,
+                            38
+                        ]
+                    },
+                    "entity": "bridgeTop3"
+                },
+                "door1Butcher": {
+                    "name": "door1Butcher",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "ButcherHouse",
+                        "target_position": [
+                            15,
+                            34
+                        ]
+                    },
+                    "entity": "door1Butcher"
+                },
+                "door2Butcher": {
+                    "name": "door2Butcher",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "ButcherHouse",
+                        "target_position": [
+                            15,
+                            35
+                        ]
+                    },
+                    "entity": "door2Butcher"
+                },
+                "doorTheatre": {
+                    "name": "doorTheatre",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Theatre",
+                        "target_position": [
+                            14,
+                            47
+                        ]
+                    },
+                    "entity": "doorTheatre"
+                },
+                "zooLeft": {
+                    "name": "zooLeft",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_STEP",
+                    "action_type": "MOVE",
+                    "kwargs": {
+                        "target_scene": "Zoo",
+                        "target_position": [
+                            10,
+                            68
+                        ]
+                    },
+                    "entity": "zooLeft"
+                },
+                "dialogue_eventted, lets>_npc1": {
+                    "name": "dialogue_eventted, lets>_npc1",
+                    "position": null,
+                    "active": true,
+                    "activation_type": "ON_INTERACT",
+                    "action_type": "DIALOGUE",
+                    "kwargs": {
+                        "dialogue": "assets/dialogues/test.json"
+                    },
+                    "entity": "npc1"
+                }
+            }
+        }
+    },
+    "current_world": "Village2",
+    "ext_data": {
+        "instances": {
+            "saucisse": {
+                "length": 0,
+                "test": "oui"
+            }
+        }
+    }
+}

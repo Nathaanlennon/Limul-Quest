@@ -5,7 +5,10 @@
 # Note that the input is defined by a mapping from key codes to action strings in the engine/ui/curses_ui.py file.
 # You can create your own mapping in ui_extensions.py if needed.
 
+import time
 from engine.core.logging_setup import logger
+from engine.core.CombatSystem import combat_system
+import mods.penduProject.penduCore as penduCore
 from mods.bank.bankCore import bankManager
 from mods.library.libraryCore import libraryManager
 
@@ -15,7 +18,6 @@ from mods.library.libraryCore import libraryManager
 def test(universe, key):
     if key == "INTERACT":
         universe.mode_change("exploration")
-
 
 def debug_input(universe, key):
     if key == "DEBUG":  # debug key is W
@@ -33,16 +35,105 @@ def debug_input(universe, key):
         universe.request_text_input(
             handle_int,
             prompt="Enter a number: ",
-            input_type="int"
+            input_type="int",
+
         )
-    elif key == ord('t'):
-        universe.save_save()
-    elif key == ord('b'):
-        universe.mode_change("bank")
-    elif key == ord('l'):
-        universe.mode_change("library")
-    elif key == ord('a'):
-        universe.player.inventory.money += 10000
+
+    elif key == ord('j'):
+        universe.mode_change("pendu")
+
+
+
+
+def pendu(universe, key):
+
+    if penduCore.levelChoice == 0 :
+        def handleUserTry(num):
+                if num>0 and num<4 :
+                    penduCore.levelChoice = num
+                    penduCore.chosenWord = penduCore.getRandomWord(num)
+                    penduCore.wordBeingFound = penduCore.updateWord()
+
+        universe.request_text_input(
+                handleUserTry,
+                prompt="Veuillez rentrer le niveau voulu (entre 1 et 3): ",
+                input_type="int",
+                x = 2,
+                y = 1
+            )
+        
+    if penduCore.chosenWord != "" :
+
+        if penduCore.mistakes < 6 : 
+                
+                def handleUserTry(letter):
+                 if not (len(letter) > 1) and letter!= "" :
+
+                    checkedLetter = penduCore.checkLetter(letter) # fonction qui renvoi la lettre si dans le mot false sinon, 
+                    #si lettre on push si false on ajoute 1 à mistakes
+                    if checkedLetter == False :
+
+                        penduCore.mistakes +=1
+                        penduCore.wordBeingFound = penduCore.updateWord()
+                        penduCore.penduSpriteShowed = penduCore.updateSprite()
+                    else :
+
+                        penduCore.wordBeingFound = penduCore.appendLetters(checkedLetter)
+
+                universe.request_text_input(
+                        handleUserTry,
+                        prompt="Veuillez rentrer une lettre du mot : ",
+                        input_type="string",
+                        x = 5,
+                        y = 1
+                    )
+
+                if penduCore.wordBeingFound == penduCore.chosenWord :
+
+                    penduCore.hasWon = True
+
+                    def handleUserHasWon(letter):
+                            if letter == "Y" or letter =="y" :
+                                universe.player.inventory.money +=1*penduCore.levelChoice
+                                penduCore.resetStats()
+
+
+                            elif letter == "N" or letter == "n"  :
+                                universe.player.inventory.money +=1*penduCore.levelChoice
+                                penduCore.resetStats()
+                                universe.mode_change("exploration")
+                                
+
+
+                    universe.request_text_input(
+                            handleUserHasWon,
+                            prompt="Voulez vous recommencer ? (Y/N) : ",
+                            input_type="string",
+                            x = 1,
+                            y = 1
+                        )
+
+        
+        elif penduCore.mistakes >= 6 :
+           penduCore.hasLost = True
+           
+           def handleUserHasLost(letter):
+                 if letter == "Y" or letter == "y" :
+                    penduCore.resetStats()
+
+                 elif letter == "N" or letter == "n"  :
+                    penduCore.resetStats()
+                    universe.mode_change("exploration")
+                     
+
+
+           universe.request_text_input(
+                handleUserHasLost,
+                prompt="Voulez vous recommencer ? (Y/N) : ",
+                input_type="string",
+                x = 1,
+                y = 1
+            )
 
 
 def bank(universe, key):
@@ -112,6 +203,7 @@ def library(universe, key):
 input_modes = {
     # custom_input: custom_input,
     "debug": debug_input,
+    "pendu":pendu,
     "bank": bank,
     "library": library,
 }
