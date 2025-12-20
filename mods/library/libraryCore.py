@@ -13,11 +13,11 @@ class library:
         self.current_account = "Tom"  #self.universe.player.name
         self.active = False
         self.accounts = {}
-        self.setup_accounts()
         self.max = 2
 
     def init_universe(self, universe):
         self.universe = universe
+        self.setup_accounts()
 
 
     def extract_data(self):
@@ -30,7 +30,7 @@ class library:
         self.accounts = data["accounts"]
 
     def setup_accounts(self):
-        universe_path = os.path.join(SAVES_DIR, "FishWorld")#self.universe.name
+        universe_path = os.path.join(SAVES_DIR, self.universe.name)
         players = [d for d in os.listdir(universe_path)
                    if os.path.isdir(os.path.join(universe_path, d))]
 

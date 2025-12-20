@@ -26,7 +26,7 @@ class bank:
         self.accounts.update(data["accounts"])
 
     def setup_accounts(self):
-        universe_path = os.path.join(SAVES_DIR, "FishWorld")#self.universe.name
+        universe_path = os.path.join(SAVES_DIR, self.universe.name)
         players = [d for d in os.listdir(universe_path)
                    if os.path.isdir(os.path.join(universe_path, d))]
         for player in players:
