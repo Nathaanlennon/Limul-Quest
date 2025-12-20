@@ -172,6 +172,8 @@ class DealItem:
                     slot = get_item_part(self.item_id, "position")
                     self.inventory_a.equipment[slot] = self.item_id
                 # For other item types, implement their effects here
+                elif item_type == "consumable":
+                    ...
 
 
         self.active=False

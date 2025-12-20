@@ -245,12 +245,14 @@ def Cave(data):
 
     self.event_system.add_event(Event(data, self, "combat_event", "ALWAYS", "COMBAT",
                                       enemies=[
-                                          ("goblin", 0),
-                                          ("goblin", 0.01),
+                                          ("goblin", 0.1),
+                                          ("goblin", 0.2),
                                           ("slime", 0.2),
-                                          ("bat", 1)
+                                          ("bat", 0.2),
+                                          ("bat", 0.3),
+                                          ("orc", 0.05),
+                                          ("spider", 0.15)
 
-                                      ], proba=0.15))
+                                      ], proba=1, max_enemies=3))
 
     return self
-

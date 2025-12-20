@@ -26,6 +26,7 @@ class CombatSystem:
         self.enemies_list = load_enemies_list()
         self.fighters = []
         self.loot = []
+        self.max_enemies = 3
 
         self.state = "START" # États possibles : START, PLAYER_TURN, ENEMIES_TURN, VICTORY, DEFEAT
         self.queue = []
@@ -80,8 +81,10 @@ class CombatSystem:
         """
         if fighter in self.enemies_list:
             self.fighters.append(self.Enemy(self, self.enemies_list[fighter]))
+            return True
         else:
             logger.warning(f"Combattant inconnu de enemies.json : {fighter}")
+            return False
 
     def remove_fighter(self, fighter):
         """Retire un combattant de la liste des combattants.
@@ -217,6 +220,20 @@ class CombatSystem:
         self.loot = []
         self.queue = []
         self.state = "START"
+    def setup_combat(self, enemies):
+        """
+
+        :param enemies: couples list of ennemies and their probability to appear
+        :return: None
+        """
+        i = 0 # counter of enemies added
+        while not i:
+            for enemy_id, prob in enemies:
+                if random.random() <= prob:
+                    if self.add_fighter(enemy_id):
+                        i+= 1
+                        if i >= self.max_enemies:
+                            break
 
 
 combat_system = CombatSystem(None)

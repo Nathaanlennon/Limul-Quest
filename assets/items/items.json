@@ -25,39 +25,47 @@
     "effect": {
       "damage": 40
     },
-    "description": "Explose et inflige 40 points de dégâts à un ennemi",
+    "description": "Un artéfact puissant laissé par une créature verte portant un habit étrange. Dégats suplémentaires sur les tours",
     "price": 25
-  },
-  "wooden_shield": {
-    "id": "wooden_shield",
-    "name": "Bouclier en bois",
-    "type": "equipment",
-    "position":"shield",
-    "armor": 50,
-    "description": "Un petit bouclier qui bloque les attaques légères.",
-    "price": 30
-  },
-  "hunter_bow": {
-    "id": "hunter_bow",
-    "name": "Arc de chasseur",
-    "type": "equipment",
-    "position":"weapon",
-    "damages": 12,
-    "description": "Arc léger pour les attaques à distance.",
-    "price": 70
-  },
-  "rusty_key": {
-    "id": "rusty_key",
-    "name": "Clé rouillée",
-    "type": "quest_item",
-    "description": "Une clé ancienne couverte de rouille. Ouvre peut-être une porte oubliée.",
-    "price": 0
   },
   "slime_gel": {
     "id": "slime_gel",
     "name": "Gelée de Slime",
     "type": "junk",
-    "description": "Une substance visqueuse laissée par les slimes. Utile pour fabriquer des potions.",
+    "description": "Une substance visqueuse laissée par les slimes. Il paraitrait qu'il serait utilisé dans des rituels de fertilité...",
     "price": 5
-  }
+  },
+    "bat_wing": {
+        "id": "bat_wing",
+        "name": "Aile de chauve-souris",
+        "type": "junk",
+        "description": "Une aile prélevée sur une chauve-souris. Certains en mangent mais une légende raconte qu'un monde ancien a presque succombé à cause de ça.",
+        "price": 3
+    },
+    "spider_eye": {
+        "id": "spider_eye",
+        "name": "Œil d'araignée",
+        "type": "junk",
+        "description": "Un œil brillant d'araignée. Combinez le avec un champignon et du sucre, et donnez le à un villageois avec une pomme brillante pour de meilleurs prix...",
+        "price": 4
+    },
+  "orc_head": {
+    "id": "orc_head",
+    "name": "Tête d'orc",
+    "type": "junk",
+    "description": "La tête tranchée d'un orc. Certains s'en servent comme trophée, d'autre pour maintenir leur papier toilette. Pas certain de l'hygiène...",
+    "price": 15
+  },
+  "iron_axe": {
+    "id": "iron_axe",
+    "name": "Hache en fer",
+    "type": "equipment",
+    "position":"weapon",
+    "damages": 20,
+    "description": "Une hache robuste en fer, idéale pour les combats rapprochés et pour couper du bois.",
+    "price": 70
+  },
+
+
+
 }
