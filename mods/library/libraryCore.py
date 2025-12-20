@@ -16,6 +16,9 @@ class library:
         self.setup_accounts()
         self.max = 2
 
+    def init_universe(self, universe):
+        self.universe = universe
+
 
     def extract_data(self):
         data = {
@@ -33,13 +36,12 @@ class library:
 
         for player_name in players:
             self.accounts[player_name] = []
-        #self.accounts[self.universe.player.name] = 0
 
     def verification(self):
         return len(self.accounts[self.universe.player.name]) <= self.max #à définir
 
     def available_books(self):
-        intersection = list(set(self.book_no_take) & set(self.accounts["Tom"]))#self.universe.player.name
+        intersection = list(set(self.book_no_take) - set(self.accounts[self.universe.player.name]))
         return intersection
 
 
