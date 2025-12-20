@@ -112,7 +112,7 @@ def Village2(data, **kwargs):
                            [Event(data, self, "zooLeft", "ON_STEP", "MOVE",
                                   target_scene="Zoo", target_position=(10, 68))], walkable=True))
 
-    self.add_entity(NPC(self, "npc1", (11, 52), 'N', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "npc1", (11, 52), 'N', dialogue="assets/dialogues/penduNPC.json"))
 
     return self
 
@@ -126,6 +126,8 @@ def ButcherHouse(data, **kwargs):
     self.add_entity(Entity(self, "door2Butcher", (16, 35), 'D',
                            [Event(data, self, "door2Butcher", "ON_INTERACT", "MOVE",
                                   target_scene="Village2", target_position=(10, 14))]))
+    self.add_entity(NPC(self, "npc1", (4, 35), 'N', dialogue="assets/dialogues/bucher.json"))
+
     return self
 
 
@@ -171,27 +173,27 @@ def Zoo(data, **kwargs):
 
     # we are going to use the already existing class npc for the signs in the zoo
     self.add_entity(
-        NPC(self, "sign1", (6, 13), '🪧', dialogue="assets/dialogues/testZoo.json"))  # chat gpt dialogue for now
-    self.add_entity(NPC(self, "sign1", (6, 14), '',
-                        dialogue="assets/dialogues/test.json"))  # need this one cause sign is two caracter
+        NPC(self, "sign1", (6, 13), '🪧', dialogue="assets/dialogues/zooSign.json"))  # chat gpt dialogue for now
+    self.add_entity(NPC(self, "sign1.1", (6, 14), '',
+                        dialogue="assets/dialogues/zooSign.json"))  # need this one cause sign is two caracter
 
-    self.add_entity(NPC(self, "sign2", (6, 30), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign2.1", (6, 31), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign2", (6, 30), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign2.1", (6, 31), '', dialogue="assets/dialogues/zooSign.json"))
 
-    self.add_entity(NPC(self, "sign3", (6, 46), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign3.1", (6, 47), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign3", (6, 46), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign3.1", (6, 47), '', dialogue="assets/dialogues/zooSign.json"))
 
-    self.add_entity(NPC(self, "sign4", (6, 63), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign4.1", (6, 62), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign4", (6, 63), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign4.1", (6, 64), '', dialogue="assets/dialogues/zooSign.json"))
 
-    self.add_entity(NPC(self, "sign5", (13, 13), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign5.1", (13, 14), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign5", (13, 13), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign5.1", (13, 14), '', dialogue="assets/dialogues/zooSign.json"))
 
-    self.add_entity(NPC(self, "sign6", (13, 30), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign6.1", (13, 31), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign6", (13, 30), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign6.1", (13, 31), '', dialogue="assets/dialogues/zooSign.json"))
 
-    self.add_entity(NPC(self, "sign7", (13, 46), '🪧', dialogue="assets/dialogues/test.json"))
-    self.add_entity(NPC(self, "sign7.1", (13, 47), '', dialogue="assets/dialogues/test.json"))
+    self.add_entity(NPC(self, "sign7", (13, 46), '🪧', dialogue="assets/dialogues/zooSign.json"))
+    self.add_entity(NPC(self, "sign7.1", (13, 47), '', dialogue="assets/dialogues/zooSign.json"))
 
     return self
 
