@@ -56,7 +56,8 @@ def Guild(data):
                                   target_scene="Village1", target_position=(11, 12))]))
 
     # librarian
-    self.add_entity(NPC(self, "librarian", (6, 11), 'L', dialogue="assets/dialogues/librarian.json"))
+    self.add_entity(Entity(self, "librarian", (6, 11), 'L',
+                        [Event(data, self, "librarian", "ON_INTERACT", "MODE_CHANGE", mode = "library")]))
 
     # teacher
     self.add_entity(NPC(self, "teacher", (7, 37), 'E', dialogue="assets/dialogues/teacher.json"))
