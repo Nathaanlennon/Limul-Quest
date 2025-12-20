@@ -11,6 +11,7 @@ chosenWord = ""
 listWords = []
 mistakes = 0
 hasLost = False
+hasWon = False
 lettersFound = []
 wordBeingFound = ""
 penduSprite = [[
@@ -81,4 +82,24 @@ def appendLetters(letter):
 def updateSprite():
       updatedSprite = penduSprite[mistakes-1]
       return updatedSprite
-      
+
+def resetStats():
+    global penduSpriteShowed 
+    global levelChoice 
+    global chosenWord
+    global listWords 
+    global mistakes 
+    global lettersFound 
+    global wordBeingFound 
+    global hasLost 
+    global hasWon 
+    penduSpriteShowed = []
+    levelChoice = 0
+    chosenWord = ""
+    listWords = []
+    mistakes = 0
+    lettersFound = []
+    wordBeingFound = ""
+    hasLost = False
+    hasWon = False
+     

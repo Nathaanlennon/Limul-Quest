@@ -59,5 +59,59 @@
     "type": "junk",
     "description": "Une substance visqueuse laissée par les slimes. Utile pour fabriquer des potions.",
     "price": 5
+  },
+  "steak": {
+    "id": "steak",
+    "name": "Épée en fer",
+    "type": "equipment",
+    "position":"weapon",
+    "damages": 15,
+    "description": "Une simple épée forgée en fer. Efficace contre les ennemis faibles.",
+    "price": 50
+  },
+  "poisson": {
+    "id": "poisson",
+    "name": "Poisson",
+    "type": "food",
+    "effect": {
+      "heal": 5
+    },
+    "description": "Un poisson frais, parfait pour un repas rapide.",
+    "price": 12
+  },
+  "filet_de_poulet": {
+    "id": "filet_de_poulet",
+    "name": "Filet de poulet",
+    "type": "food",
+    "effect": {
+      "heal": 8
+    },
+    "description": "Filet de poulet tendre, restaure un peu de vie.",
+    "price": 14
+  },
+  "pain": {
+    "id": "pain",
+    "name": "Pain",
+    "type": "food",
+    "effect": {
+      "heal": 3
+    },
+    "description": "Une miche de pain, simple mais efficace pour calmer la faim.",
+    "price": 3
+  },
+  "thym": {
+    "id": "thym",
+    "name": "Thym",
+    "type": "ingredient",
+    "description": "Une herbe aromatique, utile pour la cuisine ou les potions.",
+    "price": 2
+  },
+  "curcuma": {
+    "id": "curcuma",
+    "name": "Curcuma",
+    "type": "ingredient",
+    "description": "Épice exotique au goût piquant, peut être utilisée en cuisine ou potion.",
+    "price": 1
   }
+  
 }

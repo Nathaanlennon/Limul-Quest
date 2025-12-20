@@ -16,5 +16,35 @@
             "quantity": "infinite"
         }
     }
-  }
+  },
+  {
+  "name": "Viandes et Plus magasin :",
+  "money": "infinite",
+  "items": {
+    "Steak": {
+      "require": {},
+      "quantity": "infinite"
+    },
+    "Poisson": {
+      "require": {},
+      "quantity": "infinite"
+    },
+    "Filet de poulet": {
+      "require": {},
+      "quantity": "infinite"
+    },
+    "Pain": {
+      "require": {},
+      "quantity": "infinite"
+    },
+    "Thym": {
+      "require": {},
+      "quantity": "infinite"
+    },
+    "Curcuma": {
+      "require": {},
+      "quantity": "infinite"
+        }
+      }
+    }
 ]

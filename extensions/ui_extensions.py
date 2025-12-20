@@ -16,17 +16,20 @@ import mods.library.libraryCore as libraryCore
 from engine.core.logging_setup import logger
 
 def pendu(self, stdscr):
-    if penduCore.hasLost == False :
+    if penduCore.hasLost == False and penduCore.hasWon == False :
         self.draw(stdscr,"hud", 1,1, f"Bonjour et bienvenue au pendu !")
         if penduCore.levelChoice !=0 :
             self.draw(stdscr,"hud", 2,1, f"Le niveau choisi est  : {penduCore.levelChoice}")
-            self.draw(stdscr,"hud", 3,1, f"Pour debug : {penduCore.chosenWord}")
-            self.draw(stdscr,"hud", 4,1, f"Nombre de chances restantes  : {6 -penduCore.mistakes}")
-            self.draw(stdscr,"hud", 5,1, f"Le mot à deviner est : {penduCore.wordBeingFound}")    
-    else :
-            stdscr.clear()
-            self.draw(stdscr,"hud", 10,10, f"Vous avez perdu !")
-            penduCore.hasLost = False
+            self.draw(stdscr,"hud", 3,1, f"Nombre de chances restantes  : {6 -penduCore.mistakes}")
+            self.draw(stdscr,"hud", 4,1, f"Le mot à deviner est : {penduCore.wordBeingFound}")    
+ 
+    elif penduCore.hasLost == True :
+            self.draw(stdscr,"hud", 4,1, f"Vous avez perdu !")
+ 
+    elif penduCore.hasWon == True :
+        self.draw(stdscr,"hud", 4,1, f"Vous avez gagné !")
+
+
 
     position = self.screens["scene"]["size"][1] // 2
     pilotiSprite, (maxx, maxy) = self.load_sprite("mods/penduProject/pilotiSprite.txt")

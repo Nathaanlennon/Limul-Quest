@@ -35,7 +35,8 @@ def debug_input(universe, key):
         universe.request_text_input(
             handle_int,
             prompt="Enter a number: ",
-            input_type="int"
+            input_type="int",
+
         )
 
     elif key == ord('j'):
@@ -45,8 +46,6 @@ def debug_input(universe, key):
 
 
 def pendu(universe, key):
-
-
 
     if penduCore.levelChoice == 0 :
         def handleUserTry(num):
@@ -58,7 +57,9 @@ def pendu(universe, key):
         universe.request_text_input(
                 handleUserTry,
                 prompt="Veuillez rentrer le niveau voulu (entre 1 et 3): ",
-                input_type="int"
+                input_type="int",
+                x = 2,
+                y = 1
             )
         
     if penduCore.chosenWord != "" :
@@ -82,21 +83,57 @@ def pendu(universe, key):
                 universe.request_text_input(
                         handleUserTry,
                         prompt="Veuillez rentrer une lettre du mot : ",
-                        input_type="string"
+                        input_type="string",
+                        x = 5,
+                        y = 1
                     )
+
+                if penduCore.wordBeingFound == penduCore.chosenWord :
+
+                    penduCore.hasWon = True
+
+                    def handleUserHasWon(letter):
+                            if letter == "Y" or letter =="y" :
+                                universe.player.inventory.money +=1*penduCore.levelChoice
+                                penduCore.resetStats()
+
+
+                            elif letter == "N" or letter == "n"  :
+                                universe.player.inventory.money +=1*penduCore.levelChoice
+                                penduCore.resetStats()
+                                universe.mode_change("exploration")
+                                
+
+
+                    universe.request_text_input(
+                            handleUserHasWon,
+                            prompt="Voulez vous recommencer ? (Y/N) : ",
+                            input_type="string",
+                            x = 1,
+                            y = 1
+                        )
+
         
-        elif penduCore.mistakes == 6 :
+        elif penduCore.mistakes >= 6 :
            penduCore.hasLost = True
-           time.sleep(2)
-           universe.mode_change("exploration")
-           penduCore.penduSpriteShowed = []
-           penduCore.levelChoice = 0
-           penduCore.chosenWord = ""
-           penduCore.listWords = []
-           penduCore.mistakes = 0
-           penduCore.hasLost = False
-           penduCore.lettersFound = []
-           penduCore.wordBeingFound = ""
+           
+           def handleUserHasLost(letter):
+                 if letter == "Y" or letter == "y" :
+                    penduCore.resetStats()
+
+                 elif letter == "N" or letter == "n"  :
+                    penduCore.resetStats()
+                    universe.mode_change("exploration")
+                     
+
+
+           universe.request_text_input(
+                handleUserHasLost,
+                prompt="Voulez vous recommencer ? (Y/N) : ",
+                input_type="string",
+                x = 1,
+                y = 1
+            )
 
 
 def bank(universe, key):

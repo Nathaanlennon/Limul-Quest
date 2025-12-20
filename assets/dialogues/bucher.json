@@ -1,0 +1,37 @@
+[
+  {
+    "speaker": "MAN",
+    "text": "Salut voyageur ! Ici, je vends de la viande et toutes sortes de produits frais.",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Que vendez-vous ?",
+        "next": 1
+      },
+      {
+        "text": "Je passe.",
+        "next": -1
+      }
+    ]
+  },
+  {
+    "speaker": "MAN",
+    "text": "Je peux tout te vendre : porc, bœuf, agneau… et même quelques spécialités rares. Tout est frais !",
+    "require": null,
+    "effects": null,
+    "options": [
+      {
+        "text": "Afficher la boutique",
+        "next": -1,
+        "effects": {
+          "shop": 0
+        }
+      },
+      {
+        "text": "Je reviendrai plus tard.",
+        "next": -1
+      }
+    ]
+  }
+]
